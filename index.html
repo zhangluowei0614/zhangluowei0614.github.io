@@ -22,7 +22,7 @@
   --bg:var(--surface); --bg1:var(--surface-low); --bg2:var(--surface-high);
   /* — 文本 — */
   --txt:#1F1F1F; --txt2:#444746; --txt3:#74777C;
-  /* — 与 次/三色（Google 蓝基准）— */
+  /* —— 次/三色（Google 蓝基准）—— */
   --primary:#0B57D0; --onp:#FFFFFF; --pcontainer:#D3E3FD; --onpc:#041E49;
   --scontainer:#C2E7FF; --onsc:#001D35;
   --tertiary:#7D5260; --tcontainer:#FFD8E4; --ontc:#31111D;
@@ -39,7 +39,7 @@
   --sb-h:36px;              /* 状态栏高度（含挖孔， */
   /* 拨号盘配色：浅灰面板 + 白色键帽（深色模式在 html.dark 中反转） */
   --kp-panel:#EFEFF4; --kp-key:#FFFFFF; --kp-press:#E3E3E8;
-  --nav-h:34px;             /* 手势导航区高应 */
+  --nav-h:34px;             /* 手势导航区高度 */
   --r-phone:56px;           /* 机身圆角 */
   --r-screen:44px;          /* 屏幕圆角 */
   --r-app:28px;             /* 应用窗口/卡片大圆角（M3 Expressive， */
@@ -1344,17 +1344,17 @@ img,svg{-webkit-user-drag:none;user-select:none}
             <div class="ph-pane on" id="phHome">
               <div class="ph-search">
                 <button class="ph-icbtn" data-act="ph-menu"><i data-ic="menu"></i></button>
-                <input id="phSearch" placeholder="搜索联系享">
+                <input id="phSearch" placeholder="搜索联系人">
                 <button class="ph-icbtn" data-act="ph-search-mic"><i data-ic="mic"></i></button>
               </div>
               <div class="ph-chips">
                 <button class="ph-chip on" data-phfilter="all">全部</button>
                 <button class="ph-chip" data-phfilter="missed">未接</button>
-                <button class="ph-chip" data-phfilter="contacts">联系享</button>
-                <button class="ph-chip" data-phfilter="nonspam">非骚打</button>
+                <button class="ph-chip" data-phfilter="contacts">联系人</button>
+                <button class="ph-chip" data-phfilter="nonspam">非骚扰</button>
                 <button class="ph-chip" data-phfilter="spam">骚扰</button>
               </div>
-              <div class="ph-sec"><span>收藏</span><button data-act="ph-viewcontacts">查看联系享</button></div>
+              <div class="ph-sec"><span>收藏</span><button data-act="ph-viewcontacts">查看联系人</button></div>
               <div class="ph-favrow" id="phFav"></div>
               <div class="ph-recwrap" id="phRecent"></div>
               <div class="ph-empty" id="phEmpty">
@@ -1372,7 +1372,7 @@ img,svg{-webkit-user-drag:none;user-select:none}
               <div class="ph-empty" id="phVmErr">
                 <div class="vm-illus"><svg viewBox="0 0 24 24" width="72" height="72" fill="none"><circle cx="12" cy="12" r="10" fill="#D3E3FD"/><path d="M17 18.5V5.5l-9 4.2" stroke="#0B57D0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
                 <div class="vm-t">无法启用可视化语音邮件</div>
-                <div class="vm-s">你仍然可以拨打电话收听语音邮件、</div>
+                <div class="vm-s">你仍然可以拨打电话收听语音邮件。</div>
                 <div class="vm-actions">
                   <button class="vm-btn" data-act="ph-vm-call">呼叫语音邮件</button>
                   <button class="vm-btn alt" data-act="ph-vm-retry">重试</button>
@@ -1409,7 +1409,7 @@ img,svg{-webkit-user-drag:none;user-select:none}
               <div class="sheet">
                 <div class="sheet-handle"></div>
                 <div class="sheet-title">电话</div>
-                <button class="menu-row" data-act="ph-menu-contacts"><i data-ic="person"></i>联系享</button>
+                <button class="menu-row" data-act="ph-menu-contacts"><i data-ic="person"></i>联系人</button>
                 <button class="menu-row" data-act="ph-menu-recents"><i data-ic="call_received"></i>通话记录</button>
                 <button class="menu-row" data-act="ph-menu-vm"><i data-ic="vm"></i>语音邮件</button>
                 <button class="menu-row" data-act="ph-menu-settings"><i data-ic="settings"></i>设置</button>
@@ -1423,7 +1423,7 @@ img,svg{-webkit-user-drag:none;user-select:none}
             </div>
             <div class="callview" id="callview">
               <div class="cv-avatar" id="cvAvatar">妈</div>
-              <div class="cv-name" id="cvName">妈妈</div>
+              <div class="cv-name" id="cvName">妈</div>
               <div class="cv-state" id="cvState">正在呼叫</div>
               <div class="cv-btns">
                 <button class="cv-btn" data-act="call-mute"><span class="c"><i data-ic="mic"></i></span>静音</button>
@@ -1795,7 +1795,7 @@ img,svg{-webkit-user-drag:none;user-select:none}
                 <textarea class="mc-body" id="mcBody" placeholder="撰写邮件内容"></textarea>
                 <div class="mc-actions">
                   <button class="pillbtn primary" data-act="mail-compose-send">${mi(M.send)}发送</button>
-                  <button class="pillbtn" data-act="mail-compose-draft">存为草用></button>
+                  <button class="pillbtn" data-act="mail-compose-draft">存为草稿></button>
                 </div>
               </div>
             </div>
@@ -2522,18 +2522,18 @@ function appName(id){return (LANG==='zh'?(APP_NAME_ZH[id]||id):(APP_NAME_EN[id]|
 const I18N={
   zh:{},
   en:{
-    '网络与互联网':'Network & internet','已连接设天':'Connected devices','应用':'Apps','通知':'Notifications','电池':'Battery','显示':'Display','声音和振动':'Sound & vibration','安全与隐移':'Security & privacy','位置信息':'Location','无障碍':'Accessibility','系统':'System','关于手机':'About phone',
+    '网络与互联网':'Network & internet','已连接设备':'Connected devices','应用':'Apps','通知':'Notifications','电池':'Battery','显示':'Display','声音和振动':'Sound & vibration','安全与隐私':'Security & privacy','位置信息':'Location','无障碍':'Accessibility','系统':'System','关于手机':'About phone',
     'Wi-Fi':'Wi-Fi','蓝牙':'Bluetooth','勿扰':'Do not disturb','手电签':'Flashlight','省电':'Battery saver','自动旋转':'Auto-rotate','飞行模式':'Airplane mode','个人热点':'Hotspot','深色主题':'Dark theme','屏幕投射':'Cast','屏幕录制':'Screen record','护眼模式':'Eye comfort','钱包':'Wallet','移动数据':'Mobile data','互联置':'Internet',
-    '收藏':'Favorites','最近':'Recents','联系享':'Contacts','闹钟':'Alarm','秒表':'Stopwatch','计时器':'Timer','收件管':'Inbox','促销':'Promotions','社交':'Social','首页':'Home','共享':'Shared','已加星标':'Starred','回收端':'Trash','精通':'Featured','音乐应':'Library','探索':'Explore',
+    '收藏':'Favorites','最近':'Recents','联系人':'Contacts','闹钟':'Alarm','秒表':'Stopwatch','计时器':'Timer','收件管':'Inbox','促销':'Promotions','社交':'Social','首页':'Home','共享':'Shared','已加星标':'Starred','回收端':'Trash','精通':'Featured','音乐应用':'Library','探索':'Explore',
     '搜索':'Search','设置':'Settings','下载':'Download','文件':'Files','视频':'Videos','音频':'Audio','图片':'Images','文档':'Documents','最近使用':'Recent',
     '完成':'Done','取消':'Cancel','确定':'OK','删除':'Delete','保存':'Save','编辑':'Edit','更多':'More','打开':'Open','分享':'Share','关闭':'Close','播放':'Play','暂停':'Pause','静音':'Mute','扬声器':'Speaker','截图':'Screenshot','选择':'Select','重启':'Restart','关机':'Power off','电源':'Power','紧急情内':'Emergency','锁定':'Lock','暂停应用':'Pause app','小部件':'Widgets','应用信息':'App info','卸载':'Uninstall',
     '返回':'Back','清除全部':'Clear all','没有新通知':'No new notifications','我的账户':'My account','通知设置':'Notification settings','紧急联系人':'Emergency contacts','安全功能':'Safety features','网络状态':'Network status','本月话费':'This month bill','查看账单':'View bill','设备状态':'Device status','快速帮动':'Quick help',
     '正在搜索':'Searching','读取中':'Loading','请输入号码':'Enter number','正在呼叫':'Calling','发送':'Send','添加':'Add','新建':'New','打开设置':'Open settings',
     /* 电话 / 语音邮件 */
-    '搜索联系享':'Search contacts','全部':'All','未接':'Missed','非骚打':'Non-spam','骚扰':'Spam','查看联系享':'View contacts','你拨打的电话会显示在这里':'Calls you make will show up here',
-    '没有符合条件的记录':'No matching calls','最近':'Recents','未接来电':'Missed calls','骚扰电话':'Spam calls','非骚扰来用':'Non-spam calls','条未话':'unread','未知号码':'Unknown number',
+    '搜索联系人':'Search contacts','全部':'All','未接':'Missed','非骚扰':'Non-spam','骚扰':'Spam','查看联系人':'View contacts','你拨打的电话会显示在这里':'Calls you make will show up here',
+    '没有符合条件的记录':'No matching calls','最近':'Recents','未接来电':'Missed calls','骚扰电话':'Spam calls','非骚扰来电':'Non-spam calls','条未读':'unread','未知号码':'Unknown number',
     '拨号键盘':'Keypad','呼叫':'Call','回拨':'Call back','播放':'Play','暂停':'Pause','已添加联系人':'Contact added','已添加到收藏':'Added to favorites',
-    '不在通话与':'No call in progress','无法启用可视化语音邮件':"Can't activate visual voicemail",'你仍然可以拨打电话收听语音邮件、':'You can still call to check voicemail.',
+    '不在通话与':'No call in progress','无法启用可视化语音邮件':"Can't activate visual voicemail",'你仍然可以拨打电话收听语音邮件。':'You can still call to check voicemail.',
     '呼叫语音邮件':'Call voicemail','重试':'Retry','正在启用可视化语音邮件':'Activating visual voicemail','可视化语音邮件已启用':'Visual voicemail activated',
     '手机':'Mobile','电子邮件':'Email','发消息给该联系人':'Send a message','今天':'Today','昨天':'Yesterday','周一':'Monday',
     '信息':'Messages','日历':'Calendar','系统更新':'System update','回复':'Reply','稍后提醒':'Snooze','提醒':'Remind','推迟':'Postpone','搜索手机和更多内容':'Search your phone and more',
@@ -2543,7 +2543,7 @@ const I18N={
     '主要功能':'Main features','查看详情 ':'View details ','查看更多 ':'See more ','安装':'Install','已安装':'Installed','更新':'Update','更新与':'Updating','打开':'Open',
     '推荐应用':'Recommended apps','热门游戏':'Top games','本周新游成':'New games this week','限时折扣 · 最高 5 报 · 新游抢先体验':'Limited offer · up to 50% off · early access',
     '对话':'Conversations','标签':'Labels','路线':'Directions','天气':'Weather','翻译':'Translate','新闻':'News','搜索结果':'Search results','标签页':'Tabs','无痕模式':'Incognito','历史记录':'History',
-    '今日日程':'Today\u2019s schedule','本地时间':'Local time','计次':'Laps','， 添加闹钟':'， Add alarm','添加闹钟':'Add alarm','世界时钟':'World clock','计时器':'Timer','秒表':'Stopwatch',
+    '今日程':'Today\u2019s schedule','本地时间':'Local time','计次':'Laps','， 添加闹钟':'， Add alarm','添加闹钟':'Add alarm','世界时钟':'World clock','计时器':'Timer','秒表':'Stopwatch',
     '工作日闹钟 · 周一至周享':'Weekday alarm · Mon–Fri','周末晨跑':'Weekend run','提醒睡觉':'Sleep reminder',
     '文件天':'Folders','我的云端硬盘':'My Drive','已用 97.3 GB · 共 256 GB':'97.3 GB used · 256 GB total',
     '深色主题、亮度、壁线':'Dark theme, brightness, wallpaper','屏幕锁定、密码、设备安关':'Screen lock, password, device security','语言、输入法、重置':'Languages, input, reset',
@@ -2564,29 +2564,29 @@ const I18N={
     '平滑显示':'Smooth display','60Hz · 更省用':'60Hz · More battery','120Hz · 更流留':'120Hz · Smoother','文本与布局':'Text and layout','字体大小':'Font size','显示大小':'Display size',
     '通话记录':'Call history','随声音振动':'Vibrate with sound','关闭':'Off','仅振动':'Vibrate only','夜曲 · 轻音乐':'Nocturne · Light music','Pixel 铃声 · 晴朗':'Pixel ringtone · Sunny',
     '套餐费':'Plan fee','流量包':'Data add-on','优惠':'Discount','合计':'Total','出账日':'Bill date','每月 1 日':'1st of each month','到期日':'Due date','立即缴费':'Pay now','历史账单':'Bill history',
-    '本月已用':'Used this month','剩余流量':'Data left','套餐':'Plan','有效期':'Valid until','购买流量包':'Buy data add-on','缴费成功':'Payment successful','已购乐 10 GB 流量化':'10 GB add-on purchased',
+    '本月已用':'Used this month','剩余流量':'Data left','套餐':'Plan','有效期':'Valid until','购买流量包':'Buy data add-on','缴费成功':'Payment successful','已购乐 10 GB 流量包':'10 GB add-on purchased',
     '相关通知':'Related notifications','接收相关提醒':'Receive related alerts','已取消收藏':'Removed from favorites','已加入收藏':'Added to favorites','提醒':'Remind','5G · 信号良好':'5G · Good signal',
     '搜索应用和游成':'Search apps and games','没有找到匹配的应用':'No matching apps','拍摄享':'Taken','已经是第一张':'Already at the first photo','已经是最后一张':'Already at the last photo','归档':'Archive','已归档':'Archived','转发':'Forward',
     '早晨 · 默认':'Morning · Default','已开启振动':'Vibration on','已关闭振动':'Vibration off','名称不能为空':'Name cannot be empty','已重命名':'Renamed','已删限':'Deleted',
     '已用相册打开':'Opened in Photos','已用音乐播放器打开':'Opened in YT Music','已用视频播放器打开':'Opened in YouTube','新名移':'New name','正在打开':'Opening','正在播放':'Now playing','已暂停':'Paused',
     /* Gmail 写邮件 */
     '新邮件':'New email','收件享':'To','主题':'Subject','输入邮箱地址':'Enter an email address','邮件主题':'Subject','撰写邮件内容':'Write your message','存为草稿':'Save draft','发送':'Send',
-    '请输入收件人':'Enter a recipient','（无主题，':'(No subject)','（无正文）':'(No body)','邮件已发送':'Email sent','已存为草稿':'Saved as draft','草用 ':'Draft','刚刚':'Just now','回复':'Reply',
+    '请输入收件人':'Enter a recipient','（无主题，':'(No subject)','（无正文）':'(No body)','邮件已发送':'Email sent','已存为草稿':'Saved as draft','草稿 ':'Draft','刚刚':'Just now','回复':'Reply',
     /* 应用内真实功能 */
     '快捷方式':'Shortcuts','标签页':'Tabs','无痕模式':'Incognito','已保存':'Saved','新建标签页':'New tab','关闭全部':'Close all','与':'',
     '至少保留一个标签页':'Keep at least one tab','已关闭标签页':'Tab closed','已新建标签页':'New tab opened','清除浏览数据':'Clear browsing data','已清除浏览数据':'Browsing data cleared',
     '无痕模式已开启':'Incognito on','无痕模式已关闭':'Incognito off','无痕模式已开启，不会保存浏览记录':"Incognito is on /history won't be saved",
-    '已在新标签页中打开该页面 ':'Opened this page in a new tab.','相关结果':'Related results','来自浏览器模拟页面的示例内容、':'Sample content from the simulated browser page.',
+    '已在新标签页中打开该页面 ':'Opened this page in a new tab.','相关结果':'Related results','来自浏览器模拟页面的示例内容。':'Sample content from the simulated browser page.',
     '开始聊天':'Start chat','回忆':'Memories','周末时光':'Weekend','城市夜景':'City nights','美食记录':'Food','山与流':'Mountains & sea','星标':'Starred','主要':'Primary',
     '还没有安装任何应用':'No apps installed yet','快速操位':'Quick actions','新建活动':'New event','回到今天':'Back to today','活动名称':'Event title','新活动':'New event','已添加活动':'Event added',
     '上午 9:00':'9:00 AM','中午 12:30':'12:30 PM','下午 3:00':'3:00 PM','晚上 7:00':'7:00 PM',
-    '已下载歌更':'Downloaded songs','你的歌单':'Your playlists','新歌速通':'New releases','排行概':'Charts','心情电台':'Mood radio','播客':'Podcasts',
+    '已下载歌曲':'Downloaded songs','你的歌单':'Your playlists','新歌速递':'New releases','排行榜':'Charts','心情电台':'Mood radio','播客':'Podcasts',
     '没有符合条件的邮件':'No matching emails','没有相关内容':'Nothing here yet','已开启':'On','已关闭':'Off','应用':'Apps','离线可听':'available offline','首':'songs',
     '设备名称':'Device name','型号':'Model','愿望清单':'Wishlist','活动详情':'Event details','振动':'Vibrate','随声音振动':'Vibrate with sound','早晨 · 默认':'Morning · Default',
     '活动前 15 分钟提醒':'Remind 15 min before','健身 · 每周 3 次':'Workout · 3× a week','3 个新回忆可查看':'3 new memories to view','3 款应用已收藏':'3 apps on your wishlist','我的时间线':'My timeline',
     '上海':'Shanghai','东京':'Tokyo','伦敦':'London','纽约':'New York','与我共享':'Shared with me','文件天':'Folders','主要功能':'Main features',
     '任务已完成':'Task completed','已保存':'Saved','已删限':'Deleted','已复分':'Copied','未连接':'Disconnected','正在刷新':'Refreshing','正在检查':'Checking','正在同步':'Syncing','正在上传':'Uploading','正在下载':'Downloading','正在连接':'Connecting','已定位':'Located','已取消':'Cancelled','已收藏':'Saved to favorites','已加入收藏':'Added to favorites','已添加提醒':'Reminder added','已生成':'Generated','已复制链接':'Link copied','已停正':'Stopped','已允设':'Allowed','未允设':'Not allowed','已拦成':'Blocked','已隐藏':'Hidden','已置页':'Pinned','已归档':'Archived','已同步':'Synced','已离线':'Offline','已发送':'Sent','已接听':'Answered','未接听':'Missed','已拨出':'Dialed','正在输入':'Typing','请稍倒':'Please wait','加载失败':'Failed to load','网络错误':'Network error','无网络':'No network','请检查网络':'Check your network',
-    '我的':'My','家庭':'Family','快捷指令':'Quick commands','快捷操作':'Quick actions','建议':'Suggestions','常见问题':'FAQ','版本历史':'Version history','数据与维报':'Data & maintenance','应用管理':'App management','默认应用':'Default apps','权限':'Permissions','存储空间':'Storage','电池使用':'Battery usage','隐私':'Privacy','安全':'Security','文字与显示':'Text & display','播放与音题':'Playback & audio','连接与网络':'Network & connection','查找设备':'Find my device','设备控制':'Device controls','自动化':'Automation','成员':'Members','群组':'Groups','讨论':'Discussions','协作':'Collaboration','会议':'Meetings','日历视图':'Calendar view','世界时钟':'World clock','时钟':'Clock','起床闹钟':'Alarm','录音文件':'Recordings','最近文件':'Recent files','最近通话':'Recent calls','最近消息':'Recent messages','最近会设':'Recent meetings','重要':'Important','草用 ':'Drafts','垃圾邮件':'Spam','归档':'Archive','邀话':'Invitations','我的设备':'My devices','家庭成员':'Family members','设备列表':'Devices','可用网络':'Available networks','版本可':'Version','序列可':'Serial number','处理器':'Processor','运行内存':'RAM','内部存储':'Internal storage','屏幕分辨率':'Resolution','内核版本':'Kernel version','Android 版本':'Android version','构建可':'Build number',
+    '我的':'My','家庭':'Family','快捷指令':'Quick commands','快捷操作':'Quick actions','建议':'Suggestions','常见问题':'FAQ','版本历史':'Version history','数据与维报':'Data & maintenance','应用管理':'App management','默认应用':'Default apps','权限':'Permissions','存储空间':'Storage','电池使用':'Battery usage','隐私':'Privacy','安全':'Security','文字与显示':'Text & display','播放与音题':'Playback & audio','连接与网络':'Network & connection','查找设备':'Find my device','设备控制':'Device controls','自动化':'Automation','成员':'Members','群组':'Groups','讨论':'Discussions','协作':'Collaboration','会议':'Meetings','日历视图':'Calendar view','世界时钟':'World clock','时钟':'Clock','起床闹钟':'Alarm','录音文件':'Recordings','最近文件':'Recent files','最近通话':'Recent calls','最近消息':'Recent messages','最近会设':'Recent meetings','重要':'Important','草稿 ':'Drafts','垃圾邮件':'Spam','归档':'Archive','邀话':'Invitations','我的设备':'My devices','家庭成员':'Family members','设备列表':'Devices','可用网络':'Available networks','版本可':'Version','序列可':'Serial number','处理器':'Processor','运行内存':'RAM','内部存储':'Internal storage','屏幕分辨率':'Resolution','内核版本':'Kernel version','Android 版本':'Android version','构建可':'Build number',
     '重试':'Retry','停止':'Stop','开始':'Start','确认':'Confirm','提交':'Submit','启用':'Enable','停用':'Disable','升级':'Upgrade','复制':'Copy','粘贴':'Paste','移动':'Move','再次搜索':'Search again','拨打电话':'Call','发送消息':'Send message','添加到收藏':'Add to favorites','查看详情':'View details','查看更多':'See more','查看全部':'See all','清除缓存':'Clear cache','清除数据':'Clear data','强制停止':'Force stop','允许通知':'Allow notifications','后台运行':'Background running','请稍倒':'Please wait','离线可用':'Available offline','空':'Empty','时':'None','未读':'Unread','已读':'Read','在线':'Online','离开':'Away','请勿打扰':'Do not disturb',
     '小时':'h','分钟':'min','剩余':'left','已用':'used','目标':'Goal','步数':'Steps','距离':'Distance','千卡':'Calories','楼层':'Floors','心率':'Heart rate','睡眠':'Sleep','站立':'Stand hours','活动':'Activity','活动分钟':'Active minutes','本周':'This week','进度':'Progress','趋势':'Trend','平均':'Average','最高':'Highest','最低':'Lowest','晴':'Sunny','多云':'Partly cloudy','队':'Overcast','小雨':'Light rain','中雨':'Moderate rain','大雨':'Heavy rain','雷阵集':'Thunderstorm','阵雨':'Showers','集':'Snow','集':'Fog','风':'Wind','空气质量':'Air quality','紫外线':'UV','湿度':'Humidity','降水':'Precipitation','日出':'Sunrise','日落':'Sunset','体感':'Feels like','逐小时':'Hourly','7 天':'7-day','未来 24 小时':'Next 24 hours','中等':'Medium','高':'High','位':'Low','自动':'Auto','手动':'Manual','高精应':'High accuracy','仅设天':'Device only','标准':'Standard','深色':'Dark','浅色':'Light','跟随系统':'Follow system','夜景':'Night','人像':'Portrait','照片':'Photo','视频':'Video','全景':'Panorama','慢动位':'Slow motion','延时':'Time-lapse'
   }
@@ -2716,7 +2716,7 @@ const EXTRA_APPS=[
        <div class="act-row"><button class="pillbtn primary" data-act="toast" data-msg="正在加入会议">加入会议</button><button class="pillbtn" data-act="toast" data-msg="已复制会议链接">复制链接</button></div>
        ${XL('议程')}
        <div id="chAgenda"></div>
-       ${XL('参会享')}
+       ${XL('参会者')}
        <div class="ch-avs"><span class="avatar" style="background:#4285F4">M</span><span class="avatar" style="background:#E8710A">妈</span><span class="avatar" style="background:#188038">陈</span><span class="avatar" style="background:#9334E6">王</span><span>+8</span></div>
      </div>
    </div>
@@ -2754,9 +2754,9 @@ const EXTRA_APPS=[
        <div style="font-size:17px;font-weight:500">下午好，Momo</div>
        <div style="font-size:12.5px;color:var(--txt2);margin-top:4px">今天 12:17 · 需要我帮你做点什么？</div>
      </div>
-     ${XL('试试话')}
+     ${XL('试问')}
      <div class="opt-row">${['设置闹钟','播放音乐','发消息给妈妈','查天气'].map(s=>`<button class="opt-chip" data-act="toast" data-msg="语音指令：${s}">${s}</button>`).join('')}</div>
-     ${XL('快捷指令')}${XR(mi(M.timer),'计时 10 分钟','常用计时','执行')}${XR(mi(M.music),'播放今日推荐','YouTube Music','播放')}${XR(mi(M.phone),'给爸爸打电话','通话','拨打')}
+     ${XL('快捷指令')}${XR(mi(M.timer),'计时 10 分钟','常用计时','执行')}${XR(mi(M.music),'播放今日推荐','YouTube Music','播放')}${XR(mi(M.phone),'给爸打电话','通话','拨打')}
    </div>`},
  {id:'ytmusic',name:'YouTube Music',html:`
    <div class="appbody">
@@ -2819,7 +2819,7 @@ const EXTRA_APPS=[
    </div>`},
  {id:'home',name:'Google Home',html:`
    <div class="appbody">
-     <div class="set-info-hero"><span class="app-icon">${ICON('home')}</span><div style="font-size:17px;font-weight:600">家庭</div><div style="font-size:12px;color:var(--txt2)">3 台设天 · 2 个房间</div></div>
+     <div class="set-info-hero"><span class="app-icon">${ICON('home')}</span><div style="font-size:17px;font-weight:600">家庭</div><div style="font-size:12px;color:var(--txt2)">3 台设备 · 2 个房间</div></div>
    </div>`},
  {id:'one',name:'Google One',html:`
    <div class="appbody">
@@ -2856,7 +2856,7 @@ const EXTRA_APPS=[
      <div style="margin:12px 4px;border-radius:22px;background:linear-gradient(145deg,#202124,#3c4043);color:#fff;padding:18px;text-align:center">
        <div style="font-size:40px">🎧</div>
        <div style="font-size:16px;font-weight:600;margin-top:6px">Pixel Buds Pro 2</div>
-       <div style="font-size:12px;opacity:.75;margin-top:3px">已连接 · 已 82% · 右 78% · 盒 95%</div>
+       <div style="font-size:12px;opacity:.75;margin-top:3px">已连接 · 左 82% · 右 78% · 盒 95%</div>
        <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">${['降噪','通透','关闭'].map(m=>`<button class="opt-chip" data-act="toast" data-msg="已切换：${m}">${m}</button>`).join('')}</div>
      </div>
      ${XL('控制')}${XR(mi(M.play),'点按手势','播放/暂停 · 双击下一首','手势设置')}${XR(mi(M.mic),'入耳检测','取下时自动暂停','入耳检流')}
@@ -2910,7 +2910,7 @@ function renderExtraApps(){
 
 const CONTACTS=[
   {n:'妈妈',c:'#E8710A',p:'138 0013 8000',m:'mama@gmail.com'},
-  {n:'爸爸',c:'#1A73E8',p:'139 0013 9000',m:'baba@gmail.com'},
+  {n:'爸',c:'#1A73E8',p:'139 0013 9000',m:'baba@gmail.com'},
   {n:'小陈',c:'#188038',p:'136 1234 5678',m:'chen@example.com'},
   {n:'老王',c:'#9334E6',p:'135 5555 0101',m:'wang@example.com'},
   {n:'快递员',c:'#0B8043',p:'400 810 8080',m:''},
@@ -2918,7 +2918,7 @@ const CONTACTS=[
 ];
 const RECENTS=[
   {n:'妈妈',day:'今天',hm:'14:02',k:'in'},{n:'外卖',day:'今天',hm:'12:18',k:'missed'},{n:'快递员',day:'昨天',hm:'18:40',k:'out'},
-  {n:'小陈',day:'昨天',hm:'09:12',k:'in'},{n:'爸爸',day:'周一',hm:'20:05',k:'missed'},
+  {n:'小陈',day:'昨天',hm:'09:12',k:'in'},{n:'爸',day:'周一',hm:'20:05',k:'missed'},
   {n:'骚扰电话',num:'+86 138 0013 9999',day:'昨天',hm:'16:22',k:'spam'}
 ];
 const VOICEMAILS=[
@@ -2977,7 +2977,7 @@ const FILE_CATS=[
 const MAILS=[
   {cat:'inbox',f:'Google 团队',a:'G',c:'#4285F4',unread:true,star:true,subj:'您的 Pixel 10 已准备就绪',snip:'Android 17 与全新 Pixel 体验已就绪',time:'10:02',
    body:'你好 Momo，\n\n欢迎使用 Pixel 10！您的设备已预装 Android 17，包含全新的主题图标、应用气泡、实时信息显示与 Gemini 深度集成。\n\n立即探索：\n· 下拉查看快捷设置\n· 长按图标快速操作\n\n Google 团队'},
-  {cat:'inbox',f:'妈妈',a:'妈',c:'#E8710A',unread:true,subj:'周末一起去公园吗',snip:'天气不错，去人民公园走走？',time:'昨天',
+  {cat:'inbox',f:'妈妈',a:'妈妈',c:'#E8710A',unread:true,subj:'周末一起去公园吗',snip:'天气不错，去人民公园走？',time:'昨天',
    body:'闺女，\n\n这周末天气不错，要不要一起去人民公园走走？顺便给你带点自己做的点心。\n\n等你回复～'},
   {cat:'promo',f:'携程旅行',a:'携',c:'#0B8043',subj:'暑期机票限时特惠',snip:'上海出发低至 3 折，点击查看 ',time:'09:30',
    body:'暑期出行季，机票酒店低至 3 折！\n\n仅限本周，立即预设 '},
@@ -2990,7 +2990,7 @@ const MAILS=[
 ];
 
 const YT_FEED=[
-  {t:'、4K】上海天际线延时摄影',ch:'Pixel 摄影',th:'linear-gradient(135deg,#667eea,#764ba2)',v:'128万次观看',d:'12:34',cat:'科技'},
+  {t:'【4K】上海天际线延时摄影',ch:'Pixel 摄影',th:'linear-gradient(135deg,#667eea,#764ba2)',v:'128万次观看',d:'12:34',cat:'科技'},
   {t:'Android 17 新功能速览',ch:'Google 中国',th:'linear-gradient(135deg,#11998e,#38ef7d)',v:'86万次观看',d:'08:12',cat:'科技'},
   {t:'Tensor G5 芯片深度评测',ch:'科技君',th:'linear-gradient(135deg,#f953c6,#b91d73)',v:'45万次观看',d:'15:27',cat:'科技'},
   {t:'Pixel 10 相机实战：夜景模式',ch:'数码日常',th:'linear-gradient(135deg,#141e30,#243b55)',v:'210万次观看',d:'10:05',cat:'科技'},
@@ -3067,7 +3067,7 @@ const DISCOVER=[
 
 const GEM_REPLIES=[
   '我是一款演示版 Gemini。在 Android 17 中，Gemini 可以帮你总结通知、生成回复草稿，并跨应用完成任务、',
-  '可以试试问我在 Android 17 上有哪些新功能，或者让我帮你安排明天的日程，',
+  '可以试问我在 Android 17 上有哪些新功能，或者让我帮你安排明天的日程，',
   'Pixel 10 搭载 Tensor G5，配合 Gemini Nano 可以在端侧运行 AI 功能，例如智能回复和实时转写、',
   '好问题！不过这是演示环境，建议打开设置 → 关于手机查看完整设备信息。',
 ];
@@ -4117,7 +4117,7 @@ function renderPhone(){
   if(PH_FILTER==='missed'){head='未接来电';rows=RECENTS.filter(r=>r.k==='missed').map(phRow);}
   else if(PH_FILTER==='spam'){head='骚扰电话';rows=RECENTS.filter(r=>r.k==='spam').map(phRow);}
   else if(PH_FILTER==='nonspam'){head='非骚扰来用';rows=RECENTS.filter(r=>r.k!=='spam').map(phRow);}
-  else if(PH_FILTER==='contacts'){head='联系享';rows=CONTACTS.map(phContactRow);}
+  else if(PH_FILTER==='contacts'){head='联系人';rows=CONTACTS.map(phContactRow);}
   $('#phRecent').innerHTML=rows.length?`<div class="ph-sec"><span>${t(head)}</span></div>${rows.join('')}`:`<div class="ph-none">${t('没有符合条件的记录')}</div>`;
   $('#phEmpty').style.display=(PH_FILTER==='all'&&!RECENTS.length)?'flex':'none';
   $('#kpGrid').innerHTML=KEYS.map(k=>`<button class="kp-key" data-act="kp" data-k="${k[0]}">${k[0]}${k[1]==='vm'?`<small class="kp-vm">${mi(M.vm,16)}</small>`:(k[1]?`<small>${k[1]}</small>`:'')}</button>`).join('');
@@ -4267,7 +4267,7 @@ function endCall(){
   $('#callview').classList.remove('on');
   $('#kpDisplay').textContent='';
   phBackVis();
-  toast('通话已结条');
+  toast('通话已结束');
 }
 
 /* ============ 信息 ============ */
@@ -4751,7 +4751,7 @@ function sendCompose(){
 }
 function saveDraft(){
   const to=$('#mcTo').value.trim(),subj=$('#mcSubj').value.trim(),body=$('#mcBody').value.trim();
-  MAILS.unshift({cat:'inbox',f:t('草用 '),a:'D',c:'#5F6368',subj:subj||t('（无主题，'),snip:body.slice(0,24)||to||t('（无正文）'),time:t('刚刚'),body:body||''});
+  MAILS.unshift({cat:'inbox',f:t('草稿 '),a:'D',c:'#5F6368',subj:subj||t('（无主题，'),snip:body.slice(0,24)||to||t('（无正文）'),time:t('刚刚'),body:body||''});
   closeCompose();
   renderMails('inbox');
   toast(t('已存为草程'));
@@ -4841,7 +4841,7 @@ function openTmoBill(){
     '<div class="detail-hero"><span class="dh-ic" style="background:#E20074">'+mi(M.wallet,30)+'</span><div class="dh-name">¥ 129.00</div><div class="dh-sub">'+t('本月话费')+' · 9月25日到期</div></div>'+
     XL('费用明细')+
     '<div class="st-row"><span>'+t('套餐账')+'</span><b>¥ 99.00</b></div>'+
-    '<div class="st-row"><span>'+t('流量化')+'</span><b>¥ 30.00</b></div>'+
+    '<div class="st-row"><span>'+t('流量包')+'</span><b>¥ 30.00</b></div>'+
     '<div class="st-row"><span>'+t('优惠')+'</span><b>-¥ 0.00</b></div>'+
     '<div class="st-row"><span>'+t('合计')+'</span><b>¥ 129.00</b></div>'+
     XL('账单周期')+
@@ -4856,12 +4856,12 @@ function openTmoUsage(){
   const bars=[['微信','2.4 GB',34],['YouTube','1.8 GB',26],['Chrome','1.1 GB',16],['地图','0.9 GB',13],['其他','2.2 GB',11]];
   body.innerHTML=
     '<div class="detail-hero"><span class="dh-ic" style="background:#E20074">'+mi(M.signal,30)+'</span><div class="dh-name">8.4 GB / 50 GB</div><div class="dh-sub">'+t('本月已用')+' · '+t('剩余流量')+' 41.6 GB</div></div>'+
-    XL('应用用量')+
+    XL('应用量')+
     bars.map(b=>`<div class="st-row"><span>${b[0]}</span><b>${b[1]}</b></div><div class="tmo-bar"><i style="width:${b[2]}%"></i></div>`).join('')+
     XL('套餐')+
     '<div class="st-row"><span>'+t('套餐')+'</span><b>5G 畅享 50 GB</b></div>'+
     '<div class="st-row"><span>'+t('有效期')+'</span><b>8月31日</b></div>'+
-    '<div class="act-row"><button class="pillbtn primary" data-act="tmo-topup">'+t('购买流量化')+'</button></div>';
+    '<div class="act-row"><button class="pillbtn primary" data-act="tmo-topup">'+t('购买流量包')+'</button></div>';
   $('#tmoUsage').classList.add('on');
 }
 /* ============ YouTube Music 播放状态 ============ */
@@ -4898,7 +4898,7 @@ function openContact(name){
   $('#cdAvatar').style.background=c.c;
   $('#cdName').textContent=c.n;
   $('#cdPhone').textContent=c.p;
-  $('#cdMail').textContent=c.m||'未提供邮管';
+  $('#cdMail').textContent=c.m||'未提供邮箱';
   const btn=$('#contactDetail [data-act="phone-call"]');
   if(btn)btn.dataset.name=c.n;
   const pbtn=$('#contactDetail .cd-rows [data-act="phone-call"]');
@@ -4946,7 +4946,7 @@ function renderSetSubs(){
     <header class="appbar"><button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">关于手机</h2></header>
     <div class="appbody">
       <div style="text-align:center;padding:18px 0 6px">${ICON('phone')}<div style="margin-top:8px;font-size:15px;font-weight:600">Pixel 10</div><div style="font-size:12px;color:var(--txt2)">Android 17 · 5G 全网通 · 12GB/256GB</div></div>
-      ${[['设备名称','Pixel 10'],['型号','Pixel 10 (PKB0)'],['Android 版本','17'],['安全更新','2026年最 时'],['版本号','AP4B.260601.001'],['内核版本','6.1.95-android17-1'],['基带版本','3.5.0-00254'],['处理器','Google Tensor G5'],['运行内存','12 GB'],['存储空间','256 GB'],['序列号','5DX1C2A0001']].map(r=>`<div class="list-row"><div class="row-main"><div class="row-title" style="font-weight:400">${r[0]}</div></div><div style="font-size:13px;color:var(--txt2);text-align:right">${r[1]}</div></div>`).join('')}
+      ${[['设备名称','Pixel 10'],['型号','Pixel 10 (PKB0)'],['Android 版本','17'],['安全更新','2026年8月25日'],['版本号','AP4B.260601.001'],['内核版本','6.1.95-android17-1'],['基带版本','3.5.0-00254'],['处理器','Google Tensor G5'],['运行内存','12 GB'],['存储空间','256 GB'],['序列号','5DX1C2A0001']].map(r=>`<div class="list-row"><div class="row-main"><div class="row-title" style="font-weight:400">${r[0]}</div></div><div style="font-size:13px;color:var(--txt2);text-align:right">${r[1]}</div></div>`).join('')}
     </div>`;
   $('#setDevices').innerHTML=`
     <header class="appbar"><button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">已连接设备</h2></header>
@@ -5009,7 +5009,7 @@ function renderSetSubs(){
       <div class="set-row" data-act="toast" data-msg="指纹管理"><span class="s-ic" style="background:#0B57D0;color:#fff">${FP_SVG}</span><span class="s-main"><span class="s-title">指纹解锁</span><span class="s-sub">已录入 1 个指纹</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="面部解锁"><span class="s-ic" style="background:#9334E6;color:#fff">${mi(M.person)}</span><span class="s-main"><span class="s-title">面部解锁</span><span class="s-sub">未设置</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="查找我的设备"><span class="s-ic" style="background:#D93025;color:#fff">${mi(M.location)}</span><span class="s-main"><span class="s-title">查找我的设备</span><span class="s-sub">可远程定位与擦除</span></span><span class="chev">${mi(M.chev)}</span></div>
-      <div class="set-row" data-act="toast" data-msg="安全更新"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.update)}</span><span class="s-main"><span class="s-title">安全更新</span><span class="s-sub">2026 年 8 最25 时 · 已是最新</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="toast" data-msg="安全更新"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.update)}</span><span class="s-main"><span class="s-title">安全更新</span><span class="s-sub">2026 年 8 月 25 日 · 已是最新</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="section-label">隐私</div>
       <div class="set-row" data-act="set-open" data-sub="setPerms"><span class="s-ic">${mi(M.shield)}</span><span class="s-main"><span class="s-title">权限管理器</span><span class="s-sub">相机、麦克风、位置等</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="隐私保护"><span class="s-ic" style="background:#9334E6;color:#fff">${mi(M.shield)}</span><span class="s-main"><span class="s-title">隐私保护</span><span class="s-sub">隐私指示器已开启</span></span><span class="chev">${mi(M.chev)}</span></div>
@@ -5043,7 +5043,7 @@ function renderSetSubs(){
     <div class="appbody">
       <div class="set-row"><span class="s-ic">${mi(M.public)}</span><span class="s-main"><span class="s-title">语言</span><span class="s-sub">简体中文</span></span><span class="chev">${mi(M.chev)}</span></div>
       ${optChips('lang',[['zh','简体中文'],['en','English'],['ja','日本語'],['ko','한국어']])}
-      <div class="set-row" data-act="set-open" data-sub="setDateTime"><span class="s-ic">${mi(M.timer)}</span><span class="s-main"><span class="s-title">日期与时间</span><span class="s-sub">自动 · 8 月 2 时 10:30</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="set-open" data-sub="setDateTime"><span class="s-ic">${mi(M.timer)}</span><span class="s-main"><span class="s-title">日期与时间</span><span class="s-sub">自动 · 8 月 2 日 10:30</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="手势导航：从屏幕边缘滑动返回、上滑回桌面、上滑悬停查看最近任务"><span class="s-ic">${mi(M.play)}</span><span class="s-main"><span class="s-title">手势导航</span><span class="s-sub">边缘滑动返回 · 上滑回桌面</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="键盘与输入法"><span class="s-ic">${mi(M.edit)}</span><span class="s-main"><span class="s-title">键盘与输入法</span><span class="s-sub">Gboard</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="备份"><span class="s-ic">${mi(M.download)}</span><span class="s-main"><span class="s-title">备份</span><span class="s-sub">Google 云端备份已开启</span></span><span class="chev">${mi(M.chev)}</span></div>
@@ -5055,10 +5055,10 @@ function renderSetSubs(){
     <header class="appbar"><button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">可用网络</h2></header>
     <div class="appbody">
       <div class="set-row"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">GoogleWiFi</span><span class="s-sub">已连接 · 信号强 · 5 GHz</span></span><span class="chev">${mi(M.check)}</span></div>
-      <div class="set-row" data-act="toast" data-msg="正在连接 Home-5G"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">Home-5G</span><span class="s-sub">已保存 · 信号开</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="toast" data-msg="正在连接 Home-5G"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">Home-5G</span><span class="s-sub">已保存 · 信号强</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="正在连接 CMCC-9F8K"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">CMCC-9F8K</span><span class="s-sub">加密网络 · 信号一般</span></span><span class="chev">${mi(M.chev)}</span></div>
-      <div class="set-row" data-act="toast" data-msg="正在连接 Pixel_热点"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">Pixel_热点</span><span class="s-sub">已保存 · 信号开</span></span><span class="chev">${mi(M.chev)}</span></div>
-      <div class="set-row" data-act="toast" data-msg="正在连接 STORE-WiFi"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">STORE-WiFi</span><span class="s-sub">开放网络 · 信号开</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="toast" data-msg="正在连接 Pixel_热点"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">Pixel_热点</span><span class="s-sub">已保存 · 信号强</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="toast" data-msg="正在连接 STORE-WiFi"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">STORE-WiFi</span><span class="s-sub">开放网络 · 信号强</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="section-label">已保存的网络</div>
       <div class="set-row" data-act="toast" data-msg="咖啡馆WiFi"><span class="s-ic">${mi(M.wifi)}</span><span class="s-main"><span class="s-title">咖啡馆WiFi</span><span class="s-sub">已保存 · 不在范围内</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="添加网络"><span class="s-ic">${mi(M.add)}</span><span class="s-main"><span class="s-title">添加网络</span></span><span class="chev">${mi(M.chev)}</span></div>
@@ -5089,7 +5089,7 @@ function renderSetSubs(){
     <div class="appbody">
       <div class="set-row"><span class="s-ic">${mi(M.timer)}</span><span class="s-main"><span class="s-title">自动确定日期和时间</span><span class="s-sub">使用网络提供的时间</span></span><button class="switch${DEV_STATE.autoDT?' on':''}" data-act="dev-switch" data-dev="autoDT"></button></div>
       <div class="set-row"><span class="s-ic">${mi(M.public)}</span><span class="s-main"><span class="s-title">自动确定时区</span><span class="s-sub">使用网络提供的时区</span></span><button class="switch${DEV_STATE.autoTZ?' on':''}" data-act="dev-switch" data-dev="autoTZ"></button></div>
-      <div class="set-row" data-act="toast" data-msg="日期"><span class="s-ic">${mi(M.calendar)}</span><span class="s-main"><span class="s-title">日期</span><span class="s-sub">2026 年 8 最 2 时 · 星期日</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="toast" data-msg="日期"><span class="s-ic">${mi(M.calendar)}</span><span class="s-main"><span class="s-title">日期</span><span class="s-sub">2026 年 8 月 2 日 · 星期日</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="时间"><span class="s-ic">${mi(M.timer)}</span><span class="s-main"><span class="s-title">时间</span><span class="s-sub">10:30</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="section-label">时间格式</div>
       ${optChips('dt',[['24','24 小时制'],['12','12 小时制']])}
@@ -5130,7 +5130,7 @@ function renderSetSubs(){
     <div class="appbody">
       <div class="set-info-hero"><span class="app-icon">${ICON('settings')}</span><div style="font-size:17px;font-weight:600">Android 17</div><div style="font-size:12px;color:var(--txt2)">Pixel 10 · 已是最新版本</div></div>
       <div class="act-row"><button class="pillbtn primary" data-act="check-update">检查更新</button></div>
-      <div class="set-row" data-act="toast" data-msg="安全更新"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.update)}</span><span class="s-main"><span class="s-title">安全更新</span><span class="s-sub">2026 年 8 最25 时</span></span><span class="chev">${mi(M.chev)}</span></div>
+      <div class="set-row" data-act="toast" data-msg="安全更新"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.update)}</span><span class="s-main"><span class="s-title">安全更新</span><span class="s-sub">2026 年 8 月 25 日</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="上次检查"><span class="s-ic">${mi(M.timer)}</span><span class="s-main"><span class="s-title">上次检查时间</span><span class="s-sub">今天 08:00</span></span><span class="chev">${mi(M.chev)}</span></div>
       <div class="set-row" data-act="toast" data-msg="更新记录"><span class="s-ic">${mi(M.info)}</span><span class="s-main"><span class="s-title">更新记录</span><span class="s-sub">AP4B.260601.001</span></span><span class="chev">${mi(M.chev)}</span></div>
     </div>`;
@@ -5292,7 +5292,7 @@ const VOICE_SMS=[
 function renderVoice(){
   const dirI={out:M.call_made,in:M.call_received,missed:M.call_missed};
   const dirC={out:'#1A73E8',in:'#188038',missed:'#D93025'};
-  const dirT={out:'已拨出',in:'已接听',missed:'未接启'};
+  const dirT={out:'已拨出',in:'已接听',missed:'未接听'};
   $('#gvRecents').innerHTML=VOICE_CALLS.map((c,i)=>`<button class="gv-row" data-act="voice-call-detail" data-i="${i}"><span class="avatar" style="background:${c.c}">${c.n[0]}</span><div class="gv-row-main"><div class="gv-row-title">${c.n}</div><div class="gv-row-sub">${c.p} · ${dirT[c.dir]||''} · ${c.t}</div></div><div class="gv-row-right"><span class="gv-dir" style="color:${dirC[c.dir]||'#5F6368'}">${mi(dirI[c.dir]||M.phone)}</span><span class="gv-time">${c.t.split(' ')[0]}</span></div></button>`).join('');
   $('#gvMessages').innerHTML=VOICE_SMS.map(m=>`<button class="gv-row" data-act="voice-sms" data-n="${m.n}"><span class="avatar" style="background:${m.c}">${m.n[0]}</span><div class="gv-row-main"><div class="gv-row-title">${m.n}</div><div class="gv-row-sub">${m.t}</div></div><div class="gv-row-right"><span class="gv-time">${m.time}</span><span class="gv-unread"></span></div></button>`).join('');
   $('#gvVoicemail').innerHTML=VOICE_VMS.map((v,i)=>`<div class="gv-vm" data-act="voice-vm-detail" data-i="${i}"><span class="avatar" style="background:${v.c}">${v.n[0]}</span><div class="gv-vm-main"><div class="gv-vm-title">${v.n}</div><div class="gv-vm-sub">${v.t} · 时长 ${v.d}</div><div class="gv-vm-trans">${v.trans}</div></div><button class="gv-play" data-act="voice-vm">${mi(M.play)}</button></div>`).join('');
@@ -5459,14 +5459,14 @@ const APP_EXTRA={
   notebooklm:[['笔记本','研究论文 · 12 个来源','产品文档 · 8 个来源'],['音频概览','已生成 2 段播客式摘要'],['问答','可基于资料提问'],['共享','与 1 人共享笔记本']],
   journal:[['今日反思','「记录今日的小确幸」'],['心情','本周心情趋势：平静 5 天'],['回忆','6 月照片回忆 3 络'],['提醒','每日 21:00 写日记提醒']],
   auto:[['驾驶模式','地图 · 媒体 · 通话'],['最近目的地','公司 · 家 · 上海南站'],['媒体','继续播放 Lofi 电台'],['设置','自动启动 · 免打扰已开启']],
-  wallet:[['支付卡','Momo 的储蓄卡 · 尾号 8821'],['票券','电影票 · 周六 19:00'],['登机牌','8 月 15 时 上海→东享'],['会员卡','星巴克、优衣库 2 张']],
+  wallet:[['支付卡','Momo 的储蓄卡 · 尾号 8821'],['票券','电影票 · 周六 19:00'],['登机牌','8 月 15 日 上海→东享'],['会员卡','星巴克、优衣库 2 张']],
   home:[['设备','客厅灯 · 已开启','空调 · 26°C','门锁 · 已上锁'],['自动化','回家模式 · 每天 18:00'],['家庭成员','3 位成员共享家庭'],['房间','客厅、卧室、厨房 3 间']],
   one:[['存储','已用 97.3 GB / 256 GB'],['权益','VPN、家庭共享已包含'],['备份','照片与视频已备份 32 GB'],['会员','2 TB 方案 · 2027-08-01 到期']],
   fit:[['今日','4,215 步 · 2.8 公里 · 260 千卡'],['目标','本周运动目标完成 62%'],['睡眠','昨晚 7 小时 12 分'],['心率','静息 62 bpm · 正常']],
   findhub:[['设备','Pixel 10 · 在线','Pixel Buds Pro 2 · 在线'],['物品','钥匙扣 · 蓝牙标签','背包 · 蓝牙标签'],['共享位置','与 Momo 共享中'],['离线提醒','遗落提醒已开启']],
   pixelbuds:[['连接状态','Pixel Buds Pro 2 · 已连接'],['降噪','自适应降噪 · 开启'],['均衡器','低音增强'],['查找','耳塞在充电盒内 · 位置已更新']],
   pixelwatch:[['连接状态','Pixel Watch 3 · 已连接'],['表盘','Pixel 数字 · 当前使用'],['健康','今日活动环 68%'],['通知','镜像手机通知 12 条']],
-  safety:[['紧急联系人','妈妈 · 138 0013 8000'],['紧急共享','实时位置共享已开启'],['检测','车祸检测 · 开启','跌倒检测 · 关闭'],['演练','最近演练 8 最 1 时']],
+  safety:[['紧急联系人','妈妈 · 138 0013 8000'],['紧急共享','实时位置共享已开启'],['检测','车祸检测 · 开启','跌倒检测 · 关闭'],['演练','最近演练 8 月 1 日']],
   mypixel:[['设备诊断','电池健康 · 良好','存储 · 158 GB 可用'],['支持','快速联系 Pixel 支持'],['保修','2027-08-01 到期'],['提示','3 条新使用技巧']],
   thermometer:[['体温','36.8°C · 今天 09:12'],['物体温度','咖啡 42°C · 水杯 23°C'],['历史','近 7 天记录 5 条'],['建议','额头测量 · 距离 3cm']],
   gboard:[['主题','跟随系统 · 浅色/深色'],['键盘高度','默认 · 中等'],['滑动输入','已开启'],['词典','个人词典 12 条']],
@@ -5477,7 +5477,7 @@ const APP_EXTRA={
   forms:[['默认收集','已连接表格'],['通知','新回复提醒'],['回复权限','组织内可填写'],['附件','允许上传附件']]
 };
 Object.assign(APP_EXTRA,{
-  phone:[['最近通话','妈妈 · 今天 14:02 · 已接听','外卖 · 今天 12:18 · 已拨出','快递员 · 昨天 18:40 · 未接听'],['收藏','妈妈 · 爸爸 · 小陈'],['快速拨号','1 妈妈 · 2 爸爸 · 3 小陈'],['语音信箱','1 条新留言 · 妈妈 10:25']],
+  phone:[['最近通话','妈妈 · 今天 14:02 · 已接听','外卖 · 今天 12:18 · 已拨出','快递员 · 昨天 18:40 · 未接听'],['收藏','妈 · 爸 · 小陈'],['快速拨号','1 妈 · 2 爸 · 3 小陈'],['语音信箱','1 条新留言 · 妈 10:25']],
   messages:[['对话','妈妈 · 14:02','小陈 · 12:30','Pixel 助手 · 09:15'],['未读','2 条未读消息'],['RCS 状态','已开启 · 端到端加密'],['垃圾短信拦截','本月已拦截 3 条']],
   chrome:[['标签页','3 个打开的标签页'],['书签','8 个书签 · 2 个文件夹'],['历史记录','今天 6 条 · 关 128 条'],['无痕模式','1 个无痕窗可']],
   camera:[['拍摄模式','照片 · 视频 · 夜景 · 人像'],['快捷设置','闪光灯 · 定时器 · 4:3 比例'],['最近拍摄','IMG_0802 · 今天 14:30'],['专业控制','曝光 · 对焦 · 白平衡']],
@@ -5488,10 +5488,10 @@ Object.assign(APP_EXTRA,{
   photos:[['照片','1,284 张照片 · 86 个视频'],['相册','旅行 · 家人 · 收藏 等 12 个相册'],['回忆','3 个新回忆可查看'],['备份','已备份 96% · 最近 2 小时前']],
   clock:[['闹钟','3 个闹钟 · 2 个已开启'],['世界时钟','上海 · 东京 · 伦敦 · 纽约'],['计时器','3 个常用计时器'],['秒表','最近记录 4 条']],
   calculator:[['历史记录','12 条计算记录'],['科学模式','三角函数 · 指数 · 进制'],['单位换算','长度 · 重量 · 温度 · 货币'],['主题','深色 · 浅色']],
-  calendar:[['今日日程','3 个活动 · 2 个会议'],['8 月视图','12 个标记日'],['提醒','活动前 15 分钟提醒'],['目标','健身 · 每周 3 次']],
+  calendar:[['今日程','3 个活动 · 2 个会议'],['8 月视图','12 个标记日'],['提醒','活动前 15 分钟提醒'],['目标','健身 · 每周 3 次']],
   files:[['存储','已用 97.3 GB · 可用 158 GB'],['分类','图片 · 音频 · 视频 · 文档 · 下载'],['最近文件','6 个最近访问的文件'],['清理建议','可清理 2.4 GB']],
   drive:[['云端存储','已用 97.3 GB / 256 GB'],['最近文件','6 个最近打开的文件'],['共享','2 个共享文件夹'],['离线','3 个文件已离线可用']],
-  contacts:[['联系人','6 位联系人'],['群组','家人 · 同事 · 朋友'],['收藏','3 位收藏联系人'],['同步','Google 账号 · 刚刚同步']],
+  contacts:[['联系人','6 位联系人'],['群组','家人 · 同事 · 朋友'],['收藏','3 位收藏联系人'],['同步','Google 账号 · 刚同步']],
   weather:[['当前位置','上海 · 29° 多云'],['逐小时预报','未来 24 小时'],['10 天预报','周四 31° · 周五 28°'],['空气质量','优 · 32 AQI']],
   settings:[['网络与连接','Wi-Fi · 移动网络 · VPN · 热点'],['显示','壁纸与样式 · 深色主题'],['应用','应用管理 · 默认应用'],['系统','关于手机 · 备份 · 系统更新']],
   gemini:[['对话','今日 3 段对话'],['扩展能力','日历 · 提醒 · 设备控制'],['快捷提示','翻译 · 总结 · 写作'],['隐私','对话记录保留 30 天']],
@@ -5551,7 +5551,7 @@ function subPages(id,page){
       row('star','评分与评价','4.8 分 · 2.4 万条评价','toast',' data-msg="评分页面"')+
       row('send','分享此应用','发送给朋友或家人','toast',' data-msg="已生成分享链接"')+
       row('play','商店页面','在 Play 商店中查看','toast',' data-msg="正在打开商店页面"')+
-      row('update','版本历史','17.0.0 · 2026年最 时','sub-open',' data-sub="updates"')+
+      row('update','版本历史','17.0.0 · 2026年8月25日','sub-open',' data-sub="updates"')+
       row('mail','帮助与反馈','在线帮助、反馈问题','sub-open',' data-sub="help"')};
   }
   if(page==='storage'){
@@ -5606,7 +5606,7 @@ function subPages(id,page){
       sw('folder','云端存储','同步文件与设置',true)+
       sw('wifi','仅在 Wi-Fi 下同步','节省移动数据',false)+
       XL('状态')+
-      '<div class="st-row"><span>上次同步</span><b>刚刚</b></div>'+
+      '<div class="st-row"><span>上次同步</span><b>刚</b></div>'+
       '<div class="st-row"><span>自动同步</span><b>每 6 小时</b></div>'+
       '<div class="act-row"><button class="pillbtn primary" data-act="toast" data-msg="正在同步 已完成">立即同步</button></div>'};
   }
@@ -5642,7 +5642,7 @@ function subPages(id,page){
       '<div class="st-row"><span>后台流量</span><b>220 MB</b></div></div>'+
       XL('节省')+
       sw('timer','节省流量','压缩数据并限制后台下载',false)+
-      sw('wifi','仅 Wi-Fi 下载','大文件仅在 Wi-Fi 下下载',true)+
+      sw('wifi','仅 Wi-Fi 下载','大文件仅在 Wi-Fi 下载',true)+
       sw('notif','推送精简','合并通知减少数据',false)+
       '<div class="act-row"><button class="pillbtn" data-act="toast" data-msg="本月流量详情">查看流量详情</button></div>'};
   }
@@ -5663,7 +5663,7 @@ function subPages(id,page){
     return {title:'版本历史',body:
       XL('当前版本')+
       '<div class="st-row"><span>版本号</span><b>17.0.0</b></div>'+
-      '<div class="st-row"><span>更新日期</span><b>2026年最 时</b></div>'+
+      '<div class="st-row"><span>更新日期</span><b>2026年8月25日</b></div>'+
       '<div class="st-row"><span>大小</span><b>'+meta[2]+'</b></div>'+
       sw('update','自动更新','有新版本时自动安装',true)+
       XL('更新记录')+
@@ -5726,7 +5726,7 @@ function subPages(id,page){
       XL('信息')+
       '<div class="st-row"><span>所属分类</span><b>'+g[0]+'</b></div>'+
       '<div class="st-row"><span>状态</span><b>正常</b></div>'+
-      '<div class="st-row"><span>更新时间</span><b>2026年最 时</b></div>'+
+      '<div class="st-row"><span>更新时间</span><b>2026年8月25日</b></div>'+
       '<div class="st-row"><span>来源</span><b>Pixel 10 · '+meta[1]+'</b></div>'+
       XL('操作')+
       '<div class="act-row"><button class="pillbtn primary" data-act="toast" data-msg="正在打开">打开</button><button class="pillbtn" data-act="toast" data-msg="已分享">分享</button></div>'+
@@ -5774,9 +5774,9 @@ function chromeGo(){
   const q=$('#chromeInput').value.trim()||'Android 17';
   $('#resTitle').textContent=`${q} 的搜索结果`;
   const cards=[
-    ['Android 17  维基百科','zh.wikipedia.org','Android 17 是 Google 于 2026 年发布的移动操作系统，带来全新的主题图标、应用气泡、实时信息与 Gemini 集成、'],
+    ['Android 17  维基百科','zh.wikipedia.org','Android 17 是 Google 于 2026 年发布的移动操作系统，带来全新的主题图标、应用气泡、实时信息与 Gemini 集成。'],
     ['Android 17 新功能一览','blog.google','了解 Android 17 的全新设计语言、主题图标与设备端 AI 能力、'],
-    [`${q} 最新资讯`, 'news.google.com', `获取关于 ${q} 的最新新闻、评测与讨论。`],
+    [`${q} 最新资讯`, 'news.google.com', `获取关于 ${q} 的最新闻、评测与讨论。`],
     ['Google Pixel 10 官方页面','store.google.com','6.3 英寸 Actua 屏幕 · Tensor G5 · Android 17，体验焕然一新的 Pixel、']
   ];
   $('#resList').innerHTML=cards.map(c=>`<div class="result-card"><div class="res-url">${escHtml(c[1])}</div><div class="res-title">${escHtml(c[0])}</div><div class="res-snip">${escHtml(c[2])}</div></div>`).join('');
@@ -6064,7 +6064,7 @@ function openVoiceDetail(type,i){
   const el=$('#gvDetailBody');if(!el)return;
   if(type==='call'){
     const c=VOICE_CALLS[i];
-    const dirT={out:'已拨出',in:'已接听',missed:'未接启'};
+    const dirT={out:'已拨出',in:'已接听',missed:'未接听'};
     $('#gvDetailTitle').textContent=c.n;
     el.innerHTML='<div class="detail-hero"><span class="avatar" style="background:'+c.c+';width:62px;height:62px;font-size:24px">'+c.n[0]+'</span><div class="dh-name">'+c.n+'</div><div class="dh-sub">'+c.p+'</div></div>'+
       XL('通话信息')+
@@ -6115,10 +6115,10 @@ function openFileDetail(name,size,ic,color,where){
     '<div class="st-row"><span>'+t('类型')+'</span><b>'+({image:'图片',music:'音频',video:'视频',description:'文档',download:'下载'}[ic]||'文件')+'</b></div>'+
     '<div class="st-row"><span>'+t('位置')+'</span><b>'+where+'</b></div>'+
     '<div class="st-row"><span>'+t('大小')+'</span><b>'+size+'</b></div>'+
-    '<div class="st-row"><span>'+t('修改日期')+'</span><b>2026年最 时</b></div>'+
+    '<div class="st-row"><span>'+t('修改日期')+'</span><b>2026年8月25日</b></div>'+
     XL('操作')+
     '<div class="act-row"><button class="pillbtn primary" data-act="file-open">'+t('打开')+'</button><button class="pillbtn" data-act="file-share">'+t('分享')+'</button></div>'+
-    '<div class="act-row"><button class="pillbtn" data-act="file-rename">'+t('重命启')+'</button><button class="pillbtn" data-act="file-delete">'+t('删除')+'</button></div>';
+    '<div class="act-row"><button class="pillbtn" data-act="file-rename">'+t('重命名')+'</button><button class="pillbtn" data-act="file-delete">'+t('删除')+'</button></div>';
   $('#fileDetail').classList.add('on');
 }
 function closeFileDetail(){$('#fileDetail').classList.remove('on');}
@@ -6239,9 +6239,9 @@ function injectAppSections(){
 }
 /* 各应用的真实功能区：内容随运行时数据变化，因此每次渲染都重新生成 */
 const CHROME_TABS=[{t:'Google',u:'google.com'},{t:'Android 17 新功能',u:'android.com/17'},{t:'Pixel 10 规格',u:'store.google.com/pixel'}];
-const CHROME_BOOKMARKS=[{t:'Google',u:'google.com'},{t:'Android 开发老',u:'developer.android.com'},{t:'Material Design 3',u:'m3.material.io'},{t:'Pixel 支持',u:'support.google.com/pixel'}];
+const CHROME_BOOKMARKS=[{t:'Google',u:'google.com'},{t:'Android 开发者',u:'developer.android.com'},{t:'Material Design 3',u:'m3.material.io'},{t:'Pixel 支持',u:'support.google.com/pixel'}];
 const CHROME_HISTORY=[{t:'Pixel 10 发布',u:'store.google.com',time:'今天 09:12'},{t:'Android 17 新功能速览',u:'android.com/17',time:'今天 08:40'},{t:'Material You 设计指南',u:'m3.material.io',time:'昨天 21:05'},{t:'Pixel 相机评测',u:'youtube.com',time:'昨天 19:22'}];
-const CHROME_FEED=[{t:'Android 17 正式发布：这些新功能值得一话',s:'科技 · 2 小时前',g:'linear-gradient(135deg,#4285F4,#34A853)'},{t:'Pixel 10 相机实拍样张合集',s:'摄影 · 5 小时前',g:'linear-gradient(135deg,#EA4335,#FBBC04)'},{t:'Material You 主题图标怎么用',s:'设计 · 昨天',g:'linear-gradient(135deg,#9334E6,#4285F4)'}];
+const CHROME_FEED=[{t:'Android 17 正式发布：这些新功能值得一看',s:'科技 · 2 小时前',g:'linear-gradient(135deg,#4285F4,#34A853)'},{t:'Pixel 10 相机实拍样张合集',s:'摄影 · 5 小时前',g:'linear-gradient(135deg,#EA4335,#FBBC04)'},{t:'Material You 主题图标怎么用',s:'设计 · 昨天',g:'linear-gradient(135deg,#9334E6,#4285F4)'}];
 let chromeIncognito=false, chromeTabsData=CHROME_TABS.slice(), gmailChip='all', ytChip='all', storeTab='apps';
 const APP_FUNC={
   chrome(){
@@ -6298,11 +6298,11 @@ const APP_FUNC={
       '<div class="act-row"><button class="pillbtn primary" data-act="event-new">'+t('新建活动')+'</button><button class="pillbtn" data-act="cal-today">'+t('回到今天')+'</button></div>';
   },
   ytmusic(){
-    const lib=[['已下载歌更','3 首 · 离线可听'],['最近播放','Lofi 电台 · 2 小时前'],['你的歌单','通勤歌单 · 18 首']];
-    return '<div id="ytmLib">'+XL('音乐应')+
+    const lib=[['已下载歌曲','3 首 · 离线可听'],['最近播放','Lofi 电台 · 2 小时前'],['你的歌单','通勤歌单 · 18 首']];
+    return '<div id="ytmLib">'+XL('音乐应用')+
       lib.map(x=>`<button class="set-row" data-act="ytm-lib" data-name="${x[0]}"><span class="s-ic">${mi(M.music)}</span><span class="s-main"><span class="s-title">${x[0]}</span><span class="s-sub">${x[1]}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('')+
       '</div><div id="ytmExplore">'+XL('探索')+'<div class="app-tiles">'+
-        [['新歌速通','music'],['排行概','star'],['心情电台','sun'],['播客','mic']].map(x=>`<button class="app-tile" data-act="ytm-explore" data-name="${x[0]}"><span class="t-ic">${mi(M[x[1]])}</span><span class="t-t">${x[0]}</span></button>`).join('')+
+        [['新歌速递','music'],['排行榜','star'],['心情电台','sun'],['播客','mic']].map(x=>`<button class="app-tile" data-act="ytm-explore" data-name="${x[0]}"><span class="t-ic">${mi(M[x[1]])}</span><span class="t-t">${x[0]}</span></button>`).join('')+
       '</div></div>';
   },
   /* ===== Play 商店可安装的 Google 应用（安装后即可使用， ===== */
@@ -6311,7 +6311,7 @@ const APP_FUNC={
       `<div class="act-row"><button class="pillbtn primary" data-act="doc-new">${t('新建文档')}</button></div>`;
   },
   sheets(){
-    return XL('最近表标')+SHEETS.map((d,i)=>`<button class="set-row" data-act="sheet-open" data-i="${i}"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.grid||M.apps)}</span><span class="s-main"><span class="s-title">${escHtml(d.n)}</span><span class="s-sub">${escHtml(d.t)} · ${escHtml(d.size)}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('')+
+    return XL('最近表格')+SHEETS.map((d,i)=>`<button class="set-row" data-act="sheet-open" data-i="${i}"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.grid||M.apps)}</span><span class="s-main"><span class="s-title">${escHtml(d.n)}</span><span class="s-sub">${escHtml(d.t)} · ${escHtml(d.size)}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('')+
       `<div class="act-row"><button class="pillbtn primary" data-act="sheet-new">${t('新建表格')}</button></div>`;
   },
   slides(){
@@ -6332,18 +6332,18 @@ const APP_FUNC={
     return XL('对话')+CHAT_SPACES.map((c,i)=>`<button class="set-row" data-act="space-open" data-i="${i}"><span class="avatar" style="background:${c.c}">${c.n[0]}</span><span class="s-main"><span class="s-title">${escHtml(c.n)}</span><span class="s-sub">${escHtml(c.last)}</span></span><span class="row-time">${escHtml(c.t)}</span></button>`).join('');
   },
   meet(){
-    const list=[['每日站会','今天 10:00','产品络'],['产品评审','今天 15:00','设计与研可'],['面试 · 后端','明天 11:00','招聘络']];
+    const list=[['每日站会','今天 10:00','产品组'],['产品评审','今天 15:00','设计与研发'],['面试 · 后端','明天 11:00','招聘组']];
     return XL('即将开始')+list.map((m,i)=>`<button class="set-row" data-act="meet-join" data-i="${i}"><span class="s-ic" style="background:#00A862;color:#fff">${mi(M.video)}</span><span class="s-main"><span class="s-title">${m[0]}</span><span class="s-sub">${m[1]} · ${m[2]}</span></span><span class="chev">${mi(M.video)}</span></button>`).join('');
   },
   one(){
     return XL('存储空间')+'<div class="kb-hint" style="padding:0 16px 4px">'+t('已用 97.3 GB · 共 256 GB')+'</div>'+
       '<div class="tmo-bar" style="margin:0 16px 12px"><i style="width:38%"></i></div>'+
       XL('会员权益')+
-      `<button class="set-row" data-act="one-backup"><span class="s-ic">${mi(M.update)}</span><span class="s-main"><span class="s-title">${t('备份与恢天')}</span><span class="s-sub">${t('照片、视频与应用数据')}</span></span><button class="switch${oneBackup?' on':''}" id="oneBackupSw"></button></button>`+
-      `<button class="set-row" data-act="one-vpn"><span class="s-ic">${mi(M.shield)}</span><span class="s-main"><span class="s-title">${t('Google VPN')}</span><span class="s-sub">${t('已包含在 2 TB 方案与')}</span></span><span class="chev">${mi(M.chev)}</span></button>`;
+      `<button class="set-row" data-act="one-backup"><span class="s-ic">${mi(M.update)}</span><span class="s-main"><span class="s-title">${t('备份与恢复')}</span><span class="s-sub">${t('照片、视频与应用数据')}</span></span><button class="switch${oneBackup?' on':''}" id="oneBackupSw"></button></button>`+
+      `<button class="set-row" data-act="one-vpn"><span class="s-ic">${mi(M.shield)}</span><span class="s-main"><span class="s-title">${t('Google VPN')}</span><span class="s-sub">${t('已包含在 2 TB 方案中')}</span></span><span class="chev">${mi(M.chev)}</span></button>`;
   },
   gtv(){
-    const list=[['、4K】上海天际线延时摄影',0],['Android 17 新功能速览',1],['Tensor G5 芯片深度评测',2]];
+    const list=[['【4K】上海天际线延时摄影',0],['Android 17 新功能速览',1],['Tensor G5 芯片深度评测',2]];
     return XL('继续观看')+list.map(x=>`<button class="feed-card" data-act="gtv-play" data-i="${x[1]}"><span class="feed-thumb" style="background:${YT_FEED[x[1]].th}"></span><span class="flex1"><span class="feed-t">${YT_FEED[x[1]].t}</span><div class="feed-s">${YT_FEED[x[1]].ch} · ${x[0]===null?'':YT_FEED[x[1]].d}</div></span></button>`).join('');
   },
   news(){
@@ -6357,20 +6357,20 @@ const APP_FUNC={
     return XL('卡券')+WALLET.map((w,i)=>`<button class="set-row" data-act="wallet-open" data-i="${i}"><span class="s-ic" style="background:${w.c};color:#fff">${mi(M.wallet)}</span><span class="s-main"><span class="s-title">${escHtml(w.n)}</span><span class="s-sub">${escHtml(w.s)}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('');
   },
   notebooklm(){
-    return XL('笔记最')+NOTEBOOKS.map((b,i)=>`<button class="set-row" data-act="nb-open" data-i="${i}"><span class="s-ic" style="background:#7C4DFF;color:#fff">${mi(M.description)}</span><span class="s-main"><span class="s-title">${escHtml(b.n)}</span><span class="s-sub">${b.src} ${t('个来源')}${b.sum?' · '+t('已生成摘要'):''}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('')+
-      `<div class="act-row"><button class="pillbtn primary" data-act="nb-new">${t('新建笔记最')}</button></div>`;
+    return XL('笔记本')+NOTEBOOKS.map((b,i)=>`<button class="set-row" data-act="nb-open" data-i="${i}"><span class="s-ic" style="background:#7C4DFF;color:#fff">${mi(M.description)}</span><span class="s-main"><span class="s-title">${escHtml(b.n)}</span><span class="s-sub">${b.src} ${t('个来源')}${b.sum?' · '+t('已生成摘要'):''}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('')+
+      `<div class="act-row"><button class="pillbtn primary" data-act="nb-new">${t('新建笔记本')}</button></div>`;
   }
 };
-/* 可安装 Google 应用用到的数据 */
+/* 可安装 Google 应用到的数据 */
 let DOCS=[{n:'项目管理计划.docx',t:'今天编辑',size:'1.2 MB',body:'一、目标\n完成 Pixel 10 适配并交付。\n\n二、里程碑\n· 8/10 需求评审\n· 8/20 开发完成\n· 8/28 上线'},{n:'家庭清单.docx',t:'昨天打开',size:'320 KB',body:'· 牛奶\n· 面包\n· 洗衣消'},{n:'会议纪要_0801.docx',t:'周一',size:'48 KB',body:'与会：小陈、老王\n结论：本周完成交互用 ，下周一评审、'}];
 let SHEETS=[{n:'Q3 预算.xlsx',t:'2 小时前',size:'640 KB',rows:[['项目','预算','实际'],['市场','12,000','9,800'],['研发','30,000','28,400'],['差旅','6,000','5,200']]},{n:'课程表.xlsx',t:'昨天',size:'92 KB',rows:[['时间','课程'],['周一 9:00','算法'],['周三 14:00','设计']]}];
 let SLIDES=[{n:'产品发布.pptx',t:'今天',n2:12,first:'Pixel 10 · 全新一件'},{n:'培训材料.pptx',t:'昨天',n2:8,first:'Android 17 新特态'}];
-let KEEP_NOTES=[{t:'购物清单',b:'牛奶、面包、洗衣液',c:'#F9AB00'},{t:'读书摘录',b:'“好的设计是尽可能少的设计',c:'#4285F4'},{t:'灵感',b:'做一与 Pixel 模拟器',c:'#188038'}];
+let KEEP_NOTES=[{t:'购物清单',b:'牛奶、面包、洗衣液',c:'#F9AB00'},{t:'读书摘录',b:'“好的设计是尽可能少的设计”',c:'#4285F4'},{t:'灵感',b:'做一个 Pixel 模拟器',c:'#188038'}];
 let TASKS=[{t:'完成周报',s:'今天截止',done:false},{t:'预约体检',s:'本周',done:false},{t:'整理桌面文件',s:'本周',done:true}];
-let CHAT_SPACES=[{n:'产品群',c:'#1A73E8',last:'小陈：交互用 已更新',t:'12:30',msgs:[{me:false,t:'交互稿已更新，大家看看'},{me:true,t:'收到，下午给反馈'}]},{n:'设计络',c:'#9334E6',last:'老王：图片 3 开',t:'昨天',msgs:[{me:false,t:'这几版配色哪个好，'}]},{n:'家人群',c:'#E8710A',last:'妈妈：周末聚餐',t:'周一',msgs:[{me:false,t:'周末回家吃饭吗？'}]}];
-let NEWS=[{t:'Android 17 正式发布：这些新功能值得一话',s:'科技 · 2 小时前',g:'linear-gradient(135deg,#4285F4,#34A853)',body:'Android 17 带来了全新的主题图标、实时信息显示与更强的端例 AI 能力、'},{t:'Pixel 10 相机实拍样张合集',s:'摄影 · 5 小时前',g:'linear-gradient(135deg,#EA4335,#FBBC04)',body:'Tensor G5 加持的夜景算法在暗光下表现更稳定、'},{t:'Material You 主题图标怎么用',s:'设计 · 昨天',g:'linear-gradient(135deg,#9334E6,#4285F4)',body:'长按桌面  壁纸与样开  开启主题图标、'}];
+let CHAT_SPACES=[{n:'产品群',c:'#1A73E8',last:'小陈：交互稿 已更新',t:'12:30',msgs:[{me:false,t:'交互稿已更新，大家看'},{me:true,t:'收到，下午给反馈'}]},{n:'设计组',c:'#9334E6',last:'老王：图片 3 张',t:'昨天',msgs:[{me:false,t:'这几版配色哪个好，'}]},{n:'家人群',c:'#E8710A',last:'妈：周末聚餐',t:'周一',msgs:[{me:false,t:'周末回家吃饭吗？'}]}];
+let NEWS=[{t:'Android 17 正式发布：这些新功能值得一看',s:'科技 · 2 小时前',g:'linear-gradient(135deg,#4285F4,#34A853)',body:'Android 17 带来了全新的主题图标、实时信息显示与更强的端例 AI 能力、'},{t:'Pixel 10 相机实拍样张合集',s:'摄影 · 5 小时前',g:'linear-gradient(135deg,#EA4335,#FBBC04)',body:'Tensor G5 加持的夜景算法在暗光下表现更稳定、'},{t:'Material You 主题图标怎么用',s:'设计 · 昨天',g:'linear-gradient(135deg,#9334E6,#4285F4)',body:'长按桌面  壁纸与样开  开启主题图标、'}];
 let HOME_DEVICES=[{n:'客厅灯',on:true,c:'#F9AB00',ic:'lightbulb'},{n:'空调',on:true,c:'#1A73E8',ic:'ac'},{n:'门锁',on:false,c:'#5F6368',ic:'lock'}];
-let WALLET=[{n:'Momo 的储蓄卡',s:'尾号 8821 · 默认支付',c:'#1A73E8'},{n:'电影票',s:'周六 19:00 · 万达影城',c:'#D93025'},{n:'登机片',s:'8 最 15 时 上海  东京',c:'#188038'}];
+let WALLET=[{n:'Momo 的储蓄卡',s:'尾号 8821 · 默认支付',c:'#1A73E8'},{n:'电影票',s:'周六 19:00 · 万达影城',c:'#D93025'},{n:'登机牌',s:'8 月 15 日 上海 → 东京',c:'#188038'}];
 let NOTEBOOKS=[{n:'研究论文',src:12,sum:'端侧模型在移动设备上的推理优化'},{n:'产品文档',src:8,sum:''}];
 let oneBackup=true;
 let chatSpaceIdx=0;
@@ -6502,7 +6502,7 @@ function chromeOpenUrl(u,title){
   $('#resTitle').textContent=title||u;
   $('#resList').innerHTML='<div class="result-card"><div class="res-title">'+escHtml(title||u)+'</div><div class="res-url">'+escHtml(u)+'</div>'+
     '<div class="res-snip">'+t('已在新标签页中打开该页面 ')+'</div></div>'+
-    '<div class="result-card"><div class="res-title">'+t('相关结果')+'</div><div class="res-snip">'+t('来自浏览器模拟页面的示例内容、')+'</div></div>';
+    '<div class="result-card"><div class="res-title">'+t('相关结果')+'</div><div class="res-snip">'+t('来自浏览器模拟页面的示例内容。')+'</div></div>';
   $('#chromeResults').classList.remove('hidden');
 }
 function chromeBookmarksPage(){
@@ -6676,7 +6676,7 @@ function applyLang(){
   });
   const ds=$('#drawerSearch'); if(ds)ds.placeholder=t('搜索手机和更多内容');
   const hs=$('#homeSearch'); if(hs)hs.placeholder=t('搜索');
-  const ps=$('#phSearch'); if(ps)ps.placeholder=t('搜索联系享');
+  const ps=$('#phSearch'); if(ps)ps.placeholder=t('搜索联系人');
   const ss=$('#storeSearch'); if(ss)ss.placeholder=t('搜索应用和游成');
   $$('.qs-notif-title button').forEach(b=>{if(b.dataset.act==='notif-clear')b.textContent=t('清除全部');});
   $$('.recents-title .recents-clear').forEach(b=>b.textContent=t('全部清除'));
@@ -7118,7 +7118,7 @@ function init(){
         $$('#app-ytmusic .tabbtn').forEach(b=>b.classList.toggle('on',b===el));
         const k=el.dataset.tab;
         const body=$('#app-ytmusic .appbody');
-        const target=k==='音乐应'?$('#ytmLib'):(k==='探索'?$('#ytmExplore'):null);
+        const target=k==='音乐应用'?$('#ytmLib'):(k==='探索'?$('#ytmExplore'):null);
         if(target&&body)body.scrollTop=Math.max(0,target.offsetTop-64);
         else if(body)body.scrollTop=0;
         break;
@@ -7146,7 +7146,7 @@ function init(){
       case 'chrome-incognito':chromeIncognitoToggle();break;
       case 'chrome-feed':{
         const f=CHROME_FEED[Number(el.dataset.i)];
-        if(f){$('#chromeHome').classList.add('hidden');$('#resTitle').textContent=f.t;$('#resList').innerHTML='<div class="result-card"><div class="res-title">'+f.t+'</div><div class="res-url">news.google.com</div><div class="res-snip">'+t('来自浏览器模拟页面的示例内容、')+'</div></div>';$('#chromeResults').classList.remove('hidden');}
+        if(f){$('#chromeHome').classList.add('hidden');$('#resTitle').textContent=f.t;$('#resList').innerHTML='<div class="result-card"><div class="res-title">'+f.t+'</div><div class="res-url">news.google.com</div><div class="res-snip">'+t('来自浏览器模拟页面的示例内容。')+'</div></div>';$('#chromeResults').classList.remove('hidden');}
         break;
       }
       case 'chat-new':chatNew(el.dataset.name);break;
@@ -7282,7 +7282,7 @@ function init(){
         if(b){b.sum=t('本笔记本聚焦移动端推理优化：量化、KV 缓存与算子融合是三个关键方向、');closeAppSubs('notebooklm');refreshAppSections();toast(t('已生成摘要'));}
         break;
       }
-      case 'nb-new':NOTEBOOKS.unshift({n:t('新建笔记最'),src:0,sum:''});refreshAppSections();toast(t('已新建笔记本'));break;
+      case 'nb-new':NOTEBOOKS.unshift({n:t('新建笔记本'),src:0,sum:''});refreshAppSections();toast(t('已新建笔记本'));break;
       case 'event-new':eventNewPage();break;
       case 'ev-time':{
         eventNewTime=el.dataset.v;
@@ -7315,7 +7315,7 @@ function init(){
       case 'tmo-back':$('#tmoBill').classList.remove('on');$('#tmoUsage').classList.remove('on');break;
       case 'tmo-pay':toast(t('缴费成功')+'： 129.00');break;
       case 'tmo-history':toast(t('历史账单')+'，" 最 ¥129 · 7 最 ¥129 · 8 最 ¥129');break;
-      case 'tmo-topup':toast(t('已购乐 10 GB 流量化'));break;
+      case 'tmo-topup':toast(t('已购乐 10 GB 流量包'));break;
       /* chat-open 已在上方统一分派：Messages 与 Google Chat */
       /* chat-back 已在上方统一分派：先 Google Chat 再 Messages */
       case 'send-msg':sendMsg();break;
@@ -7399,7 +7399,7 @@ function init(){
       case 'drive-upload':{
         DRIVE_ROOT.push({id:'dw'+Date.now(),n:'上传的照片.jpg',type:'img',size:'2.1 MB',mod:'刚刚',star:false});
         renderDrive();
-        toast('已上传「上传的照片.jpg、');
+        toast('已上传「上传的照片.jpg」');
         break;
       }
       case 'drive-open':driveOpen(el.dataset.id);break;
