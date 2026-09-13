@@ -1195,7 +1195,7 @@ img,svg{-webkit-user-drag:none;user-select:none}
     <div class="s">360 × 808 · 对应 6.3 Actua（1280 × 2856）· Android 17 (Baklava) · 底层重构版 · 单文件运行</div>
   </div>
   <div class="desk-actions">
-    <button data-act="zoom-out"></button>
+    <button data-act="zoom-out">−</button>
     <span class="zoom-label" id="zoomLabel">100%</span>
     <button data-act="zoom-in">+</button>
     <button data-act="zoom-fit">适应屏幕</button>
@@ -2630,20 +2630,20 @@ const EXTRA_APPS=[
    <div class="appbody">
      <div class="list-search">${mi(M.search)}<input placeholder="搜索文档"></div>
      <div class="act-row">${XP('＋ 新建','新建文档',1)}${XP('打开','文件选择')}</div>
-     ${XL('最近使用')}${XR(mi(M.description),'Q3 产品路线图','昨天 09:42 · 1.2 MB','打开文档')}${XR(mi(M.description),'会议纪要 0801','今天 10:02 · 320 KB','打开文档')}${XR(mi(M.description),'发布计划','7月30时 · 840 KB','打开文档')}
+     ${XL('最近使用')}${XR(mi(M.description),'Q3 产品路线图','昨天 09:42 · 1.2 MB','打开文档')}${XR(mi(M.description),'会议纪要 0801','今天 10:02 · 320 KB','打开文档')}${XR(mi(M.description),'发布计划','7月30日 · 840 KB','打开文档')}
      ${XL('共享给我的')}${XR(mi(M.person),'周报计划','小陈 共享 · 昨天','打开文档')}
    </div>`},
  {id:'sheets',name:'Google 表格',html:`
    <div class="appbody">
      <div class="list-search">${mi(M.search)}<input placeholder="搜索表格"></div>
      <div class="act-row">${XP('＋ 新建','新建表格',1)}${XP('打开','文件选择')}</div>
-     ${XL('最近使用')}${XR(mi(M.description),'预算表','昨天 17:20 · 640 KB','打开表格')}${XR(mi(M.description),'考勤统计','7月28时 · 220 KB','打开表格')}${XR(mi(M.description),'库存清单','7月25时 · 480 KB','打开表格')}
+     ${XL('最近使用')}${XR(mi(M.description),'预算表','昨天 17:20 · 640 KB','打开表格')}${XR(mi(M.description),'考勤统计','7月28日 · 220 KB','打开表格')}${XR(mi(M.description),'库存清单','7月25日 · 480 KB','打开表格')}
    </div>`},
  {id:'slides',name:'Google 幻灯片',html:`
    <div class="appbody">
-     <div class="list-search">${mi(M.search)}<input placeholder="搜索演示文用+"></div>
+     <div class="list-search">${mi(M.search)}<input placeholder="搜索演示文稿"></div>
      <div class="act-row">${XP('＋ 新建','新建演示文稿',1)}${XP('打开','文件选择')}</div>
-     ${XL('最近使用')}${XR(mi(M.image),'发布会演示文稿','7月30时 · 8.4 MB','打开演示文稿')}${XR(mi(M.image),'产品培训','7月22时 · 5.1 MB','打开演示文稿')}${XR(mi(M.image),'Q3 汇报','7月15时 · 12.6 MB','打开演示文用 ')}
+     ${XL('最近使用')}${XR(mi(M.image),'发布会演示文稿','7月30日 · 8.4 MB','打开演示文稿')}${XR(mi(M.image),'产品培训','7月22日 · 5.1 MB','打开演示文稿')}${XR(mi(M.image),'Q3 汇报','7月15日 · 12.6 MB','打开演示文稿')}
    </div>`},
  {id:'keep',name:'Google Keep',html:`
    <div class="appbody">
@@ -2657,15 +2657,15 @@ const EXTRA_APPS=[
    <div class="appbody">
      ${XL('今天')}
      ${['完成周报','给妈妈回电话','预订周五的餐厅','整理旅行照片'].map(t=>`<div class="set-row" data-act="toast" data-msg="任务已完成"><span class="s-ic" style="background:transparent;border:2px solid var(--txt3)"></span><span class="s-main"><span class="s-title">${t}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join('')}
-     ${XL('稍后')}${XR(mi(M.calendar),'续费 Google One','8月30时','任务详情')}${XR(mi(M.calendar),'预约牙医','8月15时','任务详情')}
+     ${XL('稍后')}${XR(mi(M.calendar),'续费 Google One','8月30日','任务详情')}${XR(mi(M.calendar),'预约牙医','8月15日','任务详情')}
      <div class="act-row">${XP('＋ 添加任务','添加任务',1)}</div>
    </div>`},
  {id:'forms',name:'Google 表单',html:`
    <div class="appbody">
      <div class="list-search">${mi(M.search)}<input placeholder="搜索表单"></div>
      <div class="act-row">${XP('＋ 新建表单','新建表单',1)}${XP('新建测验','新建测验')}</div>
-     ${XL('最近表单')}${XR(mi(M.check),'团队出游意向调查','12 条回复 · 昨天','打开表单')}${XR(mi(M.check),'课程反馈问卷','34 条回复 · 7月8时','打开表单')}
-     ${XL('需要回复')}${XR(mi(M.notif),'客户满意度调研','回复截止 8月时','打开表单')}
+     ${XL('最近表单')}${XR(mi(M.check),'团队出游意向调查','12 条回复 · 昨天','打开表单')}${XR(mi(M.check),'课程反馈问卷','34 条回复 · 7月8日','打开表单')}
+     ${XL('需要回复')}${XR(mi(M.notif),'客户满意度调研','回复截止 8月1日','打开表单')}
    </div>`},
  {id:'sites',name:'Google 协作平台',html:`
    <div class="appbody">
@@ -2739,7 +2739,7 @@ const EXTRA_APPS=[
      <div class="list-search">${mi(M.search)}<input placeholder="搜索数据"></div>
      <div class="set-row"><span class="s-ic">${mi(M.shield)}</span><span class="s-main"><span class="s-title">保留规则</span><span class="s-sub">默认 365 天 · 已生效</span></span><span class="chev">${mi(M.chev)}</span></div>
      ${XL('数据集')}${XR(mi(M.mail),'Gmail','保留 365 天','打开数据集')}${XR(mi(M.chat),'Chat','保留 180 天','打开数据集')}${XR(mi(M.folder),'Drive','保留 365 天','打开数据集')}
-     ${XL('审计')}${XR(mi(M.timer),'最近活动','今天 09:12 · 导出请求','查看审计日志')}${XR(mi(M.info),'数据导出','上次导出 7月30时','管理导出')}
+     ${XL('审计')}${XR(mi(M.timer),'最近活动','今天 09:12 · 导出请求','查看审计日志')}${XR(mi(M.info),'数据导出','上次导出 7月30日','管理导出')}
    </div>`},
  {id:'cloudsearch',name:'Google Cloud Search',html:`
    <div class="appbody">
@@ -2783,12 +2783,12 @@ const EXTRA_APPS=[
    <div class="appbody">
      <div class="act-row">${XP('＋ 新建笔记本','新建笔记本',1)}</div>
      ${XL('我的笔记本')}
-     ${[['产品研究','8 个来源 · 上次编辑今天','linear-gradient(135deg,#7c4dff,#b388ff)'],['会议资料','5 个来源 · 上次编辑昨天','linear-gradient(135deg,#4285f4,#8ab4f8)'],['论文笔记','12 个来源 · 7月8时','linear-gradient(135deg,#00897b,#4db6ac)']].map(n=>`<button class="note-card" data-act="toast" data-msg="打开笔记本" style="width:100%;text-align:left;margin-bottom:10px"><div style="height:48px;border-radius:12px;background:${n[2]};margin-bottom:8px"></div><h4>${n[0]}</h4><p style="font-size:11px">${n[1]}</p></button>`).join('')}
+     ${[['产品研究','8 个来源 · 上次编辑今天','linear-gradient(135deg,#7c4dff,#b388ff)'],['会议资料','5 个来源 · 上次编辑昨天','linear-gradient(135deg,#4285f4,#8ab4f8)'],['论文笔记','12 个来源 · 7月8日','linear-gradient(135deg,#00897b,#4db6ac)']].map(n=>`<button class="note-card" data-act="toast" data-msg="打开笔记本" style="width:100%;text-align:left;margin-bottom:10px"><div style="height:48px;border-radius:12px;background:${n[2]};margin-bottom:8px"></div><h4>${n[0]}</h4><p style="font-size:11px">${n[1]}</p></button>`).join('')}
      ${XL('最近对话')}${XR(mi(M.chat),'帮我总结 Q3 路线图','今天 11:20','打开对话')}
    </div>`},
  {id:'journal',name:'Journal',html:`
    <div class="appbody">
-     <div class="set-info-hero"><div style="width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#f9ab00,#ea4335);display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px">📖</div><div style="font-size:17px;font-weight:600">8月时 · 星期日</div><div style="font-size:12px;color:var(--txt2)">今天过得怎么样？</div></div>
+     <div class="set-info-hero"><div style="width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#f9ab00,#ea4335);display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px">📖</div><div style="font-size:17px;font-weight:600">8月1日 · 星期日</div><div style="font-size:12px;color:var(--txt2)">今天过得怎么样？</div></div>
      <div class="act-row">${XP('＋ 记录今天','记录日记',1)}</div>
      ${XL('今日记忆')}
      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -2814,7 +2814,7 @@ const EXTRA_APPS=[
        <div style="font-size:20px;letter-spacing:2px;margin-top:14px;font-variant-numeric:tabular-nums">••• ••• ••• 4821</div>
        <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:12px;opacity:.75"><span>MOMO ZHANG</span><span>08/28</span></div>
      </div>
-     ${XL('卡片')}${XR(mi(M.wallet),'银行卡','招商银行 · 尾号 4821','卡片详情')}${XR(mi(M.nfc),'交通卡','上海公共交通卡 · 余额 ¥36.50','交通卡详情')}${XR(mi(M.flight),'登机牌','MU5101 · 上海→北京','登机牌详情')}${XR(mi(M.calendar),'门票','8月15时 · 演唱会','门票详情')}
+     ${XL('卡片')}${XR(mi(M.wallet),'银行卡','招商银行 · 尾号 4821','卡片详情')}${XR(mi(M.nfc),'交通卡','上海公共交通卡 · 余额 ¥36.50','交通卡详情')}${XR(mi(M.flight),'登机牌','MU5101 · 上海→北京','登机牌详情')}${XR(mi(M.calendar),'门票','8月15日 · 演唱会','门票详情')}
      <div class="act-row">${XP('＋ 添加到钱包','添加卡片',1)}</div>
    </div>`},
  {id:'home',name:'Google Home',html:`
@@ -2865,7 +2865,7 @@ const EXTRA_APPS=[
  {id:'pixelwatch',name:'Pixel Watch',html:`
    <div class="appbody">
      <div style="margin:12px auto;width:148px;height:148px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#2b2b33,#0d0d12);border:5px solid #3c4043;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.35)">
-       <div style="text-align:center"><div style="font-size:24px;font-weight:300">12:17</div><div style="font-size:9px;opacity:.65">8月时 · 周日</div></div>
+       <div style="text-align:center"><div style="font-size:24px;font-weight:300">12:17</div><div style="font-size:9px;opacity:.65">8月1日 · 周日</div></div>
      </div>
      ${XL('健康')}${XR(mi(M.accessible),'心率','68 bpm · 静息 62','心率详情')}${XR(mi(M.timer),'睡眠','7 小时 26 分 · 昨晚','睡眠详情')}${XR(mi(M.battery),'电量','64% · 约 18 小时','电量详情')}
      ${XL('手表应用')}${XR(mi(M.settings),'管理应用','12 个应用已安装','管理应用')}${XR(mi(M.notif),'通知','镜像手机通知','通知设置')}
@@ -3771,7 +3771,7 @@ function applyShade(){
   if(blur){blur.style.opacity=String(Math.min(1,p*1.1));blur.style.backdropFilter='blur('+(p*26).toFixed(1)+'px)';blur.style.webkitBackdropFilter='blur('+(p*26).toFixed(1)+'px)';}
   const blurB=document.getElementById('ccBlurB');
   if(blurB){blurB.style.opacity=String(Math.min(1,k*1.1));blurB.style.backdropFilter='blur('+(k*26).toFixed(1)+'px)';blurB.style.webkitBackdropFilter='blur('+(k*26).toFixed(1)+'px)';}
-  /* 下拉时背景内容轻微缩小)+ 手势条淡出 */
+  /* 下拉时背景内容轻微缩小）· 手势条淡出 */
   const scale=k>0?(1-0.02*k):1;
   ['#home','#drawer','#lock'].forEach(sel=>{const el=$(sel);if(el)el.style.transform=k>0?('scale('+scale.toFixed(4)+')'):'';});
   const nav=$('#nav');
@@ -4314,7 +4314,7 @@ function renderAlarms(){
   $('#tab-alarm').innerHTML=ALARMS.map((a,i)=>`<div class="alarm-row" data-act="alarm-edit" data-i="${i}"><div><div class="alarm-time">${escHtml(a.t)}</div><div class="alarm-label">${escHtml(a.l)}</div></div><span class="flex1"></span><button class="switch${a.on?' on':''}" data-act="alarm-toggle" data-i="${i}"></button></div>`).join('')+`<div class="act-row"><button class="pillbtn" style="width:100%" data-act="alarm-add">＋ 添加闹钟</button></div>`;
 }
 function renderWorld(){
-  $('#tab-world').innerHTML=WORLD_ZONES.map(z=>`<div class="world-row"><div class="w-city"><div class="row-title">${z[0]}</div><div class="row-sub">${z[0]==='上海'?'本地时间':'8月时'}</div></div><span class="w-time">${new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:z[1]})}</span></div>`).join('');
+  $('#tab-world').innerHTML=WORLD_ZONES.map(z=>`<div class="world-row"><div class="w-city"><div class="row-title">${z[0]}</div><div class="row-sub">${z[0]==='上海'?'本地时间':'8月1日'}</div></div><span class="w-time">${new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:z[1]})}</span></div>`).join('');
 }
 function swFmt(ms){
   const m=Math.floor(ms/60000),s=Math.floor(ms%60000/1000),t=Math.floor(ms%1000/100);
@@ -4507,28 +4507,28 @@ const DRIVE_ROOT=[
   {id:'dw1',n:'工作项目',type:'folder',color:'#1A73E8',kids:[
     {id:'dw1a',n:'Q3 产品路线图.docx',type:'doc',size:'1.2 MB',mod:'今天 09:42',star:true},
     {id:'dw1b',n:'预算表.xlsx',type:'sheet',size:'640 KB',mod:'昨天 17:20',star:false},
-    {id:'dw1c',n:'发布会演示文稿.pptx',type:'doc',size:'8.4 MB',mod:'7月30时',star:true},
+    {id:'dw1c',n:'发布会演示文稿.pptx',type:'doc',size:'8.4 MB',mod:'7月30日',star:true},
     {id:'dw1d',n:'设计素材',type:'folder',color:'#E8710A',kids:[
-      {id:'dw1d1',n:'首页稿_v3.fig',type:'doc',size:'26 MB',mod:'7月29时',star:false},
-      {id:'dw1d2',n:'品牌色板.png',type:'img',size:'1.8 MB',mod:'7月28时',star:true}
+      {id:'dw1d1',n:'首页稿_v3.fig',type:'doc',size:'26 MB',mod:'7月29日',star:false},
+      {id:'dw1d2',n:'品牌色板.png',type:'img',size:'1.8 MB',mod:'7月28日',star:true}
     ]}
   ]},
   {id:'dw2',n:'个人文档',type:'folder',color:'#188038',kids:[
-    {id:'dw2a',n:'护照扫描件.pdf',type:'pdf',size:'3.6 MB',mod:'7月28时',star:false},
-    {id:'dw2b',n:'旅行计划.md',type:'doc',size:'24 KB',mod:'7月25时',star:true}
+    {id:'dw2a',n:'护照扫描件.pdf',type:'pdf',size:'3.6 MB',mod:'7月28日',star:false},
+    {id:'dw2b',n:'旅行计划.md',type:'doc',size:'24 KB',mod:'7月25日',star:true}
   ]},
   {id:'dw3',n:'云端照片',type:'folder',color:'#E8710A',kids:[
-    {id:'dw3a',n:'上海日落.jpg',type:'img',size:'4.8 MB',mod:'7月22时',star:true},
-    {id:'dw3b',n:'家庭聚会.mp4',type:'video',size:'214 MB',mod:'7月30时',star:false}
+    {id:'dw3a',n:'上海日落.jpg',type:'img',size:'4.8 MB',mod:'7月22日',star:true},
+    {id:'dw3b',n:'家庭聚会.mp4',type:'video',size:'214 MB',mod:'7月30日',star:false}
   ]},
   {id:'dw4',n:'会议纪要_20260801.docx',type:'doc',size:'320 KB',mod:'刚刚',star:true},
   {id:'dw5',n:'手机备份 2026-07.zip',type:'zip',size:'1.8 GB',mod:'今天 08:12',star:false},
-  {id:'dw6',n:'旅行vlog.mp4',type:'video',size:'860 MB',mod:'7月28时',star:false}
+  {id:'dw6',n:'旅行vlog.mp4',type:'video',size:'860 MB',mod:'7月28日',star:false}
 ];
 const DRIVE_SHARED=[
   {id:'ds1',n:'项目周报.docx',type:'doc',owner:'小陈',size:'210 KB',mod:'2小时前',star:false},
   {id:'ds2',n:'团建照片',type:'folder',color:'#E8710A',owner:'老王',mod:'昨天',star:false},
-  {id:'ds3',n:'预算终版.xlsx',type:'sheet',owner:'财务部',size:'980 KB',mod:'7月29时',star:true}
+  {id:'ds3',n:'预算终版.xlsx',type:'sheet',owner:'财务部',size:'980 KB',mod:'7月29日',star:true}
 ];
 let driveTrash=[];
 let driveFolderStack=[];
@@ -5170,7 +5170,7 @@ function renderRec(){
   const bars=[];
   for(let i=0;i<48;i++)bars.push(Math.floor(Math.random()*80+12));
   $('#recWave').innerHTML=bars.map(h=>`<i style="height:${h}px"></i>`).join('');
-  $('#recList').innerHTML=[['会议记录 08-01','今天 10:24 · 00:18:32'],['灵感随笔','7月1时 · 00:03:05']].map(r=>`<div class="file-row"><span class="f-ic" style="background:#E91E63">${mi(M.music)}</span><div class="row-main"><div class="row-title">${r[0]}</div><div class="row-sub">${r[1]}</div></div><span class="chev">${mi(M.chev)}</span></div>`).join('');
+  $('#recList').innerHTML=[['会议记录 08-01','今天 10:24 · 00:18:32'],['灵感随笔','7月1日 · 00:03:05']].map(r=>`<div class="file-row"><span class="f-ic" style="background:#E91E63">${mi(M.music)}</span><div class="row-main"><div class="row-title">${r[0]}</div><div class="row-sub">${r[1]}</div></div><span class="chev">${mi(M.chev)}</span></div>`).join('');
 }
 function toggleRec(){
   recOn=!recOn;
@@ -5371,7 +5371,7 @@ const APP_META={
   gboard:['Google LLC','输入法','186 MB','智能键盘：滑动输入、语音与翻译'],
   docs:['Google LLC','效率','138 MB','创建、编辑与协作处理文档'],
   sheets:['Google LLC','效率','142 MB','电子表格、公式与数据分析'],
-  slides:['Google LLC','效率','122 MB','演示文用 、模板与协作'],
+  slides:['Google LLC','效率','122 MB','演示文稿、模板与协作'],
   keep:['Google LLC','效率','66 MB','记录灵感、清单与提醒'],
   tasks:['Google LLC','效率','32 MB','任务、待办与子任务管理'],
   forms:['Google LLC','效率','28 MB','创建表单、问卷与测验'],
@@ -5617,7 +5617,7 @@ function subPages(id,page){
       sw('sound','屏幕朗读','朗读界面内容',false)+
       row('settings','无障碍按钮','快捷启动辅助功能','toast',' data-msg="无障碍设置"')+
       XL('说明')+
-      '<div class="kb-hint">更多无障碍选项可在系统「设置  无障碍」中调整。</div>'};
+      '<div class="kb-hint">更多无障碍选项可在系统「设置 → 无障碍」中调整。</div>'};
   }
   if(page==='updates'){
     return {title:'版本历史',body:
@@ -6276,7 +6276,7 @@ const APP_FUNC={
   },
   slides(){
     return XL('最近演示')+SLIDES.map((d,i)=>`<button class="set-row" data-act="slide-open" data-i="${i}"><span class="s-ic" style="background:#F9AB00;color:#fff">${mi(M.slides||M.image)}</span><span class="s-main"><span class="s-title">${escHtml(d.n)}</span><span class="s-sub">${escHtml(d.t)} · ${d.n2} ${t('张幻灯片')}</span></span><span class="chev">${mi(M.chev)}</span></button>`).join('')+
-      `<div class="act-row"><button class="pillbtn primary" data-act="slide-new">${t('新建演示文用 ')}</button></div>`;
+      `<div class="act-row"><button class="pillbtn primary" data-act="slide-new">${t('新建演示文稿')}</button></div>`;
   },
   keep(){
     return XL('笔记')+KEEP_NOTES.map((n,i)=>`<div class="set-row"><span class="s-ic" style="background:${n.c};color:#fff">${mi(M.description)}</span><button class="s-main" style="background:none;border:0;text-align:left;color:inherit" data-act="note-open" data-i="${i}"><span class="s-title">${escHtml(n.t)}</span><span class="s-sub">${escHtml(n.b.slice(0,18))}</span></button><button class="iconbtn" data-act="note-del" data-i="${i}">${mi(M.delete)}</button></div>`).join('')+
@@ -6947,7 +6947,7 @@ function init(){
       case 'tile':toggleTile(el.dataset.tile);break;
       case 'lock-flash':
         tiles.flash=!tiles.flash;
-        $('#flash').classList.toggle('on',tiles.flash);
+        
         renderTiles();
         toast(tiles.flash?'手电筒已开启':'手电筒已关闭');
         break;
@@ -7598,10 +7598,10 @@ function init(){
       case 'close-sheet':closeSheets();break;
       case 'media-play':mediaToggle();break;
       case 'media-prev':
-        mediaCur=Math.max(0,mediaCur-15);renderMedia();toast('已快退 15 移');
+        mediaCur=Math.max(0,mediaCur-15);renderMedia();toast('已快退 15 秒');
         break;
       case 'media-next':
-        mediaCur=Math.min(192,mediaCur+15);renderMedia();toast('已快进 15 移');
+        mediaCur=Math.min(192,mediaCur+15);renderMedia();toast('已快进 15 秒');
         break;
       case 'zoom-in':zoom=Math.min(1.6,zoom+0.1);fit();break;
       case 'zoom-out':zoom=Math.max(0.55,zoom-0.1);fit();break;
@@ -8003,7 +8003,6 @@ function toggleTile(id){
     }
   }
   if(id==='comfort')$('#warmOverlay').classList.toggle('on',tiles.comfort);
-  if(id==='flash')$('#flash').classList.toggle('on',tiles.flash);
   if(id==='wifi'||id==='flight'||id==='bt'||id==='mobile')updateSB();
   if(id==='wifi'){
     const sw=$('#internetSheet .switch[data-tile="wifi"]');
