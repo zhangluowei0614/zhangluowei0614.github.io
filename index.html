@@ -3197,7 +3197,7 @@ function renderTiles(){
   /* 次级 1×1 磁贴（剔除已占用大磁贴的 wifi/mobile/bt， */
   $('#qsTiles').innerHTML=TILE_DEFS.filter(x=>!['wifi','mobile','bt'].includes(x.id)).map(x=>{
     const on=tiles[x.id];
-    return `<button class="qs-tile${on?' on':''}" data-act="tile" data-tile="${x.id}" aria-pressed="${on}"><span class="tile-ic">${mi(M[x.icon])}</span><span>${t(x.name)}</span></button>`;
+    return `<button class="qs-tile${on?' on':''}" data-act="tile" data-tile="${x.id}" aria-pressed="${on}"><span class="tile-ic">${mi(M[x.icon]||M.notif)}</span><span>${t(x.name)}</span></button>`;
   }).join('');
   /* 通知面板预览磁贴 */
   const prev=['wifi','bt','flash','dnd'];
@@ -4760,7 +4760,7 @@ function storeInstall(i){
     installAppToLauncher(a.app,a.n.replace(/^(谷歌|Google)\s*/,'')||a.n);
     renderStore();
     refreshAppSections();
-    NOTIFS.unshift({appId:a.app||'play',app:appName('play'),title:t('应用已安装'),body:a.n+' · '+t('可在应用抽屉中打开'),time:t('刚刚'),acts:[]});
+    NOTIFS.unshift({appId:a.app||'play',icon:a.app||'play',app:appName('play'),title:t('应用已安装'),body:a.n+' · '+t('可在应用抽屉中打开'),time:t('刚刚'),acts:[]});
     if(NOTIFS.length>12)NOTIFS.length=12;
     renderNotifs();
     toast(a.n+' '+t('已安装'));
@@ -4874,7 +4874,7 @@ function renderSettings(){
   $('#setGroups').innerHTML=SET_GROUPS.map((g,i)=>{
     const prev=SET_GROUPS[i-1];
     const head=(!prev||prev.head!==g.head)?`<div class="set-group-title">${t(g.head)}</div>`:'';
-    return `<div class="set-group">${head}<button class="set-row" data-act="${g.subid?'set-open':'toast'}" data-sub="${g.subid||''}" data-msg="${t(g.title)}"><span class="s-ic">${mi(M[g.icon])}</span><span class="s-main"><span class="s-title">${t(g.title)}</span><span class="s-sub">${t(g.sub)}</span></span><span class="chev">${mi(M.chev)}</span></button></div>`;
+    return `<div class="set-group">${head}<button class="set-row" data-act="${g.subid?'set-open':'toast'}" data-sub="${g.subid||''}" data-msg="${t(g.title)}"><span class="s-ic">${mi(M[g.icon]||M.notif)}</span><span class="s-main"><span class="s-title">${t(g.title)}</span><span class="s-sub">${t(g.sub)}</span></span><span class="chev">${mi(M.chev)}</span></button></div>`;
   }).join('');
 }
 function renderSetSubs(){
@@ -4916,7 +4916,7 @@ function renderSetSubs(){
       <div class="set-row"><span class="s-ic" style="background:#0B57D0;color:#fff">${mi(M.bt)}</span><span class="s-main"><span class="s-title">Pixel Buds Pro 2</span><span class="s-sub">耳机 · 电量 82%</span></span><button class="switch${DEV_STATE.buds?' on':''}" data-act="dev-switch" data-dev="buds"></button></div>
       <div class="set-row"><span class="s-ic" style="background:#188038;color:#fff">${mi(M.devices)}</span><span class="s-main"><span class="s-title">Pixel Watch 3</span><span class="s-sub">手表 · 电量 64%</span></span><button class="switch on" data-act="toast" data-msg="Pixel Watch 3"></button></div>
       <div class="section-label">智能家居</div>
-      ${DEVICES.map((d,i)=>`<div class="set-row"><span class="s-ic" style="background:var(--pcontainer);color:var(--onpc)">${mi(M[d.icon])}</span><span class="s-main"><span class="s-title">${d.n}</span>${d.sub?`<span class="s-sub">${d.sub}</span>`:''}</span><button class="switch${d.on?' on':''}" data-act="dev-toggle" data-d="${i}"></button></div>`).join('')}
+      ${DEVICES.map((d,i)=>`<div class="set-row"><span class="s-ic" style="background:var(--pcontainer);color:var(--onpc)">${mi(M[d.icon]||M.notif)}</span><span class="s-main"><span class="s-title">${d.n}</span>${d.sub?`<span class="s-sub">${d.sub}</span>`:''}</span><button class="switch${d.on?' on':''}" data-act="dev-toggle" data-d="${i}"></button></div>`).join('')}
       <div class="section-label">其他设备</div>
       <div class="set-row" data-act="set-open" data-sub="setFindDevices"><span class="s-ic">${mi(M.search)}</span><span class="s-main"><span class="s-title">查找附近设备</span><span class="s-sub">搜索范围内的设备</span></span><span class="chev">${mi(M.chev)}</span></div>
     </div>`;
@@ -4935,7 +4935,7 @@ function renderSetSubs(){
       <div class="section-label">应用通知</div>
       ${Object.keys(NOTIF_SW).map(id=>{const a=APPS.find(x=>x.id===id);return a?`<div class="set-row"><span class="app-mini">${ICON(id)}</span><span class="s-main"><span class="s-title">${a.name}</span><span class="s-sub">允许通知</span></span><button class="switch${NOTIF_SW[id]?' on':''}" data-act="dev-switch" data-dev="notif:${id}"></button></div>`:'';}).join('')}
       <div class="section-label">近期通知</div>
-      ${NOTIFS.map((n,i)=>`<div class="set-row" data-act="notif-open" data-src="live" data-i="${i}"><span class="s-ic" style="background:${n.color};color:#fff">${mi(M[n.icon])}</span><span class="s-main"><span class="s-title">${n.title}</span><span class="s-sub">${n.body} · ${n.time}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join('')}
+      ${NOTIFS.map((n,i)=>`<div class="set-row" data-act="notif-open" data-src="live" data-i="${i}"><span class="s-ic" style="background:${n.color};color:#fff">${mi(M[n.icon]||M[n.appId]||M.notif)}</span><span class="s-main"><span class="s-title">${n.title}</span><span class="s-sub">${n.body} · ${n.time}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join('')}
     </div>`;
   $('#setBattery').innerHTML=`
     <header class="appbar"><button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">电池</h2></header>
@@ -5765,7 +5765,7 @@ function renderWeather(){
 
 /* ============ 控制中心扩展 ============ */
 function renderDevices(){
-  $('#devGrid').innerHTML=DEVICES.map((d,i)=>`<button class="dev-tile${d.on?' on':''}" data-act="dev-toggle" data-d="${i}"><span class="d-ic">${mi(M[d.icon])}</span><span>${d.n}${d.sub?' · '+d.sub:''}</span><span style="font-size:10.5px;opacity:.65">${d.on?'已开启':'已关闭'}</span></button>`).join('');
+  $('#devGrid').innerHTML=DEVICES.map((d,i)=>`<button class="dev-tile${d.on?' on':''}" data-act="dev-toggle" data-d="${i}"><span class="d-ic">${mi(M[d.icon]||M.notif)}</span><span>${d.n}${d.sub?' · '+d.sub:''}</span><span style="font-size:10.5px;opacity:.65">${d.on?'已开启':'已关闭'}</span></button>`).join('');
 }
 function openSheet(id){$('#'+id).classList.add('on');}
 function closeSheets(){['internetSheet','deviceSheet'].forEach(id=>$('#'+id).classList.remove('on'));}
@@ -6407,7 +6407,7 @@ function genRemind(){
   toast(t('已添加提醒')+'，'+name);
 }
 function pushReminder(name){
-  NOTIFS.unshift({appId:'clock',app:appName('clock'),title:t('提醒'),body:name,time:t('刚刚'),acts:[]});
+  NOTIFS.unshift({appId:'clock',icon:'timer',app:appName('clock'),title:t('提醒'),body:name,time:t('刚刚'),acts:[]});
   if(NOTIFS.length>12)NOTIFS.length=12;
   renderNotifs();
   renderTiles();
