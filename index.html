@@ -3314,7 +3314,7 @@ function setScreen(s){
   updateNav();
   if(LANG!=='zh'&&typeof staticI18n==='function')staticI18n();
 }
-let appAnimBusy=false,appAnimTimer=null,appAnimSeq=0;
+let appAnimBusy=false,appAnimTimer=null,appAnimSeq=0,appAnimEl=null;
 /* 立即切换状态栏进度（用于无动画路径），避免多出一段淡可 */
 function appProgInstant(){
   const scr=$('#screen');
@@ -3409,12 +3409,16 @@ function appOpenAnim(id){
   if(!el||!appIconPos[id])return false;
   const p=appIconPos[id];
   appAnimBusy=true;
+  appAnimEl=el;                        /* 记录当前正在播动画的窗口，供过期的收尾判断 */
+  const openSeq=++appAnimSeq;
   appIconHidden(id,true);              /* 窗口从图标处长出，图标先藏起来，避免重影 */
   const fin=e=>{
     if(e&&e.target!==el)return;
     clearTimeout(appAnimTimer);
     el.removeEventListener('transitionend',fin);
     el._animFin=null;el._animTimer=null;
+    if(openSeq!==appAnimSeq)return;    /* 已被新的关闭动画接管：不要动它的内联样式，否则会闪一帧 */
+    if(appAnimEl===el)appAnimEl=null;
     el.style.transition=el.style.transform=el.style.transformOrigin=el.style.borderRadius=el.style.opacity=el.style.overflow=el.style.willChange='';
     el.style.zIndex='';
     appIconHidden(id,false);
@@ -3435,11 +3439,17 @@ function appOpenAnim(id){
   };
   el._animFin=fin;
   const sW=p.s, sH=(p.sh||p.s);
+  /* 若这一窗口正在播「关闭」动画（用户又把应用点开）：从当前中间帧继续长回全屏，
+     不要先跳到图标尺寸再放大，否则会看到一帧明显的回跳 */
+  const midClose=!!el._closing;
+  el._closing=false;
+  const midTf=midClose?getComputedStyle(el).transform:'none';
+  const midBr=midClose?getComputedStyle(el).borderRadius:'50%';
   el.style.transition='none';
   el.style.transformOrigin='50% 50%';
-  /* 起点＝图标本体（正方形＋50% 圆角＝正圆），与关闭动画的终点完全一自  打开/关闭互为反向 */
-  el.style.transform='translate('+p.dx+'px,'+p.dy+'px) scale('+sW+','+sH+')';
-  el.style.borderRadius='50%';
+  /* 起点＝图标本体（正方形＋50% 圆角＝正圆），与关闭动画的终点完全一致  打开/关闭互为反向 */
+  el.style.transform=midClose?midTf:('translate('+p.dx+'px,'+p.dy+'px) scale('+sW+','+sH+')');
+  el.style.borderRadius=midClose?midBr:'50%';
   el.style.opacity='1';                 /* 真机打开动画不透明，避免透出桌面/白底 */
   el.style.overflow='hidden';
   el.style.willChange='transform, opacity';
@@ -3479,6 +3489,8 @@ function openApp(id){
     if(typeof flushSecondaryRender==='function'&&!secondaryRenderDone)flushSecondaryRender();
   appAnimSeq++;                     /* 作废可能仍在收尾的上一次关闭动用 */
   $('#screen').classList.remove('app-closing');
+  /* 其它窗口上一次的「正在关闭」标记要清掉，否则下次打开会从残留位置长出来 */
+  $$('#apps .app').forEach(x => { if (x.id !== 'app-' + id) x._closing = false; });
   closeShade();
   appOrigin=curScreen==='lock'?'lock':(curScreen==='drawer'?'drawer':'home');
   if(curScreen==='lock')lockOrigin=true;
@@ -3526,6 +3538,8 @@ function closeApp(){
       if(el._animTimer){clearTimeout(el._animTimer);}
       el._animFin=null;el._animTimer=null;
       clearTimeout(appAnimTimer);
+      appAnimEl=el;
+      el._closing=true;
       const cs=getComputedStyle(el);
       el.style.transition='none';
       el.style.transform=cs.transform;
@@ -3537,11 +3551,23 @@ function closeApp(){
         el.removeEventListener('transitionend',done);
         clearTimeout(appAnimTimer);
         const stale=closeSeq!==appAnimSeq;
+        /* 过期收尾（已被新的打开动画接管）时绝不能清掉内联样式或恢复图标，
+           否则新动画会在这一帧跳回全屏 —— 就是那次「闪一下」 */
+        if(stale){
+          if(el!==appAnimEl){
+            el.style.transition=el.style.transform=el.style.transformOrigin=el.style.borderRadius=el.style.opacity=el.style.overflow=el.style.willChange='';
+            el.style.zIndex='';
+            appIconHidden(id,false);
+          }
+          return;
+        }
+        if(appAnimEl===el)appAnimEl=null;
+        el._closing=false;
+      el._closing=false;
         el.style.transition=el.style.transform=el.style.transformOrigin=el.style.borderRadius=el.style.opacity=el.style.overflow=el.style.willChange='';
         el.style.zIndex='';
         appIconHidden(id,false);
         $('#screen').classList.remove('app-closing');
-        if(stale)return;                    /* 已被新的打开动画接管 */
         bgBlurClear();
         $('#apps').style.zIndex='';
         $('#home').style.display='';
@@ -3563,7 +3589,9 @@ function closeApp(){
       if(p){
         const sW=p.s, sH=(p.sh||p.s);
         appIconHidden(id,true);
-        el.style.transition='transform .72s cubic-bezier(.22,1,.36,1), border-radius .72s cubic-bezier(.22,1,.36,1), opacity .25s linear .45s';
+        /* 淡出用「无延迟」写法：到 450ms 时把 opacity 设为 0 才开始淡出，避免延迟叠加导致
+           窗口缩小到位后还停着不动一瞬（时间线与正常关闭一致：720ms 收尾） */
+        el.style.transition='transform .72s cubic-bezier(.22,1,.36,1), border-radius .72s cubic-bezier(.22,1,.36,1), opacity .27s linear';
         el.style.transform='translate('+p.dx+'px,'+p.dy+'px) scale('+sW+','+sH+')';
         el.style.borderRadius='50%';
         el.style.opacity='1';
@@ -3606,16 +3634,28 @@ function closeApp(){
   }
   if(el&&p&&curScreen==='app'&&deviceOn){
     appAnimBusy=true;
+    appAnimEl=el;
+    el._closing=true;
     const fin=e=>{
       if(e&&e.target!==el)return;
       clearTimeout(appAnimTimer);
       el.removeEventListener('transitionend',fin);
       const stale=closeSeq!==appAnimSeq;
+      /* 过期收尾不能碰新动画的内联样式（否则会闪一帧） */
+      if(stale){
+        if(el!==appAnimEl){
+          el.style.transition=el.style.transform=el.style.transformOrigin=el.style.borderRadius=el.style.opacity=el.style.overflow=el.style.willChange='';
+          el.style.zIndex='';
+          appIconHidden(id,false);
+        }
+        return;
+      }
+      if(appAnimEl===el)appAnimEl=null;
+      el._closing=false;
       el.style.transition=el.style.transform=el.style.transformOrigin=el.style.borderRadius=el.style.opacity=el.style.overflow=el.style.willChange='';
       el.style.zIndex='';
       appIconHidden(id,false);
       $('#screen').classList.remove('app-closing');
-      if(stale)return;                    /* 已被新的打开动画接管：只做元素清理 */
       if(backTo==='drawer')$('#drawer').classList.remove('anim');
       setScreen(backTo);
       closeIconHide();
