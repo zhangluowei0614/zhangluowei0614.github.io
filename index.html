@@ -3240,7 +3240,7 @@ function renderTiles(){
   if(shadeP>0.002||qsP>0.002)applyShade();
 }
 function renderNotifs(){
-  const html=NOTIFS.map((n,i)=>`<div class="notif-card" data-act="notif-open" data-src="live" data-i="${i}"><div class="n-head"><span class="n-icon" style="background:${ICON_BG[n.appId]||'transparent'}">${ICON(n.appId)}</span><span class="n-app">${t(n.app)}</span><span class="n-time">${n.time}</span></div><div class="n-title">${n.title}</div><div class="n-body">${n.body}</div>${n.acts?`<div class="n-acts">${n.acts.map(a=>`<button class="n-act" data-act="notif-act" data-i="${i}" data-k="${t(a)}">${t(a)}</button>`).join('')}</div>`:''}</div>`).join('');
+  const html=NOTIFS.map((n,i)=>`<div class="notif-card" data-act="notif-open" data-src="live" data-i="${i}"><div class="n-head"><span class="n-icon" style="background:${ICON_BG[n.appId]||'transparent'}">${ICON(n.appId)}</span><span class="n-app">${t(n.app)}</span><span class="n-time">${escHtml(n.time)}</span></div><div class="n-title">${escHtml(n.title)}</div><div class="n-body">${escHtml(n.body)}</div>${n.acts?`<div class="n-acts">${n.acts.map(a=>`<button class="n-act" data-act="notif-act" data-i="${i}" data-k="${t(a)}">${t(a)}</button>`).join('')}</div>`:''}</div>`).join('');
   const empty='<div style="padding:10px 24px;font-size:12px;opacity:.6">'+t('没有新通知')+'</div>';
   $('#shadeNotifs').innerHTML=html||empty;
   ccInvalidate();
@@ -3344,7 +3344,7 @@ function setScreen(s){
   updateNav();
   if(LANG!=='zh'&&typeof staticI18n==='function')staticI18n();
 }
-let appAnimBusy=false,appAnimTimer=null,appAnimSeq=0,appAnimEl=null,appOpenedAt=0;
+let appAnimBusy=false,appAnimTimer=null,appAnimSeq=0,appAnimEl=null,appOpenedAt=0,lastAppAnimAt=0;
 /* 立即切换状态栏进度（用于无动画路径），避免多出一段淡可 */
 function appProgInstant(){
   const scr=$('#screen');
@@ -3512,6 +3512,39 @@ function appZoomRun(el,pose,targetP,opMode,onDone,onFade){
   };
   z.raf=requestAnimationFrame(step);
 }
+/* ===== 自愈兜底 =====
+   动画被打断 / 切后台等异常路径可能留下残留状态，定期检查并修复：
+   ① appAnimBusy 卡在 true（1.5s 内没有任何动画在跑）→ 解锁，否则后续动画都不播
+   ② 停在「应用页但没有应用」→ 回到来源页，否则界面卡死
+   ③ 关闭动画残留的内联 transform/zIndex → 清掉，否则窗口下次打开位置错误
+   注意：只要还有动画在跑就完全不插手，避免和动画抢样式（会造成一帧跳变） */
+setInterval(()=>{
+  try{
+    const running=!!(appAnimEl&&appAnimEl._zx&&appAnimEl._zx.raf);
+    if(appAnimBusy&&!running&&performance.now()-lastAppAnimAt>1500){
+      appAnimBusy=false;
+      if(appAnimEl)appAnimEl._closing=false;
+    }
+    if(appAnimBusy)return;
+    if(curScreen==='app'&&!app){
+      bgBlurClear();
+      $('#screen').classList.remove('app-closing');
+      $('#apps').style.zIndex='';
+      ['#home','#drawer','#lock','#shade','#qs'].forEach(s=>{const e=$(s);if(e)e.style.display='';});
+      $('#shade').style.opacity='';$('#shade').style.background='';
+      $('#qs').style.opacity='';$('#qs').style.background='';
+      appProgInstant();
+      setScreen(lockOrigin?'lock':(appOrigin==='drawer'?'drawer':'home'));
+    }
+    $$('#apps .app').forEach(el=>{
+      if(el===appAnimEl&&el._zx&&el._zx.raf)return;
+      if(!el.style.transform&&!el.style.zIndex&&!el.style.borderRadius)return;
+      el._closing=false;
+      el.style.transition=el.style.transform=el.style.transformOrigin=el.style.borderRadius=el.style.opacity=el.style.overflow=el.style.willChange='';
+      el.style.zIndex='';
+    });
+  }catch(e){}
+},700);
 function appOpenAnim(id){
   const el=$('#app-'+id);
   appOpenedAt=performance.now();
@@ -4774,17 +4807,17 @@ let STORE_STATE={};                 /* 0/未定乐 未安装 · installing=安�
 let storeQuery='';
 function renderMails(cat){
   mailFilter=cat||mailFilter;
-  const q=mailQuery.trim();
+  const q=mailQuery.trim();   /* 只用于过滤，不参与 HTML 拼接 */
   let list=MAILS.filter(m=>m.cat===mailFilter);
   if(gmailChip==='unread')list=list.filter(m=>m.unread);
   else if(gmailChip==='star')list=list.filter(m=>m.star);
   list=list.filter(m=>!q||m.f.toLowerCase().includes(q.toLowerCase())||m.subj.toLowerCase().includes(q.toLowerCase())||m.snip.toLowerCase().includes(q.toLowerCase()));
-  $('#mailList').innerHTML=list.length?list.map(m=>`<button class="mail-row${m.unread?' unread':''}" data-act="mail-open" data-i="${MAILS.indexOf(m)}"><span class="avatar" style="background:${m.c}">${m.a}</span><div class="m-main"><div class="row-title">${m.f}</div><div class="row-sub">${m.subj}</div><div class="row-sub" style="opacity:.75">${m.snip}</div></div><span class="row-time">${m.time}</span></button>`).join(''):`<div class="ph-none">${t('没有符合条件的邮件')}</div>`;
+  $('#mailList').innerHTML=list.length?list.map(m=>`<button class="mail-row${m.unread?' unread':''}" data-act="mail-open" data-i="${MAILS.indexOf(m)}"><span class="avatar" style="background:${m.c}">${escHtml(m.a)}</span><div class="m-main"><div class="row-title">${escHtml(m.f)}</div><div class="row-sub">${escHtml(m.subj)}</div><div class="row-sub" style="opacity:.75">${escHtml(m.snip)}</div></div><span class="row-time">${escHtml(m.time)}</span></button>`).join(''):`<div class="ph-none">${t('没有符合条件的邮件')}</div>`;
 }
 function openMail(i){
   const m=MAILS[i];
   mailIdx=i;
-  $('#mailBody').innerHTML=`<div class="mail-head"><div class="row-title" style="font-size:17px">${m.subj}</div><div class="row-sub" style="margin-top:6px">${m.f} &lt;${m.f}@gmail.com&gt; · ${m.time}</div></div><div class="mail-body">${m.body}</div>`;
+  $('#mailBody').innerHTML=`<div class="mail-head"><div class="row-title" style="font-size:17px">${escHtml(m.subj)}</div><div class="row-sub" style="margin-top:6px">${escHtml(m.f)} &lt;${escHtml(m.f)}@gmail.com&gt; · ${escHtml(m.time)}</div></div><div class="mail-body">${escHtml(m.body)}</div>`;
   $('#mailView').classList.add('on');
 }
 function closeMail(){$('#mailView').classList.remove('on');}
@@ -5038,7 +5071,7 @@ function renderSetSubs(){
       <div class="section-label">应用通知</div>
       ${Object.keys(NOTIF_SW).map(id=>{const a=APPS.find(x=>x.id===id);return a?`<div class="set-row"><span class="app-mini">${ICON(id)}</span><span class="s-main"><span class="s-title">${a.name}</span><span class="s-sub">允许通知</span></span><button class="switch${NOTIF_SW[id]?' on':''}" data-act="dev-switch" data-dev="notif:${id}"></button></div>`:'';}).join('')}
       <div class="section-label">近期通知</div>
-      ${NOTIFS.map((n,i)=>`<div class="set-row" data-act="notif-open" data-src="live" data-i="${i}"><span class="s-ic" style="background:${n.color};color:#fff">${mi(M[n.icon]||M[n.appId]||M.notif)}</span><span class="s-main"><span class="s-title">${n.title}</span><span class="s-sub">${n.body} · ${n.time}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join('')}
+      ${NOTIFS.map((n,i)=>`<div class="set-row" data-act="notif-open" data-src="live" data-i="${i}"><span class="s-ic" style="background:${n.color};color:#fff">${mi(M[n.icon]||M[n.appId]||M.notif)}</span><span class="s-main"><span class="s-title">${escHtml(n.title)}</span><span class="s-sub">${escHtml(n.body)} · ${escHtml(n.time)}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join('')}
     </div>`;
   $('#setBattery').innerHTML=`
     <header class="appbar"><button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">电池</h2></header>
@@ -5200,7 +5233,7 @@ function renderSetSubs(){
   $('#setNotifHist').innerHTML=`
     <header class="appbar"><button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">通知历史</h2></header>
     <div class="appbody">
-      ${allNotifs().length?allNotifs().map((n,i)=>`<div class="set-row" data-act="notif-open" data-src="hist" data-i="${i}"><span class="s-ic" style="background:${ICON_BG[n.appId]||'transparent'};color:#fff">${ICON(n.appId)}</span><span class="s-main"><span class="s-title">${n.title}</span><span class="s-sub">${n.app} · ${n.body} · ${n.time}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join(''):'<div style="padding:24px;text-align:center;color:var(--txt3);font-size:13px">暂无通知历史</div>'}
+      ${allNotifs().length?allNotifs().map((n,i)=>`<div class="set-row" data-act="notif-open" data-src="hist" data-i="${i}"><span class="s-ic" style="background:${ICON_BG[n.appId]||'transparent'};color:#fff">${ICON(n.appId)}</span><span class="s-main"><span class="s-title">${escHtml(n.title)}</span><span class="s-sub">${t(n.app)} · ${escHtml(n.body)} · ${escHtml(n.time)}</span></span><span class="chev">${mi(M.chev)}</span></div>`).join(''):'<div style="padding:24px;text-align:center;color:var(--txt3);font-size:13px">暂无通知历史</div>'}
       ${notifHist.length?`<div class="act-row"><button class="pillbtn" data-act="hist-clear">清空历史</button></div>`:''}
     </div>`;
   renderStyleSub();
@@ -5357,7 +5390,7 @@ function renderVoice(){
   const dirC={out:'#1A73E8',in:'#188038',missed:'#D93025'};
   const dirT={out:'已拨出',in:'已接听',missed:'未接听'};
   $('#gvRecents').innerHTML=VOICE_CALLS.map((c,i)=>`<button class="gv-row" data-act="voice-call-detail" data-i="${i}"><span class="avatar" style="background:${c.c}">${c.n[0]}</span><div class="gv-row-main"><div class="gv-row-title">${c.n}</div><div class="gv-row-sub">${c.p} · ${dirT[c.dir]||''} · ${c.t}</div></div><div class="gv-row-right"><span class="gv-dir" style="color:${dirC[c.dir]||'#5F6368'}">${mi(dirI[c.dir]||M.phone)}</span><span class="gv-time">${c.t.split(' ')[0]}</span></div></button>`).join('');
-  $('#gvMessages').innerHTML=VOICE_SMS.map(m=>`<button class="gv-row" data-act="voice-sms" data-n="${m.n}"><span class="avatar" style="background:${m.c}">${m.n[0]}</span><div class="gv-row-main"><div class="gv-row-title">${m.n}</div><div class="gv-row-sub">${m.t}</div></div><div class="gv-row-right"><span class="gv-time">${m.time}</span><span class="gv-unread"></span></div></button>`).join('');
+  $('#gvMessages').innerHTML=VOICE_SMS.map(m=>`<button class="gv-row" data-act="voice-sms" data-n="${escHtml(m.n)}"><span class="avatar" style="background:${m.c}">${escHtml(m.n[0])}</span><div class="gv-row-main"><div class="gv-row-title">${escHtml(m.n)}</div><div class="gv-row-sub">${escHtml(m.t)}</div></div><div class="gv-row-right"><span class="gv-time">${escHtml(m.time)}</span><span class="gv-unread"></span></div></button>`).join('');
   $('#gvVoicemail').innerHTML=VOICE_VMS.map((v,i)=>`<div class="gv-vm" data-act="voice-vm-detail" data-i="${i}"><span class="avatar" style="background:${v.c}">${v.n[0]}</span><div class="gv-vm-main"><div class="gv-vm-title">${v.n}</div><div class="gv-vm-sub">${v.t} · 时长 ${v.d}</div><div class="gv-vm-trans">${v.trans}</div></div><button class="gv-play" data-act="voice-vm">${mi(M.play)}</button></div>`).join('');
   const sets=[['phone','通话记录','管理通话记录与拦截'],['chat','消息','短信、通知与已读回执'],['vm','语音邮件','转写、问候语与通知'],['notif','通知','提醒与铃声'],['settings','辅助功能','字幕与无障碍服务'],['info','关于 Voice','版本 2026.17.1']];
   $('#gvSettings').innerHTML=`<div class="gv-acct"><span class="avatar" style="background:#1A73E8">M</span><div class="gv-row-main"><div class="gv-row-title">Momo Lin</div><div class="gv-row-sub">momo.lin@gmail.com</div></div><button class="gv-ic" data-act="toast" data-msg="管理 Google 账户"><i data-ic="chev"></i></button></div><div class="gv-set-label">设置</div>${sets.map(s=>`<button class="gv-row" data-act="toast" data-msg="${s[1]}"><span class="gv-set-ic">${mi(M[s[0]])}</span><div class="gv-row-main"><div class="gv-row-title">${s[1]}</div><div class="gv-row-sub">${s[2]}</div></div><span class="gv-chev">${mi(M.chev)}</span></button>`).join('')}`;
