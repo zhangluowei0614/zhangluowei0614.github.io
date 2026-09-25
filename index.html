@@ -3476,9 +3476,12 @@ function appZoomRun(el,pose,targetP,opMode,onDone,onFade){
   let op0=Math.max(0,Math.min(1,z.op));
   const dp=targetP-p0;
   const v0=Math.abs(z.vp);
-  const fresh=v0<0.35;                                  /* 几乎静止 → 走标准贝塞尔曲线 */
+  /* 速度是否已经朝着目标：朝着 → 继承（动画连续不顿挫）；
+     反向（展开还没播完就被上滑打断）→ 归零，直接朝目标走，绝不先放大一帧再缩回 */
+  const sameDir=(dp>0&&z.vp>0)||(dp<0&&z.vp<0);
+  const fresh=v0<0.35||!sameDir;
   const T=fresh?0.72:Math.min(0.58,Math.max(0.24,Math.abs(dp)/Math.max(v0,0.7)));
-  const vp=fresh?0:Math.sign(z.vp)*Math.min(v0,2.4*Math.abs(dp)/Math.max(0.001,T));
+  const vp=fresh?0:Math.sign(z.vp)*Math.min(v0,Math.abs(dp)/Math.max(0.001,T));
   const targetOp=opMode==='fade'?0:1;
   if(opMode==='show')op0=1;                             /* 打开时立刻实心，避免透出桌面 */
   const doo=targetOp-op0;
@@ -3486,6 +3489,7 @@ function appZoomRun(el,pose,targetP,opMode,onDone,onFade){
   const t0=performance.now();
   let prevP=p0,prevT=t0,faded=false;
   appZoomCancel(el);
+  appZoomDraw(z,p0,op0);                                /* 起手先按当前进度画一帧：打断处绝不回跳 */
   const tok={};
   z.tok=tok;
   const step=now=>{
