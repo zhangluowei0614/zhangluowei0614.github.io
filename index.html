@@ -155,6 +155,41 @@ html.dark #statusbar::before{background:linear-gradient(rgba(20,18,24,.92),rgba(
 html.dark #screen.appmode .nav-pill{background:color-mix(in srgb,rgba(230,224,233,.85) calc(var(--appprog,1)*100%),rgba(255,255,255,.95))}
 #screen.lockmode #sbTime{visibility:hidden}
 #shadeHit{position:absolute;top:0;left:0;right:0;height:48px;z-index:2900;cursor:pointer}
+/* 安全模式水印：真机在左下角显示 */
+#safeBadge{position:absolute;left:12px;bottom:8px;z-index:3110;padding:3px 10px;border-radius:9px;background:rgba(0,0,0,.55);color:#fff;font-size:11.5px;letter-spacing:.4px;pointer-events:none;opacity:0;transition:opacity .25s}
+#safeBadge.on{opacity:1}
+#screen.appmode #safeBadge{bottom:4px}
+/* ==== 紧急情况（电源菜单入口）：紧急拨号盘 + 紧急信息 ==== */
+#emergency{position:absolute;inset:0;z-index:3095;display:none;flex-direction:column;background:linear-gradient(180deg,#1b1420,#0d0b12 60%);color:#fff}
+#emergency.on{display:flex;animation:emgIn .24s cubic-bezier(.2,0,0,1)}
+@keyframes emgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.emg-bar{display:flex;align-items:center;gap:8px;padding:calc(var(--sb-h) + 6px) 10px 6px;flex:none}
+.emg-bar .iconbtn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.emg-bar .title{flex:1;font-size:17px;font-weight:500}
+.emg-num{flex:none;text-align:center;font-size:30px;letter-spacing:1.4px;min-height:42px;font-weight:300;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 18px}
+.emg-num.placeholder{font-size:13px;letter-spacing:0;color:rgba(255,255,255,.55);font-weight:400}
+.emg-quick{display:flex;gap:8px;padding:6px 14px 2px;flex:none}
+.emg-quick button{flex:1;background:rgba(255,255,255,.08);border-radius:14px;padding:8px 6px;color:#fff;font-size:12px;display:flex;flex-direction:column;gap:2px;align-items:center}
+.emg-quick button b{font-size:15px;font-weight:600;color:#F2B8B5}
+.emg-quick button:active{background:rgba(255,255,255,.16)}
+.emg-body{flex:1;overflow:auto;padding:8px 14px 4px;touch-action:pan-y}
+.emg-card{background:rgba(255,255,255,.07);border-radius:18px;padding:12px 14px;margin-bottom:10px}
+.emg-card h4{margin:0 0 6px;font-size:13.5px;font-weight:600;color:#F2B8B5;letter-spacing:.3px}
+.emg-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:3px 0;color:rgba(255,255,255,.9)}
+.emg-row span:first-child{color:rgba(255,255,255,.6)}
+.emg-row b{font-weight:500}
+.emg-acts{display:flex;gap:8px;margin-top:10px}
+.emg-acts button{flex:1;border-radius:999px;padding:8px 10px;font-size:12.5px;background:rgba(255,255,255,.12);color:#fff}
+.emg-acts button.primary{background:#F2B8B5;color:#3A0A0A;font-weight:600}
+.emg-edit label{display:block;font-size:11.5px;color:rgba(255,255,255,.6);margin:8px 0 3px}
+.emg-edit input{width:100%;height:34px;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;padding:0 10px;font-size:13px}
+.emg-pad{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:6px 30px 2px}
+.emg-key{height:46px;border-radius:14px;font-size:21px;color:#fff;background:rgba(255,255,255,.06)}
+.emg-key:active{background:rgba(255,255,255,.18)}
+.emg-key.fn{font-size:17px;color:rgba(255,255,255,.75)}
+.emg-call{flex:none;margin:8px 30px calc(var(--nav-h) + 10px);height:50px;border-radius:999px;background:#D93025;color:#fff;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.emg-call:active{filter:brightness(1.15)}
+.emg-note{text-align:center;font-size:11px;color:rgba(255,255,255,.45);margin:-4px 0 6px}
 .punch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:17px;height:17px;border-radius:50%;background:#000;z-index:3100;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 0 0 3px rgba(90,140,255,.35);pointer-events:none}
 /* splash · Pixel 开机画面 */
 #splash{position:absolute;inset:0;z-index:9000;background:#05070c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;transition:opacity .55s;pointer-events:auto}
@@ -1241,6 +1276,7 @@ button,.pillbtn,.app-item,.set-row,.menu-row,.opt-chip,.tabbtn,.shade-tile,.qs-t
       <div class="screen" id="screen">
         <div class="wallpaper wp-nebula"></div>
         <div class="punch"></div>
+        <div id="safeBadge" aria-hidden="true"></div>
         <div id="statusbar" data-act="toggle-shade">
           <span id="sbTime">--:--</span>
           <span class="sb-right" id="sbRight"></span>
@@ -2128,6 +2164,39 @@ button,.pillbtn,.app-item,.set-row,.menu-row,.opt-chip,.tabbtn,.shade-tile,.qs-t
             <div class="power-hint">长按「重新启动」可进入安全模式</div>
           </div>
         </div>
+        <!-- 紧急情况：紧急拨号盘 + 紧急信息（电源菜单入口） -->
+        <div id="emergency" aria-hidden="true">
+          <header class="emg-bar">
+            <button class="iconbtn" data-act="emg-back" aria-label="返回"><i data-ic="back"></i></button>
+            <h2 class="title">紧急情况</h2>
+            <button class="iconbtn" data-act="emg-info" aria-label="紧急信息"><i data-ic="info"></i></button>
+          </header>
+          <div class="emg-num placeholder" id="emgNum">输入紧急号码</div>
+          <div class="emg-quick">
+            <button data-act="emg-dial" data-num="110">报警<b>110</b></button>
+            <button data-act="emg-dial" data-num="120">急救<b>120</b></button>
+            <button data-act="emg-dial" data-num="119">火警<b>119</b></button>
+          </div>
+          <div class="emg-body">
+            <div class="emg-card" id="emgInfoCard"></div>
+          </div>
+          <div class="emg-pad">
+            <button class="emg-key" data-act="emg-key" data-k="1">1</button>
+            <button class="emg-key" data-act="emg-key" data-k="2">2</button>
+            <button class="emg-key" data-act="emg-key" data-k="3">3</button>
+            <button class="emg-key" data-act="emg-key" data-k="4">4</button>
+            <button class="emg-key" data-act="emg-key" data-k="5">5</button>
+            <button class="emg-key" data-act="emg-key" data-k="6">6</button>
+            <button class="emg-key" data-act="emg-key" data-k="7">7</button>
+            <button class="emg-key" data-act="emg-key" data-k="8">8</button>
+            <button class="emg-key" data-act="emg-key" data-k="9">9</button>
+            <button class="emg-key" data-act="emg-key" data-k="*">*</button>
+            <button class="emg-key" data-act="emg-key" data-k="0">0</button>
+            <button class="emg-key fn" data-act="emg-key" data-k="#">#</button>
+          </div>
+          <div class="emg-note">紧急呼叫将使用当前移动网络</div>
+          <button class="emg-call" data-act="emg-call"><i data-ic="phone"></i><span>紧急呼叫</span></button>
+        </div>
         <!-- Gboard 键盘 -->
         <div id="gboard" aria-hidden="true">
           <div class="gb-sug" id="gbSug"><span>好的</span><span>收到</span><span>好的，马上到</span><span>没问题</span><span>稍后回复你</span></div>
@@ -2552,6 +2621,11 @@ function appName(id){return (LANG==='zh'?(APP_NAME_ZH[id]||id):(APP_NAME_EN[id]|
 const I18N={
   zh:{},
   en:{
+    '紧急情况':'Emergency','紧急信息':'Emergency information','输入紧急号码':'Enter emergency number','报警':'Police','急救':'Ambulance','火警':'Fire',
+    '姓名':'Name','血型':'Blood type','过敏':'Allergies','长期用药':'Medications','器官捐献':'Organ donor','联系人电话':'Contact number',
+    '拨打紧急联系人':'Call emergency contact','编辑':'Edit','保存':'Save','取消':'Cancel','请输入紧急号码':'Enter an emergency number','紧急呼叫':'Emergency call',
+    '紧急信息已保存':'Emergency information saved','紧急呼叫将使用当前移动网络':'Emergency calls use the current mobile network','已进入安全模式':'Safe mode on','已退出安全模式':'Safe mode off','安全模式下已停用':'Disabled in safe mode',
+    '长按「重新启动」可进入安全模式':'Touch and hold “Restart” to enter safe mode','长按「重新启动」可退出安全模式':'Touch and hold “Restart” to exit safe mode',
     '网络与互联网':'Network & internet','已连接设备':'Connected devices','应用':'Apps','通知':'Notifications','电池':'Battery','显示':'Display','声音和振动':'Sound & vibration','安全与隐私':'Security & privacy','位置信息':'Location','无障碍':'Accessibility','系统':'System','关于手机':'About phone',
     'Wi-Fi':'Wi-Fi','蓝牙':'Bluetooth','勿扰':'Do not disturb','手电筒':'Flashlight','省电':'Battery saver','自动旋转':'Auto-rotate','飞行模式':'Airplane mode','个人热点':'Hotspot','深色主题':'Dark theme','屏幕投射':'Cast','屏幕录制':'Screen record','护眼模式':'Eye comfort','钱包':'Wallet','移动数据':'Mobile data','互联置':'Internet',
     '收藏':'Favorites','最近':'Recents','联系人':'Contacts','闹钟':'Alarm','秒表':'Stopwatch','计时器':'Timer','收件箱':'Inbox','促销':'Promotions','社交':'Social','首页':'Home','共享':'Shared','已加星标':'Starred','回收站':'Trash','精选':'Featured','音乐应用':'Library','探索':'Explore',
@@ -3117,6 +3191,8 @@ let noteEditIdx=-1;
 const tiles={wifi:true,bt:true,dnd:false,flash:false,battery:false,rotate:true,flight:false,hotspot:false,dark:false,cast:false,record:false,comfort:false,nfc:false,wallet:false,loc:true,mobile:true};
 let zoom=1;
 let deviceOn=true,volLevel=60,bootOnNext=false;
+let safeMode=false;                    /* 安全模式：停用从商店安装的应用，重启即退出（真机行为） */
+const STORED_APPS=new Set();           /* 由 Play 商店安装的应用 id */
 let callMuted=false,callSpeaker=false;
 let ytPlaying=false,ytPos=35;
 const DEV_STATE={buds:true,adaptive:true,pct:true,vibrate:true,tb:false,caption:false,mag:false,dev:true,roaming:false,autoDT:true,autoTZ:true,vpn:false,btTether:false};
@@ -3146,7 +3222,7 @@ function iconItem(id){
 }
 function renderHome(){
   /* 桌面仅显示 CORE_HOME 单页（参考真机图），其余应用在抽屉中 */
-  const ids=(CORE_HOME&&CORE_HOME.length)?CORE_HOME.slice():APPS.filter(a=>!DOCK.includes(a.id)).map(a=>a.id);
+  const ids=((CORE_HOME&&CORE_HOME.length)?CORE_HOME.slice():APPS.filter(a=>!DOCK.includes(a.id)).map(a=>a.id)).filter(id=>!(safeMode&&STORED_APPS.has(id)));
   const per=4,pages=[];
   for(let i=0;i<ids.length;i+=per)pages.push(ids.slice(i,i+per));
   if(homePage>=pages.length)homePage=Math.max(0,pages.length-1);
@@ -3186,7 +3262,7 @@ function goHomePage(np){
 }
 function renderDrawer(q=''){
   q=(q||'').trim();
-  const ids=APPS.map(a=>a.id).filter(id=>!q||APPS.find(a=>a.id===id).name.toLowerCase().includes(q.toLowerCase()));
+  const ids=APPS.map(a=>a.id).filter(id=>!(safeMode&&STORED_APPS.has(id))).filter(id=>!q||APPS.find(a=>a.id===id).name.toLowerCase().includes(q.toLowerCase()));
   ids.sort((x,y)=>{
     const a=appSortKey(x),b=appSortKey(y);
     if(a!==b)return a<b?-1:1;
@@ -3621,6 +3697,7 @@ function appOpenAnim(id){
   return true;
 }
 function openApp(id){
+  if(safeMode&&STORED_APPS.has(id)){toast(t('安全模式下已停用'));return;}
     if(typeof flushSecondaryRender==='function'&&!secondaryRenderDone)flushSecondaryRender();
   appAnimSeq++;                     /* 作废可能仍在收尾的上一次关闭动用 */
   $('#screen').classList.remove('app-closing');
@@ -4068,6 +4145,7 @@ function toggleShade(){
   else closeShade();
 }
 function globalBack(){
+  if(typeof emergencyOpen==='function'&&emergencyOpen()){closeEmergency();return;}
   if($('#gboard').classList.contains('on')){hideKb();if(kbInput)kbInput.blur();return;}
   if(shadeLevel){closeShade();return;}
   if(curScreen==='drawer'){closeDrawer();return;}if(curScreen==='recents'){setScreen(lockOrigin?'lock':'home');return;}
@@ -4170,7 +4248,24 @@ const BACKS={
     return false;
   }
 };
-function doBoot(){
+/* 安全模式开关：停用第三方（商店安装）应用，并在左下角显示水印 */
+function setSafeMode(on){
+  safeMode=!!on;
+  const b=$('#safeBadge');
+  if(b){b.textContent=t('安全模式');b.classList.toggle('on',safeMode);}
+  const hint=document.querySelector('.power-hint');
+  if(hint)hint.textContent=t(safeMode?'长按「重新启动」可退出安全模式':'长按「重新启动」可进入安全模式');
+  renderHome();
+  const ds=$('#drawerSearch');
+  renderDrawer(ds?ds.value:'');
+  if(typeof renderStore==='function')renderStore();
+}
+function doBoot(opts){
+  /* opts.toggleSafe = 长按「重新启动」：切换安全模式并给出提示；
+     普通重启（点击「重新启动」）保持当前安全模式状态，也不弹安全模式提示 */
+  const toggle=!!(opts&&opts.toggleSafe);
+  let msg=null;
+  if(toggle){setSafeMode(!safeMode);msg=safeMode?t('已进入安全模式'):t('已退出安全模式');}
   $('#splash').classList.remove('off');
   $$('.app').forEach(a=>a.classList.remove('on'));
   closeShade();
@@ -4179,6 +4274,7 @@ function doBoot(){
   setScreen('lock');
   updateClock();
   setTimeout(()=>$('#splash').classList.add('off'),1500);
+  if(msg)setTimeout(()=>toast(msg),1750);
 }
 
 /* ============ 电话 ============ */
@@ -4893,11 +4989,14 @@ function installAppToLauncher(id,name){
 function storeInstall(i){
   const a=storeItem(i);
   if(!a||STORE_STATE[i])return;
+  if(safeMode){toast(t('安全模式下已停用'));return;}
+  if(a.app&&STORED_APPS.has(a.app)&&safeMode){toast(t('安全模式下已停用'));return;}
   STORE_STATE[i]='installing';
   renderStore();
   setTimeout(()=>{
     STORE_STATE[i]='installed';
     installAppToLauncher(a.app,a.n.replace(/^(谷歌|Google)\s*/,'')||a.n);
+    if(a.app)STORED_APPS.add(a.app);
     renderStore();
     refreshAppSections();
     NOTIFS.unshift({appId:a.app||'play',icon:a.app||'play',app:appName('play'),title:t('应用已安装'),body:a.n+' · '+t('可在应用抽屉中打开'),time:t('刚刚'),acts:[]});
@@ -6738,6 +6837,9 @@ function scheduleSecondaryRender(){
 function applyLang(){
   /* 切回中文：把之前翻译过的节点还原为原文（部分动态节点不会在下面的渲染中重建） */
   if(LANG==='zh')$$('[data-i18n-zh]').forEach(el=>{el.textContent=el.dataset.i18nZh;delete el.dataset.i18nZh;});
+  /* 安全模式水印是动态节点，切语言时同步刷新 */
+  const _sb=$('#safeBadge');if(_sb)_sb.textContent=t('安全模式');
+  const _ph=document.querySelector('.power-hint');if(_ph)_ph.textContent=t(safeMode?'长按「重新启动」可退出安全模式':'长按「重新启动」可进入安全模式');
   renderHome();
   renderDrawer();
   renderTiles();
@@ -7537,10 +7639,16 @@ function init(){
       case 'power-reboot':closePowerMenu();doBoot();break;
       case 'power-cancel':closePowerMenu();break;
       case 'power-open':openPowerMenu();break;
-      case 'power-emergency':
-        closePowerMenu();
-        toast('紧急呼叫 110 · 120 · 119');
-        break;
+      case 'power-emergency':openEmergency();break;
+      case 'emg-back':closeEmergency();break;
+      case 'emg-info':emgEditing=false;renderEmgInfo();break;
+      case 'emg-key':emgKey(el.dataset.k);break;
+      case 'emg-call':emgDial();break;
+      case 'emg-dial':emgDial(el.dataset.num);break;
+      case 'emg-edit':emgEditing=true;renderEmgInfo();break;
+      case 'emg-cancel':emgEditing=false;renderEmgInfo();break;
+      case 'emg-save':saveEmgInfo();break;
+      case 'emg-contact':emgDial(EMG_INFO.cphone);break;
       case 'power-lockdown':
         closePowerMenu();
         lockScreenNow();
@@ -8200,6 +8308,95 @@ function lockScreenNow(){
   setScreen('lock');
   updateClock();
 }
+/* ============ 紧急情况（电源菜单 / 锁屏入口） ============
+   应急拨号盘 + 紧急信息（姓名、血型、过敏、用药、器官捐献、紧急联系人）
+   可编辑并保存在本机，紧急联系人可直接拨打 */
+let emgNumber='';
+const EMG_INFO={name:'Momo',blood:'O+',allergy:'青霉素',meds:'无',organ:'已登记',cname:'妈妈',cphone:'138 0013 8000'};
+let emgEditing=false;
+function openEmergency(){
+  if(!deviceOn)return;
+  closePowerMenu();closeShade();closeAppMenu();
+  emgNumber='';emgEditing=false;
+  renderEmgNum();renderEmgInfo();
+  $('#emergency').classList.add('on');
+}
+function closeEmergency(){
+  const e=$('#emergency');
+  if(!e||!e.classList.contains('on'))return false;
+  e.classList.remove('on');
+  return true;
+}
+function emergencyOpen(){
+  const e=$('#emergency');
+  return !!(e&&e.classList.contains('on'));
+}
+function renderEmgNum(){
+  const el=$('#emgNum');
+  if(!el)return;
+  el.textContent=emgNumber||t('输入紧急号码');
+  el.classList.toggle('placeholder',!emgNumber);
+}
+function renderEmgInfo(){
+  const card=$('#emgInfoCard');
+  if(!card)return;
+  if(emgEditing){
+    card.className='emg-card emg-edit';
+    card.innerHTML='<h4>'+escHtml(t('紧急信息'))+'</h4>'+
+      [['ename','姓名',EMG_INFO.name],['eblood','血型',EMG_INFO.blood],['eallergy','过敏',EMG_INFO.allergy],
+       ['emeds','长期用药',EMG_INFO.meds],['eorgan','器官捐献',EMG_INFO.organ],['ecname','紧急联系人',EMG_INFO.cname],
+       ['ecphone','联系人电话',EMG_INFO.cphone]].map(r=>
+        '<label>'+escHtml(t(r[1]))+'</label><input id="'+r[0]+'" value="'+escHtml(r[2])+'">').join('')+
+      '<div class="emg-acts"><button data-act="emg-save" class="primary">'+escHtml(t('保存'))+'</button>'+
+      '<button data-act="emg-cancel">'+escHtml(t('取消'))+'</button></div>';
+    return;
+  }
+  card.className='emg-card';
+  card.innerHTML='<h4>'+escHtml(t('紧急信息'))+'</h4>'+
+    '<div class="emg-row"><span>'+escHtml(t('姓名'))+'</span><b>'+escHtml(EMG_INFO.name)+'</b></div>'+
+    '<div class="emg-row"><span>'+escHtml(t('血型'))+'</span><b>'+escHtml(EMG_INFO.blood)+'</b></div>'+
+    '<div class="emg-row"><span>'+escHtml(t('过敏'))+'</span><b>'+escHtml(EMG_INFO.allergy)+'</b></div>'+
+    '<div class="emg-row"><span>'+escHtml(t('长期用药'))+'</span><b>'+escHtml(EMG_INFO.meds)+'</b></div>'+
+    '<div class="emg-row"><span>'+escHtml(t('器官捐献'))+'</span><b>'+escHtml(EMG_INFO.organ)+'</b></div>'+
+    '<div class="emg-row"><span>'+escHtml(t('紧急联系人'))+'</span><b>'+escHtml(EMG_INFO.cname)+' · '+escHtml(EMG_INFO.cphone)+'</b></div>'+
+    '<div class="emg-acts"><button data-act="emg-contact" class="primary">'+escHtml(t('拨打紧急联系人'))+'</button>'+
+    '<button data-act="emg-edit">'+escHtml(t('编辑'))+'</button></div>';
+}
+function emgKey(k){
+  if(!k)return;
+  if(k==='del'){emgNumber=emgNumber.slice(0,-1);}
+  else if(k==='clr'){emgNumber='';}
+  else if(emgNumber.length<15){emgNumber+=k;}
+  renderEmgNum();
+}
+function emgDial(num){
+  const n=String(num===undefined?emgNumber:num).trim();
+  if(!n){toast(t('请输入紧急号码'));return;}
+  closeEmergency();
+  openApp('phone');
+  if(typeof phSwitch==='function')phSwitch('keypad');
+  $('#callview').classList.add('on');
+  $('#cvAvatar').textContent='!';
+  $('#cvAvatar').style.background='#D93025';
+  $('#cvName').textContent=n;
+  $('#cvState').textContent=t('正在呼叫')+' · '+t('紧急呼叫');
+  clearInterval(callIv);callSec=0;
+  const isEmg=true;
+  setTimeout(()=>{
+    if($('#callview').classList.contains('on')){
+      $('#cvState').textContent='00:00';
+      callIv=setInterval(()=>{callSec++;$('#cvState').textContent=String(Math.floor(callSec/60)).padStart(2,'0')+':'+String(callSec%60).padStart(2,'0');},1000);
+    }
+  },1400);
+}
+function saveEmgInfo(){
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  EMG_INFO.name=g('ename')||EMG_INFO.name;
+  EMG_INFO.blood=g('eblood');EMG_INFO.allergy=g('eallergy');EMG_INFO.meds=g('emeds');
+  EMG_INFO.organ=g('eorgan');EMG_INFO.cname=g('ecname');EMG_INFO.cphone=g('ecphone');
+  emgEditing=false;renderEmgInfo();
+  toast(t('紧急信息已保存'));
+}
 function openPowerMenu(){
   if(!deviceOn)return;
   closeAppMenu();
@@ -8258,6 +8455,43 @@ function fit(){
   scr.addEventListener('pointerdown',lockPage,{passive:true});
   document.addEventListener('pointerup',unlockPage,{passive:true});
   document.addEventListener('pointercancel',unlockPage,{passive:true});
+  /* ===== 触摸点按兜底 =====
+     手机端抽屉/桌面图标入场动画播放期间，按下与抬起可能落在不同元素上，
+     浏览器会把 click 派发到两者的共同祖先（#screen），于是「点了没反应」。
+     这里按「手指按下时瞄准的元素」补一次点击：位移小、时间短即视为点按；
+     若浏览器已经正常派发过 click，则完全不插手（避免重复触发）。 */
+  let tapCand=null,tapLast=null;
+  scr.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse')return;                    /* 鼠标不受影响 */
+    tapCand=tapLast={el:e.target,x:e.clientX,y:e.clientY,t:performance.now(),used:false};
+  },{passive:true});
+  /* 触摸点按的判定：
+     · 浏览器派发的 click 落在「按下时瞄准的那个可点元素」（或其内部）→ 已处理，兜底不补发；
+     · click 落到别处（图标在入场动画中移动、网格重渲染导致落到容器/邻居上）→ 吞掉这次 click，
+       由兜底按「按下时瞄准的元素」重放，避免打开手指下方那个别的应用。
+     这样既不会重复触发，也不会点错、点不到。 */
+  const tapAct=el=>el&&el.closest?el.closest('[data-act],.app-item,.store-row,.result-card,.list-row,.set-row,.menu-row,.notif-card,.tabbtn,button'):null;
+  document.addEventListener('click',e=>{
+    const c=tapLast;
+    if(!c)return;
+    const aim=tapAct(c.el),hit=tapAct(e.target);
+    if((aim&&hit&&aim===hit)||e.target===c.el||(c.el.contains&&c.el.contains(e.target))){c.used=true;tapLast=null;return;}
+    if(aim&&hit!==aim&&performance.now()-c.t<480){e.stopPropagation();e.preventDefault();}
+    tapLast=null;
+  },true);
+  scr.addEventListener('pointerup',e=>{
+    const c=tapCand;
+    tapCand=null;
+    if(!c||!c.el)return;
+    const moved=Math.hypot(e.clientX-c.x,e.clientY-c.y);
+    if(moved>12||performance.now()-c.t>480)return;        /* 拖动/长按（≥480ms）不算点按 */
+    setTimeout(()=>{
+      if(c.used)return;                                   /* 浏览器已派发 click */
+      const el=c.el.closest&&c.el.closest('[data-act],.app-item,.store-row,.result-card,.list-row,.set-row,.menu-row,.notif-card,.tabbtn,button,input,textarea');
+      if(!el||el===document.body)return;
+      el.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
+    },0);
+  },{passive:true});
   window.addEventListener('pageshow',fit);
   /* 触摸端补充手势：面板/抽屉本身是纵向滚动容器，浏览器会接管纵向拖动，
      于是用 touch 事件补上「上滑收起」——真机上就是从这个位置往上滑 */
@@ -8286,6 +8520,18 @@ setInterval(()=>{updateClock();if(curScreen==='app'&&app==='clock')renderWorld()
 setInterval(mediaTick,1000);
 init();
 fit();
+/* 长按「重新启动」（电源菜单或工具栏）进入安全模式：普通点击仍是普通重启 */
+function wireSafeReboot(sel){
+  $$(sel).forEach(el=>{
+    let tm=null,fired=false;
+    const cancel=()=>{if(tm){clearTimeout(tm);tm=null;}};
+    el.addEventListener('pointerdown',()=>{fired=false;cancel();tm=setTimeout(()=>{fired=true;tm=null;closePowerMenu();doBoot({toggleSafe:true});},560);});
+    ['pointerup','pointerleave','pointercancel'].forEach(ev=>el.addEventListener(ev,cancel));
+    el.addEventListener('click',e=>{if(fired){fired=false;e.stopPropagation();e.preventDefault();}},true);
+  });
+}
+wireSafeReboot('[data-act="power-reboot"]');
+wireSafeReboot('.desk-actions [data-act="reboot"]');
 {
   const q=new URLSearchParams(location.search);
   if(q.get('dark')==='1'&&!tiles.dark)toggleTile('dark');
