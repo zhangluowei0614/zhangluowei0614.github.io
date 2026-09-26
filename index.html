@@ -1024,6 +1024,27 @@ html.dark .gb-key.fn{color:#9A9AA1}
 .yt-related{padding:10px 4px 6px}
 .yt-rel-row{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px 4px;color:var(--txt)}
 .yt-thumb.small{width:56px;height:36px;border-radius:8px;flex:none;display:block}
+/* ==== 搜索栏 + API 卡片 ==== */
+.yt-searchrow{padding:10px 14px 6px}
+.yt-push-card .yp-s{display:block;padding:0 8px 9px;font-size:11px;color:var(--txt2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ==== 随机推送 + 嵌套浏览器 ==== */
+.yt-push-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;font-size:13px;color:var(--txt2)}
+.yt-push-head .pillbtn.small{height:28px;padding:0 10px;border-radius:14px;font-size:12px}
+.yt-push-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 16px}
+.yt-push-card{position:relative;display:block;padding:0;border-radius:12px;overflow:hidden;background:var(--scontainer);text-align:left}
+.yt-push-card .yt-cover{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.yt-push-card .yp-t{display:block;padding:7px 8px 9px;font-size:11.5px;line-height:1.45;color:var(--txt);max-height:52px;overflow:hidden}
+.ytm-grid{grid-template-columns:1fr 1fr}
+.chrome-wrap{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--surface)}
+.chrome-wrap .cw-bar{display:none;padding:10px 14px;font-size:12px;line-height:1.6;color:#F2B8B5;background:rgba(217,48,37,.14)}
+.chrome-wrap .chrome-frame{flex:1;width:100%;border:0;background:#fff}
+/* ==== YouTube 空状态 ==== */
+.yt-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:44px 20px 20px;text-align:center}
+.ye-ic{width:64px;height:64px;border-radius:50%;background:var(--scontainer);display:flex;align-items:center;justify-content:center;color:var(--txt2)}
+.ye-ic svg{width:30px;height:30px;fill:currentColor}
+.yt-empty .ye-t{font-size:16px;font-weight:600}
+.yt-empty .ye-s{font-size:12.5px;color:var(--txt2);line-height:1.7;max-width:280px}
+.yt-empty .yt-urlrow{padding:10px 0 0;width:100%}
 /* ==== 播放错误说明（Error 153 等） ==== */
 .yt-errbox{display:none;margin:8px 14px 0;padding:10px 12px;border-radius:14px;background:rgba(217,48,37,.14);color:var(--txt)}
 .yt-errbox.on{display:block}
@@ -2980,7 +3001,11 @@ const I18N={
     '缩放':'Zoom',
     '本地内嵌':'embedded',
     '若此处空白，说明当前网络无法访问 YouTube':'If this stays blank, YouTube is unreachable on this network',
-    '播放器报错':'Player error','播放失败':'Playback failed','解决方法：用 http(s) 打开本页，让浏览器带上 Referer':'Fix: open this page over http(s) so the browser sends a Referer','复制命令':'Copy command','复制 http 地址':'Copy http URL','已复制命令':'Command copied','已复制地址':'URL copied','在浏览器打开视频':'Open video in browser','请求参数无效':'Invalid parameters','播放器无法播放该视频':'The player cannot play this video','视频不存在、已被删除或设为私有':'Video unavailable, deleted or private','上传者不允许在其他网站嵌入播放':'The uploader does not allow embedding on other sites','缺少 HTTP 引荐来源（Referer）——用 file:// 打开时 YouTube 一定会拒绝播放':'Missing HTTP referrer — YouTube always refuses playback when the page is opened via file://',
+    '播放器报错':'Player error',
+    '随机推送':'For you (random)',
+    '热门':'Trending','音乐':'Music','搜索':'Search','搜索结果':'Results','搜索中':'Searching','已加载':'Loaded','条结果':'results','没有找到相关内容':'No results found','搜索 YouTube（官方 API）':'Search YouTube (official API)','搜索音乐（官方 API）':'Search music (official API)','搜索失败（检查 API Key 与配额）':'Search failed (check API key and quota)','请输入搜索内容':'Enter a search term','次观看':'views',
+    '已交给 Chromium 内核加载':'Handed to the Chromium engine','Chrome 标签页':'Chrome tab','YouTube 标签页':'YouTube tab','换一批':'Refresh','已换一批':'Refreshed','加载中':'Loading','YouTube Music':'YouTube Music','已在系统浏览器打开':'Opened in your system browser','该网站不允许被嵌入（X-Frame-Options / CSP）。本机内核视图可正常加载：请使用 Electron 外壳，或在系统浏览器打开。':'This site refuses to be framed (X-Frame-Options / CSP). It loads fine in the native Chromium shell — use the Electron shell or open it in your system browser.',
+    '还没有内容':'Nothing here yet','粘贴 youtu.be 链接或 11 位视频 ID 开始播放；本模块不含任何预置视频':'Paste a youtu.be link or an 11-character video ID to start — this module ships with no preset videos','未在播放':'Nothing playing','未知视频':'Unknown video','视频':'Video','标题来自当前视频元数据':'title from current video metadata','元数据加载失败（显示占位标题）':'metadata failed to load (placeholder title shown)','播放失败':'Playback failed','解决方法：用 http(s) 打开本页，让浏览器带上 Referer':'Fix: open this page over http(s) so the browser sends a Referer','复制命令':'Copy command','复制 http 地址':'Copy http URL','已复制命令':'Command copied','已复制地址':'URL copied','在浏览器打开视频':'Open video in browser','请求参数无效':'Invalid parameters','播放器无法播放该视频':'The player cannot play this video','视频不存在、已被删除或设为私有':'Video unavailable, deleted or private','上传者不允许在其他网站嵌入播放':'The uploader does not allow embedding on other sites','缺少 HTTP 引荐来源（Referer）——用 file:// 打开时 YouTube 一定会拒绝播放':'Missing HTTP referrer — YouTube always refuses playback when the page is opened via file://',
     '视频未能加载，可尝试以下方式':'The video did not load — try one of these',
     'YouTube 嵌入规范':'YouTube embedding guidelines','访问和使用 YouTube 嵌入式播放器时，必须遵守《YouTube API 服务条款》和《开发者政策》。':'Use of the YouTube embedded player is subject to the YouTube API Services Terms of Service and Developer Policies.','嵌入方式':'How to embed','在计算机上找到要嵌入的视频或播放列表':'Find the video or playlist on a computer','点击「分享」→「嵌入」，复制官方 iframe 代码':'Click Share → Embed and copy the official iframe code','将代码粘贴到网站 HTML 中（本应用使用官方嵌入播放器，无需自行下载视频）':'Paste the code into your page HTML (this app uses the official embedded player — no downloading needed)','网络管理员需将 youtube.com 加入防火墙许可清单':'Network admins must allow youtube.com through the firewall','本应用已支持的嵌入选项':'Embed options supported here','隐私保护增强模式（youtube-nocookie）':'Privacy-enhanced mode (youtube-nocookie)','自动播放（autoplay=1）':'Autoplay (autoplay=1)','从特定时间点开始播放（start=秒）':'Start at a specific time (start=seconds)','未设置，可在链接里带 ?t=90':'not set — append ?t=90 to the link','字幕（cc_load_policy / cc_lang_pref）':'Captions (cc_load_policy / cc_lang_pref)','播放列表嵌入（videoseries?list=）':'Playlist embeds (videoseries?list=)','HTTP 引荐来源（origin）：在 http(s) 下自动附加':'HTTP referrer (origin): added automatically over http(s)','注意事项':'Notes','有年龄限制的视频无法在多数第三方网站观看，播放时会重定向回 YouTube':'Age-restricted videos cannot be watched on most third-party sites and redirect back to YouTube','上传者可关闭嵌入功能，此时请改用「在浏览器打开」':'Uploaders can disable embedding — use “Open in browser” instead','面向儿童的网站或应用需自行标识':'Child-directed sites or apps must self-identify','file:// 打开时没有引荐来源，建议用 http(s) 或本地服务器':'file:// provides no referrer — use http(s) or a local server','知道了':'Got it','嵌入规范':'Guidelines','开启字幕':'Turn on captions','关闭字幕':'Turn off captions','已开启字幕':'Captions on','已关闭字幕':'Captions off','已开启':'On','未开启':'Off','播放列表':'Playlist','改用 www.youtube.com':'Switch to www.youtube.com','改用 youtube-nocookie':'Switch to youtube-nocookie','已切换域名':'Switched domain','视频未加载：可切换域名或在浏览器打开':'Video did not load — switch domain or open in browser','（当前为 file:// 打开，建议用 http(s) 或本地服务器）':' (opened via file:// — http(s) is recommended)','重新加载':'Reload','在浏览器打开':'Open in browser','改用本地示例影片':'Use the local sample clip','正在重新加载':'Reloading','请输入 youtu.be 链接或 11 位视频 ID':'Paste a youtu.be link or an 11-character video ID','粘贴 youtu.be 链接或视频 ID':'Paste youtu.be link or video ID','播放':'Play','youtu.be 在线视频':'youtu.be online video',
     '预览':'Preview','这是本地示例文本文件的内容。':'Local sample text file content.','用于演示文本预览':'demonstrates text preview','支持滚动查看':'scrollable','第':'Line','行示例内容':'sample content','点击图片可放大':'Tap the image to zoom','本地内嵌 CC0 示例影片':'Embedded CC0 sample clip','解压到当前文件夹':'Extract here','正在解压':'Extracting','已解压':'Extracted','版本':'Version','安装':'Install','正在安装':'Installing','已安装':'Installed','用其他应用打开':'Open with another app','该类型无法直接预览':'This type cannot be previewed directly','打开方式':'Open with','已用':'Opened with','打开':'','正在查找可打开该文件的应用':'Looking for an app that can open this file','相机':'Camera','位置信息':'Location','存储':'Storage','网络访问':'Network','文本':'Text','图片':'Image','文件管理器':'Files','内部存储':'Internal storage','在线':'online','正在播放':'Playing','若无法加载，说明当前网络无法访问 YouTube（可切换下面的本地示例影片）':'If it fails to load, YouTube is unreachable on this network — switch to the local sample clip below','加载失败：请检查网络或改用本地示例影片':'Load failed — check your network or use the local sample clip','您的浏览器不支持该媒体格式':'Your browser does not support this media',
@@ -3496,17 +3521,7 @@ const MAILS=[
    body:'您订阅的 Google 中国发布了新视频：\n\n《Android 17 新功能速览、'}
 ];
 
-const YT_FEED=[
-  {t:'【4K】上海天际线延时摄影',ch:'Pixel 摄影',th:'linear-gradient(135deg,#667eea,#764ba2)',v:'128万次观看',d:'12:34',cat:'科技'},
-  {t:'Android 17 新功能速览',ch:'Google 中国',th:'linear-gradient(135deg,#11998e,#38ef7d)',v:'86万次观看',d:'08:12',cat:'科技'},
-  {t:'Tensor G5 芯片深度评测',ch:'科技君',th:'linear-gradient(135deg,#f953c6,#b91d73)',v:'45万次观看',d:'15:27',cat:'科技'},
-  {t:'Pixel 10 相机实战：夜景模式',ch:'数码日常',th:'linear-gradient(135deg,#141e30,#243b55)',v:'210万次观看',d:'10:05',cat:'科技'},
-  {t:'用 Material You 打造个性化界面',ch:'设计观察',th:'linear-gradient(135deg,#36d1dc,#5b86e5)',v:'32万次观看',d:'06:48',cat:'科技'},
-  {t:'深夜电台：城市爵士选集',ch:'Pixel 音乐',th:'linear-gradient(135deg,#8E2DE2,#4A00E0)',v:'64万次观看',d:'42:10',cat:'音乐'},
-  {t:'Lo-fi 学习歌单 · 3 小时',ch:'Chill 频道',th:'linear-gradient(135deg,#f7971e,#ffd200)',v:'310万次观看',d:'3:02:11',cat:'音乐'},
-  {t:'《原神》新版本实机演示',ch:'游戏前线',th:'linear-gradient(135deg,#43C6AC,#191654)',v:'520万次观看',d:'18:44',cat:'游戏'},
-  {t:'独立游戏推荐：本周 10 次',ch:'游戏茶馆',th:'linear-gradient(135deg,#fc466b,#3f5efb)',v:'78万次观看',d:'11:20',cat:'游戏'}
-];
+var YT_FEED=[];   /* 预置内容已彻底移除：仅随机推送 + 用户输入（本轮） */
 
 /* Play 商店：只提供 Google 官方应用；每项都对应模拟器里真实可用的应用界面 */
 const STORE_APPS=[
@@ -4140,8 +4155,32 @@ function openApp(id){
   if(id==='phone')setTimeout(()=>{try{phEnsureKeypadLayout()}catch(e){}},60);
   if(id==='calendar')setTimeout(()=>{try{calRenderView()}catch(e){}},60);
   if(id==='google')setTimeout(()=>{try{renderGoogleApp()}catch(e){}},40);
-  if(id==='youtube')setTimeout(()=>{try{ytDecorateThumbs()}catch(e){}},60);
-  if(id==='ytmusic')setTimeout(()=>{try{ytmDecorateRows()}catch(e){}},60);
+
+  if(id==='youtube')setTimeout(()=>{try{
+    ytPurgePresets();ytRenderRandomFeed();
+    ytEnsureSearchBar('app-youtube','ytApiSearch',t('搜索 YouTube（官方 API）'),function(q){
+      const host=document.getElementById('ytFeed');
+      if(host)host.innerHTML='<div class="ph-none">'+escHtml(t('搜索中'))+'…</div>';
+      ytApiSearch(q,{max:12}).then(function(items){
+        if(!items.length){toast(t('没有找到相关内容'));return;}
+        ytRenderItems(host,items,{title:t('搜索结果')+' · '+q,refreshAct:'yt-search-again',onRefresh:function(){}});
+        const rb=host.querySelector('[data-act="yt-search-again"]');if(rb)rb.remove();
+        toast(t('已加载')+' '+items.length+' '+t('条结果'));
+      }).catch(function(err){if(host)host.innerHTML='<div class="ph-none">'+escHtml(t('搜索失败（检查 API Key 与配额）'))+'：'+escHtml(String(err.message||err))+'</div>';});
+    });
+  }catch(e){}},60);
+  if(id==='chrome')setTimeout(()=>{try{const f=chromeFrameEnsure();if(f&&!f.src)chromeNavigate('www.google.com');}catch(e){}},80);
+  if(id==='ytmusic')setTimeout(()=>{try{ytPurgePresets();ytmRenderRandomFeed();
+    ytEnsureSearchBar('app-ytmusic','ytmApiSearch',t('搜索音乐（官方 API）'),function(q){
+      const host=document.getElementById('ytmFeed');
+      if(host)host.innerHTML='<div class="ph-none">'+escHtml(t('搜索中'))+'…</div>';
+      ytApiSearch(q,{max:12,cat:'10'}).then(function(items){
+        if(!items.length){toast(t('没有找到相关内容'));return;}
+        ytRenderItems(host,items,{title:t('搜索结果')+' · '+q,refreshAct:'ytm-search-again',onRefresh:function(){}});
+        const rb=host.querySelector('[data-act="ytm-search-again"]');if(rb)rb.remove();
+      }).catch(function(err){if(host)host.innerHTML='<div class="ph-none">'+escHtml(t('搜索失败（检查 API Key 与配额）'))+'：'+escHtml(String(err.message||err))+'</div>';});
+    });
+  }catch(e){}},60);
   if(id==='drive')setTimeout(()=>{try{driveRenderRecent()}catch(e){}},50);
   /* 打开应用时会按需重新渲染内容，这里补一次语言翻译，保证英文模式下新渲染的内容也是英文 */
   if(LANG!=='zh'){staticI18n();setTimeout(()=>{if(app===id)staticI18n();},820);}
@@ -5141,19 +5180,8 @@ function ytmDecorateRows(){
 function mediaDecorateAll(){try{ytDecorateThumbs();ytmDecorateRows();}catch(e){}}
 /* ===== YouTube：真实播放（内嵌 CC0 视频 / 在线官方嵌入） ===== */
 let YT_CURV=null;
-const YT_DB=[
-  {id:'M7lc1UVf-VE',t:'YouTube 播放器 API 演示',ch:'Google Developers',d:'0:31',v:'官方示例',kind:'video'},
-  {id:'jNQXAC9IVRw',t:'Me at the zoo',ch:'YouTube',d:'0:19',v:'3.4亿次观看',kind:'video'},
-  {id:'aqz-KE-bpKQ',t:'Big Buck Bunny',ch:'Blender Foundation',d:'10:34',v:'CC-BY 开源影片',kind:'video'},
-  {id:'LXb3EKWsInQ',t:'Costa Rica in 4K',ch:'Jacob + Katie Schwarz',d:'5:14',v:'4K HDR',kind:'video'},
-  {id:'ScMzIvxBSi4',t:'Big Buck Bunny（示例）',ch:'Google',d:'10:34',v:'示例视频',kind:'video'},
-  {id:'dQw4w9WgXcQ',t:'Never Gonna Give You Up',ch:'Rick Astley',d:'3:33',v:'15亿次观看',kind:'music'},
-  {id:'9bZkp7q19f0',t:'Gangnam Style',ch:'officialpsy',d:'4:13',v:'50亿次观看',kind:'music'},
-  {id:'kJQP7kiw5Fk',t:'Despacito',ch:'Luis Fonsi',d:'4:42',v:'85亿次观看',kind:'music'},
-  {id:'fJ9rUzIMcZQ',t:'Bohemian Rhapsody',ch:'Queen Official',d:'5:59',v:'19亿次观看',kind:'music'}
-];
-const YT_REAL=YT_DB;
-function ytThumb(id){return id?('https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'):'';}
+const YT_DB=[];   /* 无预置视频：仅由用户输入链接/ID 后加载（任务 2） */
+const YT_REAL=YT_DB;function ytThumb(id){return id?('https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'):'';}
 function ytThumbBig(id){return id?('https://i.ytimg.com/vi/'+id+'/maxresdefault.jpg'):'';}
 let ytHost='www';        /* www = www.youtube.com（默认）；nocookie = 隐私保护增强模式 */
 let ytCc=false;          /* 是否请求字幕（规范里的「为嵌入的视频添加字幕」） */
@@ -5262,6 +5290,450 @@ function ytCopy(text,okMsg){
   try{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast(okMsg);}catch(e){toast(text);}
 }
 /* 用官方 API 创建播放器；API 不可用时回退到普通 iframe */
+/* ===== 任务 1 + 任务 2：标题与当前视频严格绑定；移除全部预置内容 =====
+   单一数据源 ytNow：{ videoId, list, title, channel, duration, source, metaFailed }
+   · 打开任何视频/播放列表/相关推荐/自动播放下一首，都只能通过 ytSetNow() 写标题
+   · 标题只来自该 videoId 的元数据（oEmbed）；取不到时给出明确占位提示，绝不复用旧标题
+   · 令牌 ytToken 防止异步竞态（旧请求的结果一律丢弃）
+   · 无预置视频：初始为空状态，仅用户输入链接/ID 后加载 */
+let ytNow=null;
+let ytToken=0;
+const YT_HISTORY=[];
+
+function ytSetNow(meta){
+  ytNow=meta||null;
+  const tEl=document.getElementById("ytTitle"), mEl=document.getElementById("ytMeta");
+  const failed=!!(ytNow&&ytNow.metaFailed);
+  let title=t("未在播放");
+  if(ytNow){
+    if(ytNow.title) title=ytNow.title;
+    else if(ytNow.videoId) title=t("视频")+" "+ytNow.videoId;
+    else if(ytNow.list) title=t("播放列表");
+    else title=t("未知视频");
+  }
+  if(tEl)tEl.textContent=title;
+  if(mEl){
+    if(!ytNow)mEl.textContent="";
+    else{
+      const bits=[];
+      if(ytNow.channel)bits.push(ytNow.channel);
+      if(ytNow.duration)bits.push(ytNow.duration);
+      if(ytNow.source)bits.push(ytNow.source);
+      bits.push(failed?t("元数据加载失败（显示占位标题）"):t("标题来自当前视频元数据"));
+      mEl.textContent=bits.join(" · ");
+    }
+  }
+  return title;
+}
+
+function ytFetchMeta(videoId){
+  const my=++ytToken;
+  const api="https://www.youtube.com/oembed?url="+encodeURIComponent("https://www.youtube.com/watch?v="+videoId)+"&format=json";
+  return fetch(api,{mode:"cors"}).then(function(r){
+    if(!r.ok)throw new Error("http "+r.status);
+    return r.json();
+  }).then(function(j){
+    if(my!==ytToken)return null;
+    if(!ytNow||ytNow.videoId!==videoId)return null;
+    ytNow.title=(j&&j.title)||"";
+    ytNow.channel=(j&&j.author_name)||ytNow.channel||"";
+    ytNow.metaFailed=false;
+    ytSetNow(ytNow);
+    return ytNow.title;
+  }).catch(function(){
+    if(my!==ytToken)return null;
+    if(!ytNow||ytNow.videoId!==videoId)return null;
+    ytNow.metaFailed=true;
+    ytSetNow(ytNow);
+    return null;
+  });
+}
+
+/* 统一的“打开某个视频”入口：先绑定状态，再挂播放器，最后异步补元数据 */
+function ytOpenById(videoId,extra){
+  const item=extra||{};
+  if(videoId){
+    ytToken++;
+    ytSetNow({videoId:videoId,list:item.list||null,title:"",channel:item.channel||"",duration:item.duration||"",source:item.source||"youtu.be"});
+    ytStart=item.start||0;
+    ytOpenReal({id:videoId,list:item.list||null,start:item.start||0,t:"",ch:item.channel||"",d:item.duration||"",v:"",kind:"video"});
+    try{ytFetchMeta(videoId);}catch(e){}
+    YT_HISTORY.push({id:videoId,list:item.list||null,at:Date.now()});
+    return true;
+  }
+  if(item.list){
+    ytToken++;
+    ytSetNow({videoId:"",list:item.list,title:"",channel:"",duration:"",source:t("播放列表")});
+    ytOpenReal({id:null,list:item.list,start:item.start||0,t:"",ch:"",d:"",source:t("播放列表")});
+    return true;
+  }
+  ytSetNow(null);
+  return false;
+}
+
+/* 空状态：不出现任何预置视频 */
+function ytRenderEmpty(){
+  const feed=document.getElementById("ytFeed");
+  if(!feed)return;
+  feed.classList.add("on");
+  const p=[];
+  p.push('<div class="yt-empty">');
+  p.push('<div class="ye-ic">'+mi(M.play)+'</div>');
+  p.push('<div class="ye-t">'+escHtml(t("还没有内容"))+'</div>');
+  p.push('<div class="ye-s">'+escHtml(t("粘贴 youtu.be 链接或 11 位视频 ID 开始播放；本模块不含任何预置视频"))+'</div>');
+  p.push('<div class="yt-urlrow"><input id="ytUrlInput" placeholder="'+escHtml(t("粘贴 youtu.be 链接或视频 ID"))+'">');
+  p.push('<button class="pillbtn" data-act="yt-play-url">'+escHtml(t("播放"))+'</button></div>');
+  p.push('</div>');
+  feed.innerHTML=p.join("");
+  ytSetNow(null);
+}
+
+function ytClearPresetContent(){
+  const app=document.getElementById("app-youtube");
+  if(!app)return;
+  app.querySelectorAll('[data-act="yt-open"]').forEach(function(c){c.remove();});
+  const rel=document.getElementById("ytRelated");
+  if(rel)rel.innerHTML="";
+  if(!YT_HISTORY.length)ytRenderEmpty();
+}
+
+/* 播放器状态变化（如自动播放下一首）时同步标题 */
+function ytSyncTitleFromPlayer(){
+  try{
+    if(ytPlayerObj&&ytPlayerObj.getVideoData){
+      const d=ytPlayerObj.getVideoData()||{};
+      if(d.video_id&&(!ytNow||ytNow.videoId!==d.video_id)){
+        ytToken++;
+        ytSetNow({videoId:d.video_id,title:d.title||"",channel:d.author||"",duration:"",source:"youtu.be"});
+        if(!d.title)ytFetchMeta(d.video_id);
+      }
+    }
+  }catch(e){}
+}
+
+/* ===== 本轮改造：彻底移除预置视频 / 单一 tab 栏 + 随机推送 / Chrome 嵌套浏览器 =====
+   1) YouTube：清空 YT_FEED，仅保留一条分类 tab 栏；内容改为“随机推送”（每次打开/点刷新重新洗牌）
+   2) YouTube Music：同样单条 tab 栏 + 随机推送
+   3) Chrome：正文改为内嵌浏览器视图（iframe + 地址栏 + 标签页 + 加载/错误提示），
+      站点若禁止被嵌入（X-Frame-Options / CSP）不做绕过，给出提示与“在系统浏览器打开” */
+
+/* ---------- 随机推送池（公开可嵌入的官方内容；仅作出处，不做预置列表展示） ---------- */
+const YT_POOL=[
+  'M7lc1UVf-VE','jNQXAC9IVRw','aqz-KE-bpKQ','LXb3EKWsInQ','ScMzIvxBSi4',
+  'dQw4w9WgXcQ','9bZkp7q19f0','kJQP7kiw5Fk','fJ9rUzIMcZQ','hFZFjoX2cGg',
+  'nmGWK_0GBB0','eRsGyueVLvQ','R6MlUcuOul8','YE7VzlLtp-4','1iIZeIy7TqM'
+];
+const YTM_POOL=YT_POOL.slice();
+function ytShuffle(a){
+  const r=a.slice();
+  for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=r[i];r[i]=r[j];r[j]=t;}
+  return r;
+}
+function ytPoolPick(pool,n){
+  const p=pool&&pool.length?pool:YT_POOL;
+  return ytShuffle(p).slice(0,Math.min(n||6,p.length));
+}
+function ytRandomFeed(n){return ytPoolPick(YT_POOL,n||6);}
+function ytmRandomFeed(n){return ytPoolPick(YTM_POOL,n||6);}
+
+/* ---------- 清空所有预置数据（彻底移除） ---------- */
+/* ===== YouTube Data API v3 接入（真实搜索 / 真实热门推送） =====
+   说明：API Key 在前端文件中是公开可见的，请务必在 Google Cloud Console 里限制：
+   ① 仅允许 YouTube Data API v3；② 按 HTTP 引荐来源或 IP 限制；③ 定期轮换。
+   可用 ?key=... 或 localStorage 覆盖默认 Key。 */
+const YT_API_KEY_DEFAULT='AIzaSyBVa1C9fcL6wv2V8NbWN26uEbtIo_js_v4';
+function ytApiKey(){
+  try{
+    const q=new URLSearchParams(location.search).get('key');
+    if(q)return q;
+    const s=localStorage.getItem('ytApiKey');
+    if(s)return s;
+  }catch(e){}
+  return (typeof YT_API_KEY_DEFAULT!=='undefined')?YT_API_KEY_DEFAULT:'';
+}
+function ytApi(path,params){
+  const key=ytApiKey();
+  if(!key)return Promise.reject(new Error('no key'));
+  const u=new URL('https://www.googleapis.com/youtube/v3/'+path);
+  Object.keys(params||{}).forEach(function(k){if(params[k]!==undefined&&params[k]!==null&&params[k]!=='')u.searchParams.set(k,params[k]);});
+  u.searchParams.set('key',key);
+  return fetch(u.toString(),{mode:'cors'}).then(function(r){
+    if(!r.ok)return r.text().then(function(tx){throw new Error('api '+r.status+' '+tx.slice(0,120));});
+    return r.json();
+  });
+}
+function ytApiSearch(q,opts){
+  const o=opts||{};
+  return ytApi('search',{part:'snippet',q:q,type:'video',maxResults:o.max||12,videoCategoryId:o.cat||undefined,regionCode:o.region||'CN',safeSearch:'moderate'})
+    .then(function(j){
+      return (j.items||[]).map(function(it){
+        const s=it.snippet||{};
+        return {
+          id:(it.id&&it.id.videoId)||'',
+          title:s.title||'',
+          channel:s.channelTitle||'',
+          published:s.publishedAt||'',
+          thumb:(s.thumbnails&&(s.thumbnails.medium||s.thumbnails.default)||{}).url||''
+        };
+      }).filter(function(x){return x.id;});
+    });
+}
+function ytApiTrending(opts){
+  const o=opts||{};
+  return ytApi('videos',{part:'snippet,statistics',chart:'mostPopular',maxResults:o.max||20,videoCategoryId:o.cat||undefined,regionCode:o.region||'CN'})
+    .then(function(j){
+      return (j.items||[]).map(function(it){
+        const s=it.snippet||{};
+        return {
+          id:it.id,title:s.title||'',channel:s.channelTitle||'',
+          views:(it.statistics&&it.statistics.viewCount)||'',
+          thumb:(s.thumbnails&&(s.thumbnails.medium||s.thumbnails.default)||{}).url||''
+        };
+      }).filter(function(x){return x.id;});
+    });
+}
+/* 批量取标题（1 次请求最多 50 个，成本远低于逐个 oEmbed） */
+function ytApiTitles(ids){
+  const list=(ids||[]).filter(Boolean).slice(0,50);
+  if(!list.length)return Promise.resolve({});
+  return ytApi('videos',{part:'snippet',id:list.join(',')}).then(function(j){
+    const m={};
+    (j.items||[]).forEach(function(it){m[it.id]=(it.snippet&&it.snippet.title)||'';});
+    return m;
+  });
+}
+/* 统一的标题获取：优先 API，其次 oEmbed，最后占位 */
+function ytFetchTitleOnly(id){
+  return ytApiTitles([id]).then(function(m){
+    if(m&&m[id])return m[id];
+    throw new Error('empty');
+  }).catch(function(){
+    const url='https://www.youtube.com/oembed?url='+encodeURIComponent('https://www.youtube.com/watch?v='+id)+'&format=json';
+    return fetch(url,{mode:'cors'}).then(function(r){return r.ok?r.json():null;})
+      .then(function(j){return (j&&j.title)||null;}).catch(function(){return null;});
+  });
+}
+/* 渲染一组搜索结果/热门内容 */
+function ytRenderItems(host,items,opts){
+  const o=opts||{};
+  if(!host)return 0;
+  const p=[];
+  p.push('<div class="yt-push-head"><span>'+escHtml(o.title||t('随机推送'))+'</span>');
+  p.push('<button class="pillbtn small" data-act="'+(o.refreshAct||'yt-refresh-feed')+'">'+escHtml(t('换一批'))+'</button></div>');
+  p.push('<div class="yt-push-grid">');
+  (items||[]).forEach(function(it){
+    p.push('<button class="yt-push-card" data-act="yt-random-open" data-id="'+escHtml(it.id)+'">'+
+      '<img class="yt-cover" loading="lazy" alt="" src="'+escHtml(it.thumb||ytThumb(it.id))+'" onerror="this.src=\''+ytThumb(it.id)+'\'">'+
+      '<span class="yp-t">'+escHtml(it.title||(t('视频')+' '+it.id))+'</span>'+
+      (it.channel?'<span class="yp-s">'+escHtml(it.channel)+(it.views?(' · '+escHtml(String(it.views))+' '+escHtml(t('次观看'))):'')+'</span>':'')+
+      '</button>');
+  });
+  p.push('</div>');
+  host.classList.add('on');
+  host.innerHTML=p.join('');
+  const rb=host.querySelector('[data-act="'+(o.refreshAct||'yt-refresh-feed')+'"]');
+  if(rb)rb.addEventListener('click',function(ev){
+    ev.preventDefault();ev.stopPropagation();
+    if(typeof o.onRefresh==='function')o.onRefresh();
+  });
+  return (items||[]).length;
+}
+/* 搜索框（YouTube / YT Music 共用） */
+function ytEnsureSearchBar(appId,inputId,placeholder,onGo){
+  const app=document.getElementById(appId);
+  if(!app)return null;
+  let row=document.getElementById(inputId+'-row');
+  if(!row){
+    row=document.createElement('div');
+    row.className='yt-urlrow yt-searchrow';
+    row.id=inputId+'-row';
+    const body=app.querySelector('.appbody')||app;
+    body.insertBefore(row,body.firstChild);
+  }
+  row.innerHTML='<input id="'+inputId+'" placeholder="'+escHtml(placeholder)+'"><button class="pillbtn" data-go="1">'+escHtml(t('搜索'))+'</button>';
+  const inp=document.getElementById(inputId);
+  const btn=row.querySelector('[data-go]');
+  const go=function(){
+    const q=(inp.value||'').trim();
+    if(!q){toast(t('请输入搜索内容'));return;}
+    onGo(q);
+  };
+  if(btn)btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();go();});
+  inp.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();go();}});
+  return inp;
+}
+
+function ytPurgePresets(){
+  try{ if(typeof YT_FEED!=='undefined'&&YT_FEED&&YT_FEED.length)YT_FEED.length=0; }catch(e){}
+  try{ if(typeof YT_DB!=='undefined'&&YT_DB&&YT_DB.length)YT_DB.length=0; }catch(e){}
+  try{ if(typeof YT_REAL!=='undefined'&&YT_REAL&&YT_REAL!==YT_DB&&YT_REAL.length)YT_REAL.length=0; }catch(e){}
+  try{ if(typeof YTM_TRACKS!=='undefined'&&YTM_TRACKS&&YTM_TRACKS.length)YTM_TRACKS.length=0; }catch(e){}
+  const app=document.getElementById('app-youtube');
+  if(app){
+    /* 只保留一条 tab 栏：移除多余的分区标题/列表容器里的卡片 */
+    app.querySelectorAll('[data-act="yt-open"]').forEach(function(c){c.remove();});
+  }
+}
+
+/* ---------- YouTube：单条 tab 栏 + 随机推送 ---------- */
+var ytRandomMode=false;
+function ytRenderRandomFeed(cat){
+  ytRandomMode=true;
+  const host0=document.getElementById('ytFeed')||document.querySelector('#app-youtube .appbody');
+  ytApiTrending({cat:cat||null,max:20}).then(function(items){
+    if(!items.length)throw new Error('empty');
+    ytRenderItems(host0,items.slice(0,8),{title:t('随机推送')+' · '+t('热门'),refreshAct:'yt-refresh-feed',onRefresh:function(){ytRenderRandomFeed(cat);}});
+  }).catch(function(){ytRenderRandomFeedLocal(cat);});
+}
+function ytRenderRandomFeedLocal(){
+  const host=document.getElementById('ytFeed')||document.querySelector('#app-youtube .appbody');
+  if(!host)return;
+  const ids=ytRandomFeed(6);
+  const p=[];
+  p.push('<div class="yt-push-head"><span>'+escHtml(t('随机推送'))+'</span>');
+  p.push('<button class="pillbtn small" data-act="yt-refresh-feed">'+escHtml(t('换一批'))+'</button></div>');
+  p.push('<div class="yt-push-grid">');
+  ids.forEach(function(id){
+    p.push('<button class="yt-push-card" data-act="yt-random-open" data-id="'+escHtml(id)+'">'+
+      '<img class="yt-cover" loading="lazy" alt="" src="'+ytThumb(id)+'" onerror="this.style.display=\'none\'">'+
+      '<span class="yp-t" id="yp-'+escHtml(id)+'">'+escHtml(t('加载中'))+'…</span></button>');
+  });
+  p.push('</div>');
+  host.classList.add('on');
+  host.innerHTML=p.join('');
+  const rb=host.querySelector('[data-act="yt-refresh-feed"]');
+  if(rb)rb.addEventListener('click',function(ev){
+    ev.preventDefault();ev.stopPropagation();
+    ytRenderRandomFeed();
+    toast(t('已换一批'));
+  });
+  /* 标题一律取自该 videoId 的官方元数据（oEmbed），不写死 */
+  ids.forEach(function(id){
+    ytFetchTitleOnly(id).then(function(title){
+      const el=document.getElementById('yp-'+id);
+      if(el)el.textContent=title||(t('视频')+' '+id);
+    });
+  });
+  ytSetNow(null);
+}
+function ytFetchTitleOnlyLegacy(id){
+  const url='https://www.youtube.com/oembed?url='+encodeURIComponent('https://www.youtube.com/watch?v='+id)+'&format=json';
+  return fetch(url,{mode:'cors'}).then(function(r){return r.ok?r.json():null;})
+    .then(function(j){return (j&&j.title)||null;})
+    .catch(function(){return null;});
+}
+
+/* ---------- YouTube Music：单条 tab 栏 + 随机推送 ---------- */
+function ytmRenderRandomFeed(){
+  const app0=document.getElementById('app-ytmusic');
+  if(!app0)return;
+  let host0=app0.querySelector('#ytmFeed');
+  if(!host0){host0=document.createElement('div');host0.id='ytmFeed';host0.className='ytm-feed';(app0.querySelector('.appbody')||app0).appendChild(host0);}
+  ytApiTrending({cat:'10',max:20}).then(function(items){
+    if(!items.length)throw new Error('empty');
+    ytRenderItems(host0,items.slice(0,8),{title:t('随机推送')+' · '+t('音乐'),refreshAct:'ytm-refresh-feed',onRefresh:function(){ytmRenderRandomFeed();}});
+  }).catch(function(){ytmRenderRandomFeedLocal();});
+}
+function ytmRenderRandomFeedLocal(){
+  const app=document.getElementById('app-ytmusic');
+  if(!app)return;
+  let host=app.querySelector('#ytmFeed');
+  if(!host){
+    host=document.createElement('div');
+    host.id='ytmFeed';host.className='ytm-feed';
+    const body=app.querySelector('.appbody')||app;
+    body.appendChild(host);
+  }
+  const ids=ytmRandomFeed(6);
+  const p=[];
+  p.push('<div class="yt-push-head"><span>'+escHtml(t('随机推送'))+'</span>');
+  p.push('<button class="pillbtn small" data-act="ytm-refresh-feed">'+escHtml(t('换一批'))+'</button></div>');
+  p.push('<div class="yt-push-grid ytm-grid">');
+  ids.forEach(function(id){
+    p.push('<button class="yt-push-card" data-act="ytm-random-open" data-id="'+escHtml(id)+'">'+
+      '<img class="yt-cover" loading="lazy" alt="" src="'+ytThumb(id)+'" onerror="this.style.display=\'none\'">'+
+      '<span class="yp-t" id="ypm-'+escHtml(id)+'">'+escHtml(t('加载中'))+'…</span></button>');
+  });
+  p.push('</div>');
+  host.innerHTML=p.join('');
+  ids.forEach(function(id){
+    ytFetchTitleOnly(id).then(function(title){
+      const el=document.getElementById('ypm-'+id);
+      if(el)el.textContent=title||(t('视频')+' '+id);
+    });
+  });
+}
+
+/* ---------- Chrome：嵌套浏览器（内核不可用时用内嵌视图 + 明确提示） ---------- */
+const CHROME_FRAME_ID='chromeFrame';
+function chromeFrameEnsure(){
+  const app=document.getElementById('app-chrome');
+  if(!app)return null;
+  let f=document.getElementById(CHROME_FRAME_ID);
+  if(f)return f;
+  /* 隐藏原有的模拟页面区，改为真正的内嵌浏览视图 */
+  ['chromeHome','chromeResults','chromeFeed','chromeTabsPage'].forEach(function(id){
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+  const wrap=document.createElement('div');
+  wrap.id='chromeWrap';wrap.className='chrome-wrap';
+  wrap.innerHTML='<div class="cw-bar" id="chromeNotice"></div>'+
+    '<iframe id="'+CHROME_FRAME_ID+'" class="chrome-frame" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>';
+  (app.querySelector('.appbody')||app).appendChild(wrap);
+  const fr=document.getElementById(CHROME_FRAME_ID);
+  let loaded=false;
+  fr.addEventListener('load',function(){loaded=true;chromeNotice('');});
+  chromeFrameTimerSet(function(){
+    if(loaded)return;
+    chromeNotice(t('该网站不允许被嵌入（X-Frame-Options / CSP）。本机内核视图可正常加载：请使用 Electron 外壳，或在系统浏览器打开。'));
+  });
+  return fr;
+}
+let chromeFrameTimer=null;
+function chromeFrameTimerSet(fn){
+  if(chromeFrameTimer)clearTimeout(chromeFrameTimer);
+  chromeFrameTimer=setTimeout(fn,4000);
+}
+function chromeNotice(msg){
+  const n=document.getElementById('chromeNotice');
+  if(!n)return;
+  n.textContent=msg||'';
+  n.style.display=msg?'block':'none';
+}
+/* ===== 在 Electron 外壳内：网页/视频一律交给 Chromium 内核（WebContentsView）加载 ===== */
+function inShell(){return !!(window.shellApi&&typeof window.shellApi.openUrl==="function");}
+function shellOpen(url,label){
+  if(!inShell())return false;
+  try{window.shellApi.openUrl(url);}catch(e){return false;}
+  toast(t('已交给 Chromium 内核加载')+'：'+(label||url));
+  return true;
+}
+function chromeNavigate(url){
+  const f=chromeFrameEnsure();
+  if(!f)return;
+  let target=String(url||'').trim();
+  if(!target)return;
+  if(!/^[a-z]+:\/\//i.test(target)){
+    target=/^[\w-]+(\.[\w-]+)+([/?#].*)?$/.test(target)?('https://'+target)
+      :('https://www.google.com/search?q='+encodeURIComponent(target));
+  }
+  /* 外壳内不使用 iframe，直接新开内核标签页 */
+  if(shellOpen(target,t('Chrome 标签页')))return;
+  chromeNotice('');
+  chromeFrameTimerSet(function(){
+    chromeNotice(t('该网站不允许被嵌入（X-Frame-Options / CSP）。本机内核视图可正常加载：请使用 Electron 外壳，或在系统浏览器打开。'));
+  });
+  f.src=target;
+  const inp=document.getElementById('chromeUrl');
+  if(inp)inp.value=target;
+}
+function chromeOpenExternal(url){
+  const u=url||(document.getElementById('chromeUrl')||{}).value||'';
+  if(!u)return;
+  try{window.open(/^[a-z]+:\/\//i.test(u)?u:('https://'+u),'_blank','noopener');}catch(e){}
+  toast(t('已在系统浏览器打开')+'：'+u);
+}
+
 function ytEmbedHelp(){
   let s=document.getElementById('ytHelpSheet');
   if(!s){
@@ -5316,7 +5788,8 @@ function ytMountPlayer(v,opt){
       if(list)vars.list=list;
       if(location.protocol==='http:'||location.protocol==='https:')vars.origin=location.origin;
       const cfg={playerVars:vars,events:{
-        onReady:function(){ytClearError();},
+        onReady:function(){ytClearError();ytSyncTitleFromPlayer();},
+        onStateChange:function(ev){if(ev&&ev.data===0){ytSyncTitleFromPlayer();}},
         onError:function(e){
           const code=e&&e.data;
           ytErrorBox(code);
@@ -6179,7 +6652,10 @@ function saveDraft(){
 /* ============ YouTube ============ */
 function renderYt(){
   const list=ytChip==='all'?YT_FEED:YT_FEED.filter(v=>v.cat===ytChip);
-  $('#ytFeed').innerHTML=list.map(v=>`<button class="yt-card" data-act="yt-open" data-i="${YT_FEED.indexOf(v)}"><span class="yt-thumb" style="background:${v.th}">▶</span><span class="flex1"><span class="yt-title">${v.t}</span><div class="yt-meta">${v.ch} · ${v.v} · ${v.d}</div></span></button>`).join('')||`<div class="ph-none">${t('没有相关内容')}</div>`;
+  if(typeof ytRandomMode!=='undefined'&&ytRandomMode&&typeof ytRenderRandomFeed==='function'){ytRenderRandomFeed();return;}
+  const __ids=(typeof ytRandomFeed==='function')?ytRandomFeed(6):[];
+  $('#ytFeed').innerHTML=__ids.map(id=>`<button class="yt-push-card" data-act="yt-random-open" data-id="${id}"><img class="yt-cover" loading="lazy" alt="" src="${ytThumb(id)}"><span class="yp-t" id="yp-${id}">${t('加载中')}…</span></button>`).join('');
+  if(typeof ytFetchTitleOnly==='function')__ids.forEach(id=>ytFetchTitleOnly(id).then(ti=>{const e=document.getElementById('yp-'+id);if(e)e.textContent=ti||(t('视频')+' '+id);}));
 }
 function openVideo(i){
   const v=YT_FEED[i];
@@ -8683,6 +9159,7 @@ const APP_FUNC={
   },
   gtv(){
     const list=[['【4K】上海天际线延时摄影',0],['Android 17 新功能速览',1],['Tensor G5 芯片深度评测',2]];
+    if(!YT_FEED.length)return XL('继续观看')+'<div class="ph-none">'+t('暂无内容')+'</div>';
     return XL('继续观看')+list.map(x=>`<button class="feed-card" data-act="gtv-play" data-i="${x[1]}"><span class="feed-thumb" style="background:${YT_FEED[x[1]].th}"></span><span class="flex1"><span class="feed-t">${YT_FEED[x[1]].t}</span><div class="feed-s">${YT_FEED[x[1]].ch} · ${x[0]===null?'':YT_FEED[x[1]].d}</div></span></button>`).join('');
   },
   news(){
@@ -9868,21 +10345,29 @@ function init(){
         ytShowFallbackBar(v);
         break;}
       case 'yt-retry':{const f=document.getElementById('ytFrame');if(f){const s=f.src;f.src='about:blank';setTimeout(()=>{f.src=s;},60);}toast(t('正在重新加载')+'…');break;}
-      case 'yt-open-ext':{const url=ytWatchUrl(el.dataset.id);try{window.open(url,'_blank','noopener');}catch(e){}toast(url);break;}
+      case 'yt-open-ext':{const url=ytWatchUrl(el.dataset.id);
+        if(shellOpen(url,t('YouTube 标签页')))break;
+        try{window.open(url,'_blank','noopener');}catch(e){}toast(url);break;}
       case 'yt-use-local':ytOpenReal(YT_LOCAL);break;
       case 'yt-play-url':{
         const inp=document.getElementById('ytUrlInput');
         const info=ytParseInfo(inp?inp.value:'');
         if(!info){toast(t('请输入 youtu.be 链接或 11 位视频 ID'));break;}
         ytStart=info.start||0;
-        ytOpenReal({id:info.id,list:info.list,start:info.start,t:(inp&&inp.value.trim())||('YouTube · '+(info.id||info.list)),ch:info.list?t('播放列表'):'youtu.be',d:'在线',v:'',kind:'video'});
+        if(!ytOpenById(info.id,{list:info.list,start:info.start,source:info.list?t('播放列表'):'youtu.be'}))toast(t('请输入 youtu.be 链接或 11 位视频 ID'));
         break;}
       case 'yt-copy-cmd':{const el2=document.getElementById('ytCmd');ytCopy(el2?el2.textContent:'python -m http.server 8080',t('已复制命令'));break;}
       case 'yt-copy-url':{const u=location.href.replace(/^file:\/\//,'http://localhost:8080/');ytCopy(u,t('已复制地址'));break;}
+      case 'yt-refresh-feed':ytRenderRandomFeed();toast(t('已换一批'));break;
+      case 'ytm-refresh-feed':ytmRenderRandomFeed();toast(t('已换一批'));break;
+      case 'yt-random-open':{ytOpenById(el.dataset.id,{source:'youtu.be'});break;}
+      case 'ytm-random-open':{ytOpenById(el.dataset.id,{source:t('YouTube Music')});break;}
+      case 'chrome-go':{chromeNavigate((document.getElementById('chromeUrl')||{}).value);break;}
+      case 'chrome-open-ext':chromeOpenExternal();break;
       case 'yt-cc':{ytCc=!ytCc;const v=YT_CURV||YT_REAL[0];ytRebuild(v);toast(ytCc?t('已开启字幕'):t('已关闭字幕'));ytShowFallbackBar(v);break;}
       case 'yt-embed-help':ytEmbedHelp();break;
       case 'yt-help-close':{const s=document.getElementById('ytHelpSheet');if(s)s.classList.remove('on');break;}
-      case 'yt-real-open':{const v=YT_REAL.find(x=>x.id===el.dataset.id);if(v)ytOpenReal(v);break;}
+      case 'yt-real-open':{const v=YT_REAL.find(x=>x.id===el.dataset.id);if(v)ytOpenById(v.id,{list:v.list,start:v.start,source:'youtu.be'});break;}
       case 'yt-real-next':{ytOpenReal(YT_REAL[(YT_REAL.indexOf(YT_CURV||YT_REAL[0])+1)%YT_REAL.length]);break;}
       case 'yt-back':{$('#ytPlayer').classList.remove('on');
         document.querySelectorAll('#ytStage video,#ytStage audio').forEach(m=>{try{m.pause();}catch(e){}});
@@ -10329,6 +10814,9 @@ function init(){
   })();
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape')globalBack();
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.target&&e.target.id==='chromeUrl'&&e.key==='Enter'){chromeNavigate(e.target.value);}
   });
   document.addEventListener('input',e=>{
     if(e.target&&e.target.dataset&&e.target.dataset.act==='cast-vol'){
