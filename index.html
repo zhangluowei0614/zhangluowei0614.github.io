@@ -1024,6 +1024,23 @@ html.dark .gb-key.fn{color:#9A9AA1}
 .yt-related{padding:10px 4px 6px}
 .yt-rel-row{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px 4px;color:var(--txt)}
 .yt-thumb.small{width:56px;height:36px;border-radius:8px;flex:none;display:block}
+/* ==== 远程浏览器（Chrome 风格，嵌在 Chrome 应用内） ==== */
+.cr-wrap{position:absolute;inset:0;display:none;flex-direction:column;background:#202124;z-index:6}
+.cr-wrap.cr-on{display:flex}
+.cr-progress{height:2px;background:transparent;flex:none}.cr-progress i{display:block;height:100%;width:0;background:#8ab4f8;transition:width .25s}
+.cr-stage{position:relative;flex:1;min-height:0;background:#000;overflow:hidden}
+.cr-canvas{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+.cr-overlay{position:absolute;inset:0;outline:none;touch-action:none}
+.cr-kb{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0}
+.cr-hint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#9aa0a6;font-size:12.5px;text-align:center;padding:0 18px;pointer-events:none}
+.cr-hint b{color:#e8eaed;font-size:14px}
+.cr-hint #crStatus{display:none;line-height:1.7}.cr-hint #crStatus.err{color:#f28b82}
+.cr-bar{display:flex;align-items:center;justify-content:space-around;gap:4px;height:46px;flex:none;background:#292a2d;border-top:1px solid #3c4043}
+.cr-btn{width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:#e8eaed;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cr-btn:active{background:#3c4043}
+.cr-btn svg{width:19px;height:19px;fill:currentColor}
+.cr-btn.ghost{font-size:17px;color:#8ab4f8}
+.cr-wrap.cr-on ~ #chromeNotice{display:none}
 /* ==== 搜索栏 + API 卡片 ==== */
 .yt-searchrow{padding:10px 14px 6px}
 .yt-push-card .yp-s{display:block;padding:0 8px 9px;font-size:11px;color:var(--txt2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -3003,6 +3020,7 @@ const I18N={
     '若此处空白，说明当前网络无法访问 YouTube':'If this stays blank, YouTube is unreachable on this network',
     '播放器报错':'Player error',
     '随机推送':'For you (random)',
+    '远程浏览器':'Remote browser','连接中':'Connecting','已连接':'Connected','正在打开页面':'opening page','连接断开':'Disconnected','中继地址无效':'Invalid relay URL','会话初始化失败':'Session init failed','导航失败':'Navigation failed','已切换到远程浏览器（远端 Chrome）':'Switched to the remote browser (remote Chrome)','已返回模拟浏览':'Back to the simulated browser','后退':'Back','前进':'Forward','刷新':'Reload','主页':'Home',
     '热门':'Trending','音乐':'Music','搜索':'Search','搜索结果':'Results','搜索中':'Searching','已加载':'Loaded','条结果':'results','没有找到相关内容':'No results found','搜索 YouTube（官方 API）':'Search YouTube (official API)','搜索音乐（官方 API）':'Search music (official API)','搜索失败（检查 API Key 与配额）':'Search failed (check API key and quota)','请输入搜索内容':'Enter a search term','次观看':'views',
     '已交给 Chromium 内核加载':'Handed to the Chromium engine','Chrome 标签页':'Chrome tab','YouTube 标签页':'YouTube tab','换一批':'Refresh','已换一批':'Refreshed','加载中':'Loading','YouTube Music':'YouTube Music','已在系统浏览器打开':'Opened in your system browser','该网站不允许被嵌入（X-Frame-Options / CSP）。本机内核视图可正常加载：请使用 Electron 外壳，或在系统浏览器打开。':'This site refuses to be framed (X-Frame-Options / CSP). It loads fine in the native Chromium shell — use the Electron shell or open it in your system browser.',
     '还没有内容':'Nothing here yet','粘贴 youtu.be 链接或 11 位视频 ID 开始播放；本模块不含任何预置视频':'Paste a youtu.be link or an 11-character video ID to start — this module ships with no preset videos','未在播放':'Nothing playing','未知视频':'Unknown video','视频':'Video','标题来自当前视频元数据':'title from current video metadata','元数据加载失败（显示占位标题）':'metadata failed to load (placeholder title shown)','播放失败':'Playback failed','解决方法：用 http(s) 打开本页，让浏览器带上 Referer':'Fix: open this page over http(s) so the browser sends a Referer','复制命令':'Copy command','复制 http 地址':'Copy http URL','已复制命令':'Command copied','已复制地址':'URL copied','在浏览器打开视频':'Open video in browser','请求参数无效':'Invalid parameters','播放器无法播放该视频':'The player cannot play this video','视频不存在、已被删除或设为私有':'Video unavailable, deleted or private','上传者不允许在其他网站嵌入播放':'The uploader does not allow embedding on other sites','缺少 HTTP 引荐来源（Referer）——用 file:// 打开时 YouTube 一定会拒绝播放':'Missing HTTP referrer — YouTube always refuses playback when the page is opened via file://',
@@ -4169,6 +4187,7 @@ function openApp(id){
       }).catch(function(err){if(host)host.innerHTML='<div class="ph-none">'+escHtml(t('搜索失败（检查 API Key 与配额）'))+'：'+escHtml(String(err.message||err))+'</div>';});
     });
   }catch(e){}},60);
+  if(id==='chrome')setTimeout(()=>{try{crEnsureUI();}catch(e){}},70);
   if(id==='chrome')setTimeout(()=>{try{const f=chromeFrameEnsure();if(f&&!f.src)chromeNavigate('www.google.com');}catch(e){}},80);
   if(id==='ytmusic')setTimeout(()=>{try{ytPurgePresets();ytmRenderRandomFeed();
     ytEnsureSearchBar('app-ytmusic','ytmApiSearch',t('搜索音乐（官方 API）'),function(q){
@@ -5666,6 +5685,279 @@ function ytmRenderRandomFeedLocal(){
 
 /* ---------- Chrome：嵌套浏览器（内核不可用时用内嵌视图 + 明确提示） ---------- */
 const CHROME_FRAME_ID='chromeFrame';
+/* ===== 远程浏览器（嵌入 pixel17 的 Chrome 应用）：UI 模仿 Chrome，画面与请求交给远端 Chrome =====
+   远端：Browserless / 自建 relay（见 relay/relay.js）。本地只做显示 + 输入转发。 */
+const CR_WS_DEFAULT = 'wss://chrome.browserless.io?token=2VMGn68oMqP4hOi61504b021eff48aebd50cf3c61bdb9f3ae';
+const CR_START = 'https://www.google.com/';
+const CR = {
+  ws: null, connected: false, connecting: false, session: null, id: 0, pending: new Map(),
+  frame: null, decoding: false, view: { w: 360, h: 620, dpr: 2 }, retry: 0, url: '', timer: null
+};
+function crWs() {
+  try {
+    const sp = new URLSearchParams(location.search);
+    const saved = localStorage.getItem('cr_ws');
+    return (sp.get('crws') || saved || CR_WS_DEFAULT);
+  } catch (e) { return CR_WS_DEFAULT; }
+}
+function crLog(m) { try { console.log('[chrome-remote] ' + m); } catch (e) {} }
+
+/* ---------- CDP 传输 ---------- */
+function crSend(method, params, browserLevel) {
+  return new Promise(function (resolve, reject) {
+    if (!CR.ws || CR.ws.readyState !== 1) { reject(new Error('未连接')); return; }
+    const id = ++CR.id;
+    const msg = { id: id, method: method, params: params || {} };
+    if (CR.session && !browserLevel) msg.sessionId = CR.session;
+    const timer = setTimeout(function () { CR.pending.delete(id); reject(new Error('超时 ' + method)); }, 15000);
+    CR.pending.set(id, { resolve: resolve, reject: reject, timer: timer, method: method });
+    CR.ws.send(JSON.stringify(msg));
+  });
+}
+const crSendBrowser = function (m, p) { return crSend(m, p, true); };
+
+function crConnect() {
+  if (CR.connecting || CR.connected) return;
+  CR.connecting = true;
+  crStatus(t('远程浏览器') + '：' + t('连接中') + '…');
+  let ws;
+  try { ws = new WebSocket(crWs()); } catch (e) { CR.connecting = false; crStatus(t('中继地址无效'), true); return; }
+  CR.ws = ws;
+  ws.onopen = function () { CR.connected = true; CR.connecting = false; CR.retry = 0; crStatus(t('已连接') + '，' + t('正在打开页面') + '…'); crBoot(); };
+  ws.onmessage = function (ev) { crOnMessage(ev.data); };
+  ws.onerror = function () { crLog('WebSocket error'); };
+  ws.onclose = function (e) {
+    CR.connected = false; CR.connecting = false; CR.session = null;
+    crStatus(t('连接断开') + '（code ' + e.code + '）', true);
+    const wait = Math.min(15000, 1000 * Math.pow(1.6, CR.retry++));
+    setTimeout(crConnect, wait);
+  };
+}
+function crOnMessage(raw) {
+  let m; try { m = JSON.parse(raw); } catch (e) { return; }
+  if (m.id) {
+    const p = CR.pending.get(m.id); if (!p) return;
+    CR.pending.delete(m.id); clearTimeout(p.timer);
+    if (m.error) { crLog('CDP 拒绝 ' + p.method + '：' + m.error.message); p.reject(new Error(m.error.message)); }
+    else p.resolve(m.result || {});
+    return;
+  }
+  if (m.sessionId && CR.session && m.sessionId !== CR.session) return;
+  if (m.method === 'Page.screencastFrame') {
+    crSend('Page.screencastFrameAck', { sessionId: m.params.sessionId }).catch(function () {});
+    CR.frame = m.params; if (!CR.decoding) crDrawLoop();
+  } else if (m.method === 'Page.frameNavigated' && m.params.frame && !m.params.frame.parentId) {
+    CR.url = m.params.frame.url || CR.url; crSyncUrl();
+  }
+}
+
+/* ---------- 会话 ---------- */
+async function crBoot() {
+  try {
+    const t1 = await crSendBrowser('Target.createTarget', { url: 'about:blank' });
+    const a = await crSendBrowser('Target.attachToTarget', { targetId: t1.targetId, flatten: true });
+    CR.session = a.sessionId;
+    await crSend('Page.enable');
+    await crSend('Runtime.enable');
+    await crViewport();
+    await crStartCast();
+    crNavigate(CR.url || CR_START);
+  } catch (e) { crStatus(t('会话初始化失败') + '：' + e.message, true); }
+}
+function crCanvas() { return document.getElementById('crCanvas'); }
+function crBox() { const c = crCanvas(); return c ? c.getBoundingClientRect() : { width: 360, height: 600 }; }
+async function crViewport() {
+  const b = crBox();
+  const w = Math.max(320, Math.round(b.width)), h = Math.max(320, Math.round(b.height));
+  const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+  CR.view = { w: w, h: h, dpr: dpr };
+  await crSend('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: dpr, mobile: true, screenWidth: w, screenHeight: h });
+}
+async function crStartCast() {
+  const b = crBox();
+  await crSend('Page.startScreencast', {
+    format: 'jpeg', quality: 70, everyNthFrame: 1,
+    maxWidth: Math.round(b.width * CR.view.dpr), maxHeight: Math.round(b.height * CR.view.dpr)
+  });
+}
+async function crRestartCast() {
+  try { await crSend('Page.stopScreencast'); } catch (e) {}
+  await crViewport();
+  await crStartCast();
+}
+/* 只画最新一帧 */
+function crDrawLoop() {
+  const f = CR.frame; if (!f) { CR.decoding = false; return; }
+  CR.frame = null; CR.decoding = true;
+  const img = new Image();
+  img.onload = function () {
+    const c = crCanvas(); if (!c) { CR.decoding = false; return; }
+    if (c.width !== img.width || c.height !== img.height) { c.width = img.width; c.height = img.height; }
+    try { c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); } catch (e) {}
+    const hint = document.getElementById('crHint'); if (hint) hint.style.display = 'none';
+    crDrawLoop();
+  };
+  img.onerror = function () { crDrawLoop(); };
+  img.src = 'data:image/jpeg;base64,' + (f.data || '');
+}
+
+/* ---------- 导航 ---------- */
+function crNormalize(v) {
+  const s = String(v || '').trim();
+  if (!s) return null;
+  if (/^(https?|about|data|file):/i.test(s)) return s;
+  if (/^[^\s/]+\.[^\s/]{2,}/.test(s) || /^localhost(:\d+)?/.test(s)) return 'https://' + s;
+  return 'https://www.google.com/search?q=' + encodeURIComponent(s);
+}
+function crNavigate(url) {
+  const target = crNormalize(url); if (!target) return;
+  CR.url = target; crSyncUrl();
+  if (!CR.connected) { crConnect(); return; }
+  crSend('Page.navigate', { url: target }).catch(function (e) { crStatus(t('导航失败') + '：' + e.message, true); });
+}
+function crSyncUrl() {
+  const i = document.getElementById('chromeUrl');
+  if (i && document.activeElement !== i) i.value = CR.url || '';
+}
+function crHistory(d) {
+  crSend('Page.getNavigationHistory').then(function (h) {
+    const idx = Math.max(0, Math.min((h.entries || []).length - 1, (h.currentIndex || 0) + d));
+    const e = (h.entries || [])[idx];
+    if (e) return crSend('Page.navigateToHistoryEntry', { entryId: e.id });
+  }).catch(function (e) { crLog('history ' + e.message); });
+}
+function crStatus(msg, err) {
+  const el = document.getElementById('crStatus');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.classList.toggle('err', !!err);
+  el.style.display = msg ? 'block' : 'none';
+}
+
+/* ---------- 输入转发 ---------- */
+function crPoint(ev) {
+  const c = crCanvas(); if (!c) return { x: 0, y: 0 };
+  const r = c.getBoundingClientRect();
+  const scale = Math.min(r.width / c.width, r.height / c.height);
+  const offX = r.left + (r.width - c.width * scale) / 2;
+  const offY = r.top + (r.height - c.height * scale) / 2;
+  const p = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+  return {
+    x: Math.max(0, Math.min(c.width, (p.clientX - offX) / scale)),
+    y: Math.max(0, Math.min(c.height, (p.clientY - offY) / scale))
+  };
+}
+function crMods(ev) { return (ev.altKey ? 1 : 0) | (ev.ctrlKey ? 2 : 0) | (ev.metaKey ? 4 : 0) | (ev.shiftKey ? 8 : 0); }
+function crMouse(type, ev, extra) {
+  const p = crPoint(ev);
+  const params = Object.assign({
+    type: type, x: p.x, y: p.y,
+    button: 'left', buttons: ev.buttons === undefined ? 1 : ev.buttons,
+    clickCount: (extra && extra.clickCount) || 0, modifiers: crMods(ev)
+  }, extra || {});
+  if (type === 'mouseWheel') { params.deltaX = ev.deltaX || 0; params.deltaY = ev.deltaY || 0; }
+  crSend('Input.dispatchMouseEvent', params).catch(function () {});
+}
+function crTouch(type, ev) {
+  const p = crPoint(ev);
+  const tp = [{ x: p.x, y: p.y, radiusX: 6, radiusY: 6, force: 1, id: 1 }];
+  crSend('Input.dispatchTouchEvent', { type: type, touchPoints: type === 'touchEnd' ? [] : tp }).catch(function () {});
+}
+function crKey(ev, type) {
+  const special = { Enter: ['Enter', 'Enter', '\r'], Backspace: ['Backspace', 'Backspace', ''], Tab: ['Tab', 'Tab', '\t'], Escape: ['Escape', 'Escape', ''], ArrowUp: ['ArrowUp', 'ArrowUp', ''], ArrowDown: ['ArrowDown', 'ArrowDown', ''], ArrowLeft: ['ArrowLeft', 'ArrowLeft', ''], ArrowRight: ['ArrowRight', 'ArrowRight', ''] };
+  const m = special[ev.key];
+  const printable = ev.key && ev.key.length === 1;
+  const p = {
+    type: type, key: m ? m[0] : ev.key, code: m ? m[1] : (ev.code || ''),
+    windowsVirtualKeyCode: ev.keyCode || 0, nativeVirtualKeyCode: ev.keyCode || 0,
+    modifiers: crMods(ev), autoRepeat: !!ev.repeat
+  };
+  if (type === 'keyDown') { if (m && m[2]) p.text = m[2]; else if (printable) p.text = ev.key; }
+  crSend('Input.dispatchKeyEvent', p).catch(function () {});
+}
+function crTypeText(text) { if (text) crSend('Input.insertText', { text: text }).catch(function () {}); }
+
+/* ---------- Chrome 风格 UI（嵌入 #app-chrome） ---------- */
+function crEnsureUI() {
+  const app = document.getElementById('app-chrome');
+  if (!app) return null;
+  let host = document.getElementById('crWrap');
+  if (host) return host;
+  ['chromeHome', 'chromeResults', 'chromeFeed'].forEach(function (id) { const e = document.getElementById(id); if (e) e.style.display = 'none'; });
+  const wrap = document.getElementById('chromeWrap'); if (wrap) wrap.style.display = 'none';
+  host = document.createElement('div');
+  host.id = 'crWrap'; host.className = 'cr-wrap';
+  const p = [];
+  p.push('<div class="cr-progress"><i id="crBar"></i></div>');
+  p.push('<div class="cr-stage"><canvas id="crCanvas" class="cr-canvas" width="720" height="1240"></canvas>');
+  p.push('<div class="cr-overlay" id="crOverlay" tabindex="0"></div>');
+  p.push('<div class="cr-hint" id="crHint"><b>' + t('远程浏览器') + '</b><div id="crStatus"></div></div></div>');
+  p.push('<div class="cr-bar">');
+  p.push('<button class="cr-btn" data-cr="back" aria-label="' + t('后退') + '">' + mi(M.back) + '</button>');
+  p.push('<button class="cr-btn" data-cr="fwd" aria-label="' + t('前进') + '">' + mi(M.chev) + '</button>');
+  p.push('<button class="cr-btn" data-cr="reload" aria-label="' + t('刷新') + '">' + mi(M.refresh) + '</button>');
+  p.push('<button class="cr-btn" data-cr="home" aria-label="' + t('主页') + '">' + mi(M.home) + '</button>');
+  p.push('<button class="cr-btn ghost" data-cr="remote" aria-label="' + t('远程浏览器') + '">☁</button>');
+  p.push('</div>');
+  host.innerHTML = p.join('');
+  const body = app.querySelector('.appbody') || app;
+  body.appendChild(host);
+  crWire(host);
+  return host;
+}
+function crWire(host) {
+  const ov = host.querySelector('#crOverlay');
+  const canvasEl = host.querySelector('#crCanvas');
+  host.querySelectorAll('[data-cr]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      const a = b.dataset.cr;
+      if (a === 'back') crHistory(-1);
+      else if (a === 'fwd') crHistory(1);
+      else if (a === 'reload') crSend('Page.reload', {}).catch(function () {});
+      else if (a === 'home') crNavigate(CR_START);
+      else if (a === 'remote') crToggle();
+    });
+  });
+  /* 触摸（手机）/ 鼠标（桌面）双通道转发到远端 */
+  let moved = false, lastTouch = 0, lastX = 0, lastY = 0;
+  ov.addEventListener('touchstart', function (e) { e.preventDefault(); moved = false; const p = crPoint(e); lastX = p.x; lastY = p.y; crTouch('touchStart', e); }, { passive: false });
+  ov.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    const p = crPoint(e);
+    if (Math.abs(p.x - lastX) > 3 || Math.abs(p.y - lastY) > 3) moved = true;
+    crTouch('touchMove', e);
+  }, { passive: false });
+  ov.addEventListener('touchend', function (e) { e.preventDefault(); crTouch('touchEnd', e); }, { passive: false });
+  ov.addEventListener('mousemove', function (e) { crMouse('mouseMoved', e); });
+  ov.addEventListener('mousedown', function (e) { ov.focus(); crMouse('mousePressed', e, { clickCount: 1 }); });
+  ov.addEventListener('mouseup', function (e) { crMouse('mouseReleased', e, { clickCount: 1 }); });
+  ov.addEventListener('wheel', function (e) { e.preventDefault(); crMouse('mouseWheel', e); }, { passive: false });
+  ov.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  /* 键盘：用一个隐藏输入框承接系统输入法，再把文本/按键转发到远端 */
+  const kb = document.createElement('input');
+  kb.className = 'cr-kb'; kb.setAttribute('inputmode', 'text'); kb.autocapitalize = 'off'; kb.autocomplete = 'off';
+  ov.appendChild(kb);
+  ov.addEventListener('focus', function () { kb.focus({ preventScroll: true }); });
+  kb.addEventListener('keydown', function (e) {
+    e.stopPropagation();
+    if (e.key === 'Enter' || e.key === 'Backspace' || e.key.indexOf('Arrow') === 0) { e.preventDefault(); crKey(e, 'keyDown'); crKey(e, 'keyUp'); }
+  });
+  kb.addEventListener('input', function () { const v = kb.value; if (v) { crTypeText(v); kb.value = ''; } });
+  kb.addEventListener('compositionend', function () { const v = kb.value; if (v) { crTypeText(v); kb.value = ''; } });
+  /* 容器尺寸变化：防抖 300ms 后重设视口并重启录屏 */
+  const onR = function () { clearTimeout(CR.timer); CR.timer = setTimeout(function () { if (CR.connected) crRestartCast().catch(function () {}); }, 300); };
+  if (window.ResizeObserver) { new ResizeObserver(onR).observe(host.querySelector('.cr-stage')); } else { window.addEventListener('resize', onR); }
+  void canvasEl;
+}
+/* 在“模拟浏览”和“远程浏览器”之间切换 */
+function crToggle() {
+  const host = crEnsureUI(); if (!host) return;
+  const on = host.classList.toggle('cr-on');
+  if (on) { crEnsureUI(); crConnect(); setTimeout(function () { const ov = document.getElementById('crOverlay'); if (ov) ov.focus(); }, 60); }
+  else { crStatus(''); }
+  toast(on ? t('已切换到远程浏览器（远端 Chrome）') : t('已返回模拟浏览'));
+}
+
 function chromeFrameEnsure(){
   const app=document.getElementById('app-chrome');
   if(!app)return null;
@@ -5709,6 +6001,9 @@ function shellOpen(url,label){
   return true;
 }
 function chromeNavigate(url){
+  /* 若远程浏览器已开启，则交给远端 Chrome 处理（地址栏 = 远端 omnibox） */
+  const __cr=document.getElementById('crWrap');
+  if(__cr&&__cr.classList.contains('cr-on')){crNavigate(url);return;}
   const f=chromeFrameEnsure();
   if(!f)return;
   let target=String(url||'').trim();
@@ -10595,7 +10890,10 @@ function init(){
         break;
       }
       case 'chrome-back':chromeBack();break;
-      case 'chrome-refresh':
+      case 'chrome-refresh':{
+        const __cr2=document.getElementById('crWrap');
+        if(__cr2&&__cr2.classList.contains('cr-on')){crSend('Page.reload',{}).catch(function(){});break;}
+      }
         toast('正在刷新');
         el.querySelector('svg')&&el.querySelector('svg').style.setProperty('animation','rb .8s');
         setTimeout(()=>toast('页面已刷新'),800);
