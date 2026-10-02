@@ -2316,14 +2316,18 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
   justify-content:center;z-index:3;transition:transform .12s,background .16s}
 .ytm-fav.on{background:var(--primary);color:var(--onp)}
 .ytm-fav:active{transform:scale(.9)}
-/* 播放页：舞台里挂官方 iframe 播放器（放的是这首歌本身），下面是缩略封面 + 曲目信息 */
-.ytm-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;margin:10px 0 12px}
-.ytm-stage:empty{display:none}
-.ytm-frame,.ytm-media{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-.ytm-nowrow{display:flex;align-items:center;gap:10px;text-align:left;min-width:0}
-.ytm-nowmain{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left}
-.ytm-art{width:46px;height:46px;border-radius:12px;overflow:hidden;background:var(--bg1);position:relative;flex:none;display:block}
+/* 播放页：观感上是纯音乐播放器（大封面 + 曲目信息 + 控件），不放任何视频画面。
+   播放器本身藏在 #ytmStage 里，只负责出声。
+   注意不能用 display:none / 移出视口 —— 浏览器会挂起隐藏的 iframe，声音就断了；
+   所以把它做成 1×1、几乎全透明地留在屏幕角落。 */
+.ytm-hero{display:flex;align-items:center;justify-content:center;padding:14px 0 10px}
+.ytm-art{width:200px;height:200px;border-radius:20px;overflow:hidden;background:var(--bg1);
+  position:relative;display:block;flex:none;box-shadow:0 8px 24px rgba(0,0,0,.20)}
 .ytm-art .yt-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ytm-audio{position:absolute;right:0;bottom:0;width:1px;height:1px;overflow:hidden;
+  opacity:.01;pointer-events:none;border:0;z-index:-1}
+.ytm-audio:empty{display:none}
+.ytm-frame,.ytm-media{width:100%;height:100%;border:0;display:block}
 .ytm-btns{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0 2px}
 .ytm-btns .pillbtn{flex:1 1 auto;min-width:74px;height:40px;border-radius:20px;padding:0 12px;font-size:13px}
 .ytm-src{font-size:11px;color:var(--txt3);padding:10px 0 4px}
@@ -8087,14 +8091,9 @@ function ytmEnsureUI(){
       '<header class="appbar"><button class="iconbtn" data-act="ytm-back"><i data-ic="back"></i></button>'+
         '<h2 class="title">正在播放</h2></header>'+
       '<div class="appbody">'+
-        '<div class="ytm-stage" id="ytmStage"></div>'+
-        '<div class="ytm-nowrow">'+
-          '<span class="ytm-art" id="ytmArt"></span>'+
-          '<span class="ytm-nowmain">'+
-            '<span class="yt-title" id="ytmNowTitle">未在播放</span>'+
-            '<span class="yt-meta" id="ytmNowArtist"></span>'+
-          '</span>'+
-        '</div>'+
+        '<div class="ytm-hero"><span class="ytm-art" id="ytmArt"></span></div>'+
+        '<div class="yt-title" id="ytmNowTitle">未在播放</div>'+
+        '<div class="yt-meta" id="ytmNowArtist"></div>'+
         '<div class="ytm-btns">'+
           '<button class="pillbtn" data-act="ytm-prev">上一首</button>'+
           '<button class="pillbtn primary" data-act="ytm-toggle" id="ytmPlayBtn">播放</button>'+
@@ -8102,6 +8101,8 @@ function ytmEnsureUI(){
           '<button class="pillbtn" data-act="ytm-fav-cur" id="ytmFavBtn">收藏</button>'+
         '</div>'+
         '<div class="ytm-src" id="ytmSrc"></div>'+
+        /* 隐藏的播放器宿主：只用它出声，界面上一帧视频都不显示 */
+        '<div class="ytm-audio" id="ytmStage" aria-hidden="true"></div>'+
       '</div>'+
     '</div>';
   app.dataset.ytmUi='2';
@@ -8256,7 +8257,7 @@ function ytmSearchViaApi(q,done){
    以前这里不管点哪首，放的都是本地示例音轨（YTM_TRACKS 里的 SoundHelix / 恐龙吼声），
    所以听起来「一直是预置音乐」。现在改成把这首歌真实的 videoId 交给 YouTube 官方播放器，
    放的就是这首歌本身。示例音轨只在「内嵌被拒」时兜底。 */
-let ytmPlayerObj=null, YTM_CUR_ID='', YTM_LAST_ERR=0;
+let ytmPlayerObj=null, YTM_CUR_ID='', YTM_LAST_ERR=0, YTM_SKIP=0;
 function ytmStage(){ return document.getElementById('ytmStage'); }
 function ytmPaintArt(id,art){
   const box=document.getElementById('ytmArt');
@@ -8307,9 +8308,19 @@ function ytmMountSong(song){
           const code=(ev&&ev.data)||0;
           YTM_LAST_ERR=code;
           if(!netOnline()){ toast('未联网，无法播放'); return; }
-          /* 内嵌被拒（101/150 版权或区域限制）：退回示例音轨，至少不是静音 */
-          toast('这首无法内嵌播放（错误 '+code+'），改用示例音轨');
-          try{ ytmPlayReal(song.t||''); }catch(e){}
+          /* 153：嵌入页没有有效来源（file:// 打开必然如此）—— 换 http(s) 打开就好 */
+          if(code===153){
+            toast('YouTube 拒绝内嵌（153）：请通过 http(s) 打开页面，file:// 下无法内嵌播放');
+            return;
+          }
+          /* 101/150：版权方不允许内嵌。这种歌在浏览器里没有合法播放途径，
+             与其放一首毫不相干的示例曲，不如自动跳到下一首能放的。 */
+          if(code===101||code===150){
+            if(YTM_SKIP<3){ YTM_SKIP++; toast('这首不允许内嵌播放，换下一首'); setTimeout(function(){ ytmStep(1); },700); }
+            else toast('连续几首都不允许内嵌播放');
+            return;
+          }
+          toast('无法播放（错误 '+code+'）');
         }
       }};
       cfg.videoId=want;
@@ -17188,9 +17199,9 @@ function init(){
       case 'ytm-decorate':mediaDecorateAll();break;
       case 'ytm-toggle':ytmToggle();break;
       /* 上一首 / 下一首：在当前歌曲列表里走，列表为空时回退到本地池 */
-      case 'ytm-next':{ytmStep(1);break;}
-      case 'ytm-prev':{ytmStep(-1);break;}
-      case 'ytm-open':{ytmOpenSong(el.dataset.id);break;}
+      case 'ytm-next':{YTM_SKIP=0;ytmStep(1);break;}
+      case 'ytm-prev':{YTM_SKIP=0;ytmStep(-1);break;}
+      case 'ytm-open':{YTM_SKIP=0;ytmOpenSong(el.dataset.id);break;}
       case 'ytm-fav':{
         const id=el.dataset.id||'';
         const s=YTM_LIST.find(function(x){return x.id===id;})||YTM_FAVS.find(function(x){return x.id===id;});
