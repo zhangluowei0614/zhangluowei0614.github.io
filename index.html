@@ -2316,9 +2316,13 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
   justify-content:center;z-index:3;transition:transform .12s,background .16s}
 .ytm-fav.on{background:var(--primary);color:var(--onp)}
 .ytm-fav:active{transform:scale(.9)}
-.ytm-hero{display:flex;align-items:center;justify-content:center;padding:12px 0 4px}
-.ytm-art{width:190px;height:190px;border-radius:18px;overflow:hidden;background:var(--bg1);
-  display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+/* 播放页：舞台里挂官方 iframe 播放器（放的是这首歌本身），下面是缩略封面 + 曲目信息 */
+.ytm-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;margin:10px 0 12px}
+.ytm-stage:empty{display:none}
+.ytm-frame,.ytm-media{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.ytm-nowrow{display:flex;align-items:center;gap:10px;text-align:left;min-width:0}
+.ytm-nowmain{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left}
+.ytm-art{width:46px;height:46px;border-radius:12px;overflow:hidden;background:var(--bg1);position:relative;flex:none;display:block}
 .ytm-art .yt-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ytm-btns{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0 2px}
 .ytm-btns .pillbtn{flex:1 1 auto;min-width:74px;height:40px;border-radius:20px;padding:0 12px;font-size:13px}
@@ -8083,9 +8087,14 @@ function ytmEnsureUI(){
       '<header class="appbar"><button class="iconbtn" data-act="ytm-back"><i data-ic="back"></i></button>'+
         '<h2 class="title">正在播放</h2></header>'+
       '<div class="appbody">'+
-        '<div class="ytm-hero"><span class="ytm-art" id="ytmArt"></span></div>'+
-        '<div class="yt-title" id="ytmNowTitle">未在播放</div>'+
-        '<div class="yt-meta" id="ytmNowArtist"></div>'+
+        '<div class="ytm-stage" id="ytmStage"></div>'+
+        '<div class="ytm-nowrow">'+
+          '<span class="ytm-art" id="ytmArt"></span>'+
+          '<span class="ytm-nowmain">'+
+            '<span class="yt-title" id="ytmNowTitle">未在播放</span>'+
+            '<span class="yt-meta" id="ytmNowArtist"></span>'+
+          '</span>'+
+        '</div>'+
         '<div class="ytm-btns">'+
           '<button class="pillbtn" data-act="ytm-prev">上一首</button>'+
           '<button class="pillbtn primary" data-act="ytm-toggle" id="ytmPlayBtn">播放</button>'+
@@ -8243,33 +8252,93 @@ function ytmSearchViaApi(q,done){
     done(list,'YouTube Data API');
   }).catch(local);
 }
-/* ---------- 播放 ---------- */
+/* ---------- 播放 ----------
+   以前这里不管点哪首，放的都是本地示例音轨（YTM_TRACKS 里的 SoundHelix / 恐龙吼声），
+   所以听起来「一直是预置音乐」。现在改成把这首歌真实的 videoId 交给 YouTube 官方播放器，
+   放的就是这首歌本身。示例音轨只在「内嵌被拒」时兜底。 */
+let ytmPlayerObj=null, YTM_CUR_ID='', YTM_LAST_ERR=0;
+function ytmStage(){ return document.getElementById('ytmStage'); }
+function ytmPaintArt(id,art){
+  const box=document.getElementById('ytmArt');
+  if(!box)return;
+  box.innerHTML='';
+  const im=document.createElement('img');
+  im.className='yt-cover';im.alt='';
+  im.dataset.fb=coverAsset(0);im.dataset.vid=id||'';
+  im.onerror=function(){ytCoverFail(this);};
+  im.onload=function(){ytCoverLoad(this);};
+  im.src=art||ytThumb(id||'');
+  box.appendChild(im);
+}
+function ytmPaintPlayBtn(){
+  const b=document.getElementById('ytmPlayBtn');
+  if(b)b.textContent=YTM_ON?'暂停':'播放';
+}
+function ytmMountSong(song){
+  const host=ytmStage();
+  if(!host||!song)return;
+  const id=song.id||'';
+  YTM_CUR_ID=id;
+  ytmPaintArt(id,song.art);
+  if(!id){ host.innerHTML=''; toast('这首歌没有可播放的视频 ID'); return; }
+  /* 先用普通 iframe：不依赖官方 API 是否加载成功，任何网络下都立刻有播放器 */
+  const url=ytEmbedUrl(id,ytHost,{autoplay:1});
+  host.innerHTML='<iframe id="ytmFrame" class="ytm-frame" src="'+url+'" title="'+escHtml(song.t||'')+'" '+
+    'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" '+
+    'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+  ytmPlayerObj=null;
+  const want=id;
+  /* 官方 API 可用时升级成可控播放器（播放/暂停/状态） */
+  ytLoadApi(function(ok){
+    if(!ok||!window.YT||!window.YT.Player)return;
+    if(YTM_CUR_ID!==want)return;           /* 期间用户又换歌了，别覆盖 */
+    try{
+      host.innerHTML='<div id="ytmMount" class="ytm-media"></div>';
+      const vars={autoplay:1,playsinline:1,rel:0,modestbranding:1,enablejsapi:1};
+      if(location.protocol==='http:'||location.protocol==='https:')vars.origin=location.origin;
+      const cfg={playerVars:vars,events:{
+        onReady:function(){ YTM_ON=true; ytmPaintPlayBtn(); try{ytmPlayerObj.playVideo();}catch(e){} },
+        onStateChange:function(ev){
+          if(!ev)return;
+          if(ev.data===1){YTM_ON=true;ytmPaintPlayBtn();}
+          else if(ev.data===2){YTM_ON=false;ytmPaintPlayBtn();}
+        },
+        onError:function(ev){
+          const code=(ev&&ev.data)||0;
+          YTM_LAST_ERR=code;
+          if(!netOnline()){ toast('未联网，无法播放'); return; }
+          /* 内嵌被拒（101/150 版权或区域限制）：退回示例音轨，至少不是静音 */
+          toast('这首无法内嵌播放（错误 '+code+'），改用示例音轨');
+          try{ ytmPlayReal(song.t||''); }catch(e){}
+        }
+      }};
+      cfg.videoId=want;
+      ytmPlayerObj=new YT.Player('ytmMount',cfg);
+    }catch(e){ /* 保持普通 iframe */ }
+  });
+}
 function ytmOpenSong(id){
   const s=YTM_LIST.find(function(x){return x.id===id;})||YTM_FAVS.find(function(x){return x.id===id;});
   const title=s?s.t:('歌曲 '+id);
   const artist=s?s.a:'';
-  const art=document.getElementById('ytmArt');
-  if(art){
-    art.innerHTML='';
-    const im=document.createElement('img');
-    im.className='yt-cover';im.alt='';
-    im.dataset.fb=coverAsset(0);im.dataset.vid=id;
-    im.onerror=function(){ytCoverFail(this);};im.onload=function(){ytCoverLoad(this);};
-    im.src=(s&&s.art)||ytThumb(id);
-    art.appendChild(im);
-  }
   const p=document.getElementById('ytmPlayer'); if(p)p.classList.add('on');
-  ytmPlay(title,artist);
+  YTM_CUR=title; YTM_ON=true;
+  if(title&&!YTM_QUEUE.includes(title))YTM_QUEUE.push(title);
+  const t1=$('#ytmNowTitle'); if(t1)t1.textContent=title;
+  const a1=$('#ytmNowArtist'); if(a1)a1.textContent=artist;
+  ytmMountSong(s||{id:id,t:title,a:artist});
+  ytmPaintPlayBtn();
   ytmPaintFavBtn();
+  toast('正在播放，'+title);
 }
 function ytmPaintFavBtn(){
   const b=document.getElementById('ytmFavBtn');
   if(!b)return;
-  const s=YTM_LIST.find(function(x){return x.t===YTM_CUR;})||YTM_FAVS.find(function(x){return x.t===YTM_CUR;});
+  const s=YTM_LIST.find(function(x){return x.id===YTM_CUR_ID;})||YTM_FAVS.find(function(x){return x.id===YTM_CUR_ID;});
   const on=s?ytmIsFav(s.id):false;
   b.textContent=on?'已收藏':'收藏';
   b.classList.toggle('primary',!on);
-  b.dataset.id=s?s.id:'';
+  b.dataset.id=s?s.id:(YTM_CUR_ID||'');
 }
 
 
@@ -14010,20 +14079,34 @@ function ytmPlayReal(name){
   try{ytmPaintFavBtn();}catch(e){}
   toast('正在播放'+'，'+YTM_CUR);
 }
-/* 上一首 / 下一首：优先在当前歌曲列表里走，列表为空时退回播放队列 */
+/* 上一首 / 下一首：按 songId 在当前列表里走，换的是真歌 */
 function ytmStep(d){
-  const names=YTM_LIST.length?YTM_LIST.map(function(x){return x.t;}):YTM_QUEUE.slice();
-  if(!names.length){ toast('列表还是空的'); return; }
-  let i=names.indexOf(YTM_CUR); if(i<0)i=0;
-  const n=names[(i+d+names.length*2)%names.length];
-  const s=YTM_LIST.find(function(x){return x.t===n;});
-  ytmPlay(n,s?s.a:'');
+  const list=(YTM_TAB==='favs'&&YTM_FAVS.length)?YTM_FAVS:(YTM_LIST.length?YTM_LIST:YTM_FAVS);
+  if(!list.length){ toast('列表还是空的'); return; }
+  let i=-1;
+  for(let k=0;k<list.length;k++){ if(list[k].id===YTM_CUR_ID){ i=k; break; } }
+  if(i<0)i=0;
+  const s=list[(i+d+list.length*2)%list.length];
+  if(s)ytmOpenSong(s.id);
 }
 function ytmToggle(){
+  /* 优先控制官方播放器（放的是这首歌本身） */
+  if(ytmPlayerObj&&ytmPlayerObj.getPlayerState){
+    try{
+      const st=ytmPlayerObj.getPlayerState();
+      if(st===1){ ytmPlayerObj.pauseVideo(); YTM_ON=false; }
+      else{ ytmPlayerObj.playVideo(); YTM_ON=true; }
+      ytmPaint(); ytmPaintPlayBtn(); ytmPaintFavBtn();
+      toast(YTM_ON?('继续播放，'+YTM_CUR):'已暂停');
+      return;
+    }catch(e){ /* 掉到下面的兜底 */ }
+  }
+  /* 没有可控播放器时，退回本地音轨的播放/暂停 */
   const a0=document.getElementById('ytmAudio');if(a0){if(a0.paused)a0.play().catch(()=>{});else a0.pause();}
   YTM_ON=!YTM_ON;
   ytmPaint();
   try{ytmDecorateRows();}catch(e){}
+  try{ytmPaintPlayBtn();}catch(e){}
   toast(YTM_ON?('正在播放'+'，'+YTM_CUR):'已暂停');
 }
 
