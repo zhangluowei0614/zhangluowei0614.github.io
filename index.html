@@ -1321,26 +1321,19 @@ html.dark .dpv-table td{border-top-color:#4a4b50}
 .yt-empty .ye-t{font-size:16px;font-weight:600}
 .yt-empty .ye-s{font-size:12.5px;color:var(--txt2);line-height:1.7;max-width:280px}
 .yt-empty .yt-urlrow{padding:10px 0 0;width:100%}
-/* ==== 播放错误说明（Error 153 等） ==== */
-.yt-errbox{display:none;margin:8px 14px 0;padding:10px 12px;border-radius:14px;background:rgba(217,48,37,.14);color:var(--txt)}
-.yt-errbox.on{display:block}
-.yb-t{font-size:12.5px;font-weight:600;color:#F2B8B5}
-.yb-r{font-size:12px;color:var(--txt2);margin-top:4px;line-height:1.6}
-.yb-h{font-size:12px;margin-top:8px;color:var(--txt)}
-.yb-cmd{margin:6px 0 8px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.3);font-family:ui-monospace,Consolas,monospace;font-size:11.5px;white-space:pre-wrap;color:var(--txt)}
-.yb-btns{display:flex;gap:8px;flex-wrap:wrap}
-.yb-btns .pillbtn{height:32px;padding:0 12px;border-radius:16px;font-size:12px}
+/* 「播放错误说明（Error 153 等）」面板（.yt-errbox / .yb-*）已彻底移除，
+   播放失败不再显示任何调试向提示。 */
 /* ==== YouTube 嵌入规范面板 ==== */
 .yh-p{font-size:12.5px;color:var(--txt2);line-height:1.6;margin:2px 0 6px}
 .yh-h{font-size:13px;font-weight:600;margin:12px 0 4px}
 .yh-list{margin:0;padding-left:18px;font-size:12.5px;color:var(--txt2);line-height:1.75}
 .yh-list li{margin-bottom:3px}
 /* ==== youtu.be 播放器 ==== */
-.yt-fallback{display:none;margin:8px 14px 0;padding:10px 12px;border-radius:14px;background:var(--scontainer);font-size:12px;color:var(--txt2)}
-.yt-fallback.show{display:block}
-.yf-t{margin-bottom:8px}
-.yf-btns{display:flex;gap:8px;flex-wrap:wrap}
-.yf-btns .pillbtn{height:32px;padding:0 12px;border-radius:16px;font-size:12px}
+/* 「视频未能加载，可尝试以下方式」那张排错卡片（.yt-fallback / .yf-*）已彻底移除，
+   播放页只用下面这个状态表达“连不上”：WiFi 图标 + 感叹号，下面一行小字「未联网」。 */
+.yt-player-offline{margin:6px 14px 10px;border-radius:14px;background:var(--bg1)}
+.yt-player-offline[hidden]{display:none}
+.yt-player-offline .offline-view{padding:22px 18px}
 .yt-urlrow{display:flex;gap:8px;padding:10px 14px 4px}
 .yt-urlrow input{flex:1;background:var(--scontainer);border:0;border-radius:12px;padding:10px 12px;color:var(--txt);font-size:13px}
 .yt-urlrow .pillbtn{height:38px;padding:0 14px;border-radius:19px}
@@ -1437,6 +1430,23 @@ img.ytm-cover.now{width:40px;height:40px}
 .cast-sub{font-size:12px;color:var(--txt2);margin:2px 0 8px}
 .cast-center{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0 8px}
 .cast-spin{width:38px;height:38px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--primary);animation:gvSpin 1s linear infinite}
+.cast-spin.sm{width:15px;height:15px;border-width:2px;flex:none}
+/* 设备发现条：搜索中 / 已找到 + 重新搜索 */
+.cast-scan{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--txt2);
+  background:var(--bg1);border-radius:12px;padding:9px 12px;margin:2px 0 10px}
+.cast-scan .cs-ok{display:flex;color:#34A853;flex:none}
+.cast-scan .cs-ok svg{width:15px;height:15px;fill:currentColor}
+.cast-scan.done span:nth-child(2){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cast-scan .pillbtn.small{flex:none;height:26px;padding:0 11px;font-size:11.5px;border-radius:13px}
+/* 应用栏上的投屏状态提示 */
+.cast-chip{display:flex;align-items:center;gap:5px;height:28px;padding:0 11px;border-radius:14px;
+  background:var(--scontainer);color:var(--txt);font-size:11.5px;max-width:150px;overflow:hidden}
+.cast-chip[hidden]{display:none}
+.cast-chip svg{width:15px;height:15px;fill:currentColor;flex:none}
+.cast-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cast-chip.on{background:var(--pcontainer);color:var(--onpc)}
+.cast-chip.busy{background:var(--scontainer);color:var(--txt2)}
+.cast-chip.err{background:rgba(217,48,37,.16);color:#B3261E}
 .cast-ok,.cast-err{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .cast-ok{background:rgba(24,128,56,.2);color:#7BD88F}
 .cast-err{background:rgba(217,48,37,.2);color:#F2B8B5}
@@ -1802,6 +1812,10 @@ img.ytm-cover.now{width:40px;height:40px}
 .sheet-layer.on{display:flex}
 .sheet-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
 .sheet-layer .sheet{position:relative;width:100%;border-radius:28px 28px 0 0}
+/* 兜底：.sheet-card 没有自己的样式，是静态块；而 .sheet-backdrop 是 position:absolute。
+   定位元素一定画在静态元素之上，于是遮罩会盖住面板内容 —— 面板被压暗，
+   而且点到面板上其实点的是遮罩（会被当成“点击外部关闭”）。把卡片抬到遮罩之上。 */
+.sheet > .sheet-card{position:relative;z-index:1}
 /* 电源菜单（Android 17：居中对话框卡片） */
 #powerMenu{position:absolute;inset:0;z-index:5600;display:none}
 #powerMenu.on{display:block}
@@ -1850,6 +1864,14 @@ img,svg{-webkit-user-drag:none;user-select:none}
     transition-duration:.001s!important;
     scroll-behavior:auto!important;
   }
+}
+/* 日历图标跨天时的翻页（只作用于图标本体，数字与底图样式不变；
+   有 Web Animations API 时走 deskCalendarRoll 的逐元素动画，这里是兜底） */
+.app-icon.cal-roll{animation:calRoll .45s cubic-bezier(.2,0,0,1);transform-origin:50% 50%}
+@keyframes calRoll{
+  0%{opacity:1;transform:scale(1)}
+  38%{opacity:.25;transform:scale(.94)}
+  100%{opacity:1;transform:scale(1)}
 }
 @media print{
   .desk-actions,.desk-hint,.side{display:none!important}
@@ -2055,7 +2077,7 @@ body{overflow-y:auto !important;overflow-x:hidden;align-items:center}
 /* ===== Play 顶栏标题靠左（消除视觉上的前导空格） ===== */
 #app-play .appbar{justify-content:flex-start !important;padding-left:12px !important}
 #app-play .appbar .title{flex:0 1 auto !important;text-align:left !important;margin:0 !important;
-  padding:0 !important;text-indent:0 !important;order:-1 !important}
+  padding:0 !important;text-indent:0 !important}
 #app-play .appbar .title::before,#app-play .appbar .title::after{content:none !important}
 #app-play .appbar>:first-child:empty{display:none !important}
 #app-play .appbar .title{margin-right:auto !important}   /* 标题占满中间 → 右侧控件整体贴右 */
@@ -2148,19 +2170,15 @@ body{overflow-y:auto !important;overflow-x:hidden;align-items:center}
   padding:0 !important;flex:0 1 auto !important}
 #acctInApp>header.appbar,#playDetail>.ps-top{align-items:center !important;justify-content:flex-start !important}
 #acctInApp>header.appbar .title{margin-left:8px !important;margin-right:auto !important}
-/* ===== 个别应用：标题提到最前（消息 / 云端硬盘，顶栏前面有搜索框或图标占了位） ===== */
-#app-messages .appbar .title,#app-drive .appbar .title{
-  order:-1 !important;margin-left:0 !important;margin-right:auto !important;padding-left:0 !important}
-#app-messages .appbar,#app-drive .appbar{justify-content:flex-start !important;padding-left:12px !important}
-/* ===== 消息 / 云端硬盘 / Gmail：标题一律靠最左（不限 .appbar 结构） ===== */
-#app-messages .title,#app-drive .title,#app-gmail .title,
-#app-messages [class*="title"],#app-drive [class*="title"],#app-gmail [class*="title"]{
-  order:-1 !important;margin-left:0 !important;padding-left:0 !important;text-indent:0 !important;
-  text-align:left !important;margin-right:auto !important;align-self:center !important}
-#app-messages .appbar,#app-drive .appbar,#app-gmail .appbar,
-#app-messages>header,#app-drive>header,#app-gmail>header{
-  justify-content:flex-start !important;padding-left:8px !important;gap:0 !important}
-#app-messages .appbar>*:empty,#app-drive .appbar>*:empty,#app-gmail .appbar>*:empty{display:none !important}
+/* ===== 个别应用：顶栏前导控件（头像）保留在最左，标题紧随其后 =====
+   标题的 order/对齐统一由样式表末尾的「全局内容标题排版」决定，这里只管间距与空元素。 */
+#app-messages>.appbar>.avatar,#app-drive>.appbar>.avatar{
+  order:-1 !important;margin-left:0 !important;flex:none !important}
+#app-messages>.appbar .title,#app-drive>.appbar .title{
+  margin-left:6px !important;margin-right:auto !important;padding-left:0 !important}
+#app-messages>.appbar,#app-drive>.appbar,#app-gmail>.appbar{
+  justify-content:flex-start !important;padding-left:12px !important;gap:0 !important}
+#app-messages>.appbar>*:empty,#app-drive>.appbar>*:empty,#app-gmail>.appbar>*:empty{display:none !important}
 /* ===== 壁纸卡片：选中不改变尺寸（消除切换后的轻微放大） ===== */
 #app-settings .wp-card{box-sizing:border-box !important;transform:none !important;transition:none !important}
 #app-settings .wp-card.on{box-sizing:border-box !important;transform:none !important;
@@ -2186,15 +2204,23 @@ body{overflow-y:auto !important;overflow-x:hidden;align-items:center}
 .offline-t{font-size:15px;font-weight:600;color:var(--txt)}
 .offline-s{font-size:12.5px;color:var(--txt3);max-width:270px;line-height:1.5}
 .offline-acts{display:flex;gap:8px;margin-top:10px}
-.yt-offline{display:flex;align-items:center;gap:7px;margin:8px 12px 0;padding:8px 12px;border-radius:14px;
+.yt-offline{display:flex;align-items:center;gap:9px;margin:8px 12px 0;padding:8px 12px;border-radius:14px;
   background:#FDECEA;color:#B3261E;font-size:12px;line-height:1.3}
 .yt-offline[hidden]{display:none}
-.yt-offline .yo-ic{display:flex;color:#B3261E}
+.yt-offline .yo-ic{display:flex;flex:none;color:#B3261E;position:relative}
+/* WiFi 图标右上角的红色感叹号角标 */
+.yt-offline .yo-ic .yo-bang{position:absolute;right:-4px;top:-4px;width:12px;height:12px;border-radius:50%;
+  background:#D93025;color:#fff;font-size:8.5px;font-weight:700;line-height:12px;text-align:center;font-style:normal}
+/* 「未联网」小字在图标右侧单独成列（图标在上、小字在下的观感） */
+.yt-offline .yo-col{display:flex;flex-direction:column;gap:1px;min-width:0}
 .yt-offline .yo-t{font-weight:600;flex:none}
 .yt-offline .yo-s{color:#8C4A46;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 html.dark .yt-offline{background:#3A1F1C;color:#F2B8B5}
 html.dark .yt-offline .yo-ic{color:#F2B8B5}
 html.dark .yt-offline .yo-s{color:#E8A9A6}
+/* 封面最终兜底占位图（内联 SVG，永不失败） */
+.yt-cover-ph{object-fit:cover;background:#202124}
+.yt-push-card .yt-cover-ph{aspect-ratio:16/9}
 
 .skel{position:relative;overflow:hidden;background:var(--bg1);border-radius:12px}
 .skel::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
@@ -2214,6 +2240,11 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
 .yt-push-head .yp-count{font-size:12px;color:var(--txt3);font-weight:400}
 .yt-ch-list{display:flex;flex-direction:column}
 .yt-ch-row{display:flex;align-items:center;gap:11px;padding:10px 14px}
+/* 作者样式里的 display:flex 会盖过 UA 的 [hidden]{display:none}，必须显式补一条 */
+.yt-now-ch[hidden]{display:none}
+.yt-now-ch{padding:8px 2px 2px;gap:10px}
+.yt-now-ch .yt-ch-n{font-size:13px;font-weight:600;display:block}
+.yt-now-ch .yt-ch-s{font-size:11.5px;color:var(--txt2)}
 .yt-ch-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   color:#fff;font-size:16px;font-weight:600;flex:none}
 .yt-ch-main{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -2272,6 +2303,10 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
 /* ===== 状态栏指示（通知圆点 / 勿扰 / 录屏 / 隐私点） ===== */
 #statusbar .sb-ic{display:flex;align-items:center;opacity:1;transition:opacity .2s}
 #statusbar .sb-ic.off{opacity:.3}
+/* 未联网：WiFi 图标换成带斜杠的版本，并叠加红色感叹号角标（真机行为） */
+#statusbar .sb-ic.warn{opacity:1;position:relative}
+#statusbar .sb-ic.warn .sb-bang{position:absolute;right:-3.5px;top:-3px;width:10px;height:10px;border-radius:50%;
+  background:#D93025;color:#fff;font-size:7.5px;font-weight:700;line-height:10px;text-align:center;font-style:normal}
 #statusbar .sb-notif-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.85;
   display:block;flex:none}
 #statusbar .sb-rec{width:9px;height:9px;border-radius:50%;background:#D93025;display:block;flex:none;
@@ -2310,6 +2345,100 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
 .recents-cards.selmode .recent-pickdot{display:flex}
 .recent-pickdot.on{background:var(--primary);color:var(--onp)}
 .recents-cards.selmode .recent-x{display:none}
+/* ============================================================
+   控制中心（下拉通知面板 #shade / 快捷设置 #qs）：信息统一左基准线
+   问题：各行原本的左右内边距分别是 30 / 24 / 22 / 20 / 16 / 12px，
+   图标、标题、卡片各按各的边距排，左边缘参差不齐 —— 看起来就是“没有左对齐”。
+   这里把所有块统一到 20px 外边距 + 34px 文字内基线，标题行仍是“标题靠左、按钮靠右”。
+   ============================================================ */
+html #screen #shade .shade-tiles,
+html #screen #qs .shade-tiles,
+html #screen #shade .qs-big,
+html #screen #qs .qs-big,
+html #screen #shade .qs-tiles,
+html #screen #qs .qs-tiles,
+html #screen #qs .bright-row,
+html #screen #qs .qs-foot{padding-left:20px !important;padding-right:20px !important}
+html #screen #shade .notif-card,
+html #screen #qs .notif-card,
+html #screen #qs .media-card{margin-left:20px !important;margin-right:20px !important}
+html #screen #shade .qs-notif-title,
+html #screen #qs .qs-notif-title{
+  padding-left:20px !important;padding-right:20px !important;text-align:left !important;
+  justify-content:space-between !important;align-items:center !important}
+/* 统一的文字内基线：大磁贴 20+14、次级磁贴 20+14、通知卡片 20+14 = 34px */
+html #screen #shade .qs-bigtile,
+html #screen #qs .qs-bigtile{padding-left:14px !important;padding-right:14px !important}
+/* 磁贴与卡片内的信息一律左对齐 */
+html #screen #shade .qs-bigtile,
+html #screen #qs .qs-bigtile,
+html #screen #shade .qs-tile,
+html #screen #qs .qs-tile{align-items:flex-start !important;text-align:left !important}
+html #screen #shade .qs-bigtile .qbt-name,
+html #screen #shade .qs-bigtile .qbt-sub,
+html #screen #qs .qs-bigtile .qbt-name,
+html #screen #qs .qs-bigtile .qbt-sub,
+html #screen #shade .qs-tile>span:last-child,
+html #screen #qs .qs-tile>span:last-child,
+html #screen #qs .media-title,
+html #screen #qs .media-artist{text-align:left !important}
+html #screen #shade .notif-card,
+html #screen #qs .notif-card,
+html #screen #shade .notif-card .n-app,
+html #screen #shade .notif-card .n-title,
+html #screen #shade .notif-card .n-body,
+html #screen #qs .notif-card .n-app,
+html #screen #qs .notif-card .n-title,
+html #screen #qs .notif-card .n-body{text-align:left !important;align-items:stretch !important}
+html #screen #shade .notif-card .n-head,
+html #screen #qs .notif-card .n-head{justify-content:flex-start !important}
+/* ============================================================
+   全局内容标题排版（最终统一 · 放在样式表最后以确保生效）
+   ① 所有 app、所有层级页面的内容标题一律左对齐（不居中、不缩进）；
+   ② 二级 / 三级等带返回按钮的页面：返回按钮在最左，标题紧贴其右侧；
+   ③ 右侧操作控件依旧贴最右。
+   选择器用 html #screen 前缀提高权重，以压过此前所有零散补丁。
+   ============================================================ */
+/* 1) 顶栏一律从左往右排列 */
+html #screen .app .appbar,
+html #screen .app .sub>.appbar,
+html #screen .app .appsub .appbar,
+html #screen .app .gv-top,
+html #screen .app .emg-bar{
+  display:flex !important;flex-direction:row !important;
+  justify-content:flex-start !important;align-items:center !important;
+}
+/* 2) 标题：左对齐，排在“最左的前导控件”之后 */
+html #screen .app .appbar .title,
+html #screen .app .appbar .gv-name,
+html #screen .app .appbar h1,
+html #screen .app .appbar h2,
+html #screen .app .appsub .appbar .title,
+html #screen .app .gv-top .title,
+html #screen .app .gv-top .gv-name{
+  order:0 !important;
+  text-align:left !important;
+  text-indent:0 !important;
+  padding-left:0 !important;
+  align-self:center !important;
+  margin-right:auto !important;
+}
+/* 3) 顶栏第一个控件固定在标题左侧（返回键 / 菜单键 / 头像 / 应用图标） */
+html #screen .app .appbar>:first-child:not(.title):not(.gv-name):not(h1):not(h2),
+html #screen .app .gv-top>:first-child:not(.title):not(.gv-name){
+  order:-1 !important;flex:none !important;margin-left:0 !important;
+}
+/* 4) 标题紧贴前导控件右侧（返回键后 6px） */
+html #screen .app .appbar>:first-child:not(.title):not(.gv-name):not(h1):not(h2)+.title,
+html #screen .app .appbar>:first-child:not(.title):not(.gv-name):not(h1):not(h2)+h1,
+html #screen .app .appbar>:first-child:not(.title):not(.gv-name):not(h1):not(h2)+h2,
+html #screen .app .appbar>:first-child:not(.title):not(.gv-name):not(h1):not(h2)+.gv-name,
+html #screen .app .gv-top>:first-child:not(.title):not(.gv-name)+.gv-name{
+  margin-left:6px !important;
+}
+/* 5) 顶栏里空的首元素不占位（避免标题被“看不见的东西”推右） */
+html #screen .app .appbar>:first-child:empty,
+html #screen .app .gv-top>:first-child:empty{display:none !important}
 </style>
 </head>
 <body>
@@ -2543,7 +2672,7 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
             </div>
             <div class="sheet-layer" id="phMenu">
               <div class="sheet-backdrop" data-act="ph-menu-close"></div>
-              <div class="sheet">
+              <div class="sheet on">
                 <div class="sheet-handle"></div>
                 <div class="sheet-title">电话</div>
                 <button class="menu-row" data-act="ph-menu-contacts"><i data-ic="person"></i>联系人</button>
@@ -2964,6 +3093,9 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
           <section class="app" id="app-youtube">
             <header class="appbar">
               <div class="yt-logo">YouTube</div>
+              <button class="cast-chip" id="ytCastChip" data-act="cast-toggle" hidden aria-live="polite">
+                <i data-ic="cast"></i><span id="ytCastChipT">投屏中</span>
+              </button>
               <span class="flex1"></span>
               <button class="iconbtn" data-act="cast-toggle"><i data-ic="cast"></i></button>
               <button class="iconbtn"><i data-ic="search"></i></button>
@@ -2978,7 +3110,7 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
               <header class="appbar">
                 <button class="iconbtn" data-act="yt-back"><i data-ic="back"></i></button>
                 <h2 class="title">播放器</h2>
-                <button class="iconbtn"><i data-ic="more"></i></button>
+                <button class="iconbtn" data-act="yt-embed-help" aria-label="嵌入规范"><i data-ic="more"></i></button>
               </header>
               <div class="player-stage">
                 <div class="play-ic"><i data-ic="play"></i></div>
@@ -2987,6 +3119,8 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
               <div class="appbody">
                 <div class="yt-title" id="ytTitle"></div>
                 <div class="yt-meta" id="ytMeta"></div>
+                <div id="ytPlayerOffline" class="yt-player-offline" role="status" aria-live="polite" hidden></div>
+                <div id="ytChRow" class="yt-ch-row yt-now-ch" hidden></div>
                 <div class="player-controls">
                   <button class="iconbtn" data-act="yt-seek-back"><i data-ic="back"></i></button>
                   <button class="iconbtn" data-act="yt-play"><i data-ic="play"></i></button>
@@ -3332,6 +3466,8 @@ const NET={online:navigator.onLine!==false,forced:false,lastChange:Date.now()};
 function netOnline(){ return NET.forced ? false : (NET.online && navigator.onLine !== false); }
 function netSetForced(off){ NET.forced=!!off; NET.lastChange=Date.now(); try{ netBroadcast(); }catch(e){} }
 function netBroadcast(){
+  /* 状态栏的 WiFi 感叹号必须跟着一起变，而且和 YouTube 是否打开无关 */
+  try{ if(typeof updateSB==='function')updateSB(); }catch(e){}
   try{ window.dispatchEvent(new CustomEvent('netchange',{detail:{online:netOnline()}})); }catch(e){}
 }
 addEventListener('online',()=>{ NET.online=true;NET.lastChange=Date.now();netBroadcast(); });
@@ -3376,24 +3512,79 @@ function netErrorHtml(sub,retryAct){
   '</div>';
 }
 
-/* ============ 封面图统一失败回退（本地资源，绝不死循环） ============ */
-let _coverSeq=0;
-function ytCoverFail(img){
-  if(!img||img.dataset.fbDone==='1')return;
-  img.dataset.fbDone='1';
-  img.onerror=null;                       /* 关键：先摘掉处理器，杜绝无限重试 */
-  const local=img.dataset.fb||'';
-  if(local&&img.src!==local){ img.src=local; return; }
-  const asset=(typeof coverAsset==='function')?coverAsset(_coverSeq++):'';
-  if(asset&&img.src!==asset){ img.src=asset; return; }
-  img.style.display='none';
+/* ============ 封面图统一回退链（远端 → 换地址重试 → 本地图片 → 内置占位图） ============
+   逐层降级，每一层都可能失败，最后一层是内联 SVG（不可能失败），
+   因此任何情况下都有一张可见封面，绝不会留下破图或空白。 */
+/* 最终兜底：内联 SVG 占位图（不依赖网络，也不依赖 ASSETS 是否就绪） */
+const COVER_PH='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">'+
+  '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'+
+  '<stop offset="0" stop-color="#3c4043"/><stop offset="1" stop-color="#202124"/></linearGradient></defs>'+
+  '<rect width="320" height="180" fill="url(#g)"/>'+
+  '<rect x="126" y="58" width="68" height="48" rx="9" fill="none" stroke="#9aa0a6" stroke-width="5"/>'+
+  '<path d="M146 82V68l24 10-24 10z" fill="#9aa0a6"/>'+
+  '<text x="160" y="146" font-family="Roboto,Arial,sans-serif" font-size="16" fill="#9aa0a6" text-anchor="middle">暂无封面</text>'+
+  '</svg>');
+function coverIdFromUrl(u){
+  const m=/\/vi\/([A-Za-z0-9_-]{6,})/.exec(String(u||''));
+  return m?m[1]:'';
+}
+/* 第 3 层：内置占位图。到这里一定成功，所以可以安全摘掉所有处理器。 */
+function ytCoverPlaceholder(img){
+  img.onerror=null;img.onload=null;
+  if(img.dataset.covDone==='1')return;
+  img.dataset.covDone='1';
+  img.dataset.covTier='3';
+  img.classList.add('yt-cover-ph');
+  img.src=COVER_PH;
   const host=img.parentElement;
   if(host)host.classList.add('cover-failed');
 }
-/* 生成带本地回退的封面 <img> 标签 */
-function coverImgTag(remote,local,cls){
+/* YouTube 对不存在/不可用的视频不返回 404，而是返回一张 120×90 的灰色默认图（HTTP 200），
+   因此 onerror 永远不会触发——封面看起来“加载不出来”。真实尺寸：hqdefault 480×360、
+   mqdefault 320×180。宽度 ≤120 一定是那张灰图，按失败处理。 */
+function ytCoverIsGreyDefault(img){
+  const w=img.naturalWidth||0;
+  return w>0&&w<=120;
+}
+function ytCoverStep(img){
+  if(!img||img.dataset.covDone==='1')return;
+  const tier=Number(img.dataset.covTier||'0');
+  const id=img.dataset.vid||coverIdFromUrl(img.getAttribute('src'));
+  if(tier<1&&id){
+    /* 第 1 层：换 mqdefault 重试一次（hqdefault 缺失时它常常还在），带 cache-buster 绕开失败缓存 */
+    img.dataset.covTier='1';
+    img.src='https://i.ytimg.com/vi/'+encodeURIComponent(id)+'/mqdefault.jpg?r='+Date.now();
+    return;
+  }
+  const local=img.dataset.fb||'';
+  if(tier<2&&local){
+    /* 第 2 层：本地真实图片 */
+    img.dataset.covTier='2';
+    img.src=local;
+    return;
+  }
+  ytCoverPlaceholder(img);
+}
+function ytCoverFail(img){ ytCoverStep(img); }
+function ytCoverLoad(img){
+  if(!img||img.dataset.covDone==='1')return;
+  if(ytCoverIsGreyDefault(img)){ ytCoverStep(img); return; }
+  /* 这一层成功了：收工，摘掉处理器 */
+  img.dataset.covDone='1';
+  img.onerror=null;img.onload=null;
+  img.classList.remove('yt-cover-ph');
+  const host=img.parentElement;
+  if(host)host.classList.remove('cover-failed');
+}
+/* 生成带完整回退链的封面 <img> 标签；vid 用于第 1 层换地址重试 */
+function coverImgTag(remote,local,cls,vid){
+  const v=vid||coverIdFromUrl(remote)||'';
+  const startRemote=!!remote;
   return '<img class="'+(cls||'yt-cover')+'" loading="lazy" decoding="async" alt="" '+
-    'src="'+escHtml(remote||local||'')+'" data-fb="'+escHtml(local||'')+'" onerror="ytCoverFail(this)">';
+    'src="'+escHtml(remote||local||'')+'" data-fb="'+escHtml(local||'')+'" data-vid="'+escHtml(v)+'" '+
+    'data-cov-tier="'+(startRemote?'0':'2')+'" '+
+    'onerror="ytCoverFail(this)" onload="ytCoverLoad(this)">';
 }
 
 const M={
@@ -4654,7 +4845,15 @@ function updateSB(){
   if(tiles.dnd)p.push('<span class="sb-ic" title="勿扰" aria-label="勿扰">'+mi(M.dnd,15)+'</span>');
   if(tiles.record)p.push('<span class="sb-rec" title="正在录屏" aria-label="正在录屏"></span>');
   if(tiles.flight)p.push('<span class="sb-ic" title="飞行模式" aria-label="飞行模式">'+mi(M.flight,15)+'</span>');
-  p.push('<span class="sb-ic'+(wifiOn?'':' off')+'" title="Wi-Fi">'+mi(M.wifi,15)+'</span>');
+  /* Wi-Fi 图标跟随真实联网状态：未联网时显示「WiFi + 感叹号」，恢复后自动还原。
+     飞行模式/关闭 Wi-Fi 仍然走原来的置灰样式。 */
+  const netUp=(typeof netOnline==='function')?netOnline():(navigator.onLine!==false);
+  if(!netUp&&!tiles.flight){
+    p.push('<span class="sb-ic warn" title="Wi-Fi 未联网" aria-label="Wi-Fi 未联网">'+mi(M.wifi_off,15)+
+      '<i class="sb-bang">!</i></span>');
+  }else{
+    p.push('<span class="sb-ic'+(wifiOn?'':' off')+'" title="Wi-Fi" aria-label="Wi-Fi">'+mi(M.wifi,15)+'</span>');
+  }
   p.push((mobileData&&!tiles.flight)?SIG:'<span class="sb-ic off">'+SIG+'</span>');
   p.push(BAT);
   const unread=notifUnreadCount();
@@ -6431,43 +6630,99 @@ function photoInitViewer(){
   bar.innerHTML='<button data-act="photo-fav" id="photoFavBtn" aria-label="收藏">'+mi(M.star)+'</button>'+    '<button data-act="photo-zoom-out" aria-label="缩小">'+mi(M.close)+'</button>'+    '<button data-act="photo-zoom-in" aria-label="放大">'+mi(M.add)+'</button>'+    '<button data-act="photos-share" aria-label="分享">'+mi(M.send)+'</button>'+    '<button data-act="photo-del" aria-label="删除">'+mi(M.close)+'</button>';
   v.appendChild(bar);
   v.addEventListener('wheel',e=>{e.preventDefault();photoZoomBy(e.deltaY<0?1.15:1/1.15);},{passive:false});
-}/* ===== YouTube 投屏：设备发现 / 连接 / 音量 / 断开 / 错误 ===== */
+}
+/* ===== YouTube 投屏：设备发现 / 连接中 / 已连接 / 断开 + 播放与音量控制 + 错误处理 ===== */
+/* 模拟设备列表：ok:false 的设备首次连接必定失败，用来演示错误处理与「重试」恢复 */
 const CAST_DEVICES=[{id:'tv',n:'客厅电视',t:'Chromecast 4K',ok:true},{id:'speaker',n:'卧室音箱',t:'Google Nest Audio',ok:true},{id:'phone2',n:'Pixel 10 Pro',t:'附近设备',ok:false}];
 let castState='idle',castDev=null,castVol=60,castTimer=null,castPlaying=true;
+let castScanning=false,castScanTimer=null,castScanned=false,castLastErr='';
+const castPickCount={};   /* 每个设备被尝试连接的次数：用于模拟“首次失败、重试成功” */
+function castResetScan(){
+  if(castScanTimer){clearTimeout(castScanTimer);castScanTimer=null;}
+  castScanning=false;castScanned=false;
+}
 function castSheet(){
   let s=document.getElementById('castSheet');
   if(s)return s;
   const host=document.querySelector('#app-youtube')||document.querySelector('#screen');
   if(!host)return null;
-  s=document.createElement('div');s.id='castSheet';s.className='sheet';
-  s.innerHTML='<div class="sheet-backdrop" data-act="cast-close"></div><div class="sheet-card" id="castCard"></div>';
+  /* 用应用里既有的 .sheet-layer 结构：遮罩与面板是兄弟节点，面板在后且定位，
+     因此面板永远画在遮罩之上。
+     旧写法把 position:absolute 的 .sheet-backdrop 塞进 .sheet 里，而 .sheet-card
+     没有任何 CSS 规则、是静态块——定位元素一定画在静态元素之上，
+     于是遮罩盖住了整张面板：面板被压暗（看着“亮暗不对”），
+     而且所有点击都被遮罩吃掉（表现为“无法触控”）。 */
+  s=document.createElement('div');s.id='castSheet';s.className='sheet-layer';
+  s.setAttribute('role','dialog');s.setAttribute('aria-label','投屏');
+  s.innerHTML='<div class="sheet-backdrop" data-act="cast-close"></div>'+
+    '<div class="sheet on"><div class="sheet-handle"></div><div class="sheet-card" id="castCard"></div></div>';
   host.appendChild(s);
   return s;
+}
+/* 应用栏上的投屏状态提示：连接中/已连接时常驻显示，离开或断开后自动消失 */
+function castSyncChip(){
+  const chip=document.getElementById('ytCastChip');
+  if(!chip)return;
+  const st=castState;
+  if(st==='idle'){ chip.hidden=true; chip.classList.remove('on','busy','err'); return; }
+  chip.hidden=false;
+  chip.classList.toggle('busy',st==='connecting');
+  chip.classList.toggle('err',st==='error');
+  chip.classList.toggle('on',st==='connected');
+  const t=document.getElementById('ytCastChipT');
+  if(t)t.textContent=st==='connecting'?'正在连接…':(st==='error'?'投屏失败':(castDev?('投屏中 · '+castDev.n):'投屏中'));
+  chip.setAttribute('title',st==='connected'&&castDev?('正在投屏到 '+castDev.n):(st==='error'?'投屏连接失败':'正在连接投屏设备'));
+}
+/* 设备发现：先扫描，再给出结果反馈 */
+function castScan(){
+  if(castScanTimer){clearTimeout(castScanTimer);castScanTimer=null;}
+  castScanning=true;renderCast();
+  castScanTimer=setTimeout(function(){
+    castScanTimer=null;castScanning=false;castScanned=true;
+    renderCast();
+    toast('找到 '+CAST_DEVICES.length+' 台可投屏设备');
+  },900);
 }
 function renderCast(){
   const s=castSheet();
   if(!s)return;
   const card=s.querySelector('#castCard');
+  if(!card)return;
   const p=[];
   p.push('<div class="sheet-title">'+'投屏'+'</div>');
   if(castState==='idle'){
+    if(castScanning){
+      p.push('<div class="cast-scan"><span class="cast-spin sm"></span><span>正在搜索附近的设备…</span></div>');
+    }else{
+      p.push('<div class="cast-scan done"><span class="cs-ok">'+mi(M.check,15)+'</span><span>找到 '+CAST_DEVICES.length+' 台设备</span>'+
+        '<button class="pillbtn small" data-act="cast-scan">重新搜索</button></div>');
+    }
     p.push('<div class="cast-sub">'+'选择要投屏的设备'+'</div>');
-    p.push(CAST_DEVICES.map(d=>'<button class="sheet-row" data-act="cast-pick" data-id="'+d.id+'"><span class="s-ic">'+mi(d.id==='speaker'?M.sound:M.cast)+'</span><span class="s-main"><span class="s-title">'+escHtml(d.n)+'</span><span class="s-sub">'+escHtml(d.t)+'</span></span>'+mi(M.chev)+'</button>').join(''));
+    p.push(CAST_DEVICES.map(function(d){
+      return '<button class="sheet-row" data-act="cast-pick" data-id="'+d.id+'"><span class="s-ic">'+mi(d.id==='speaker'?M.sound:M.cast)+'</span>'+
+        '<span class="s-main"><span class="s-title">'+escHtml(d.n)+'</span><span class="s-sub">'+escHtml(d.t)+'</span></span>'+mi(M.chev)+'</button>';
+    }).join(''));
     p.push('<div class="cast-note">'+'未找到您的设备？请确认手机与设备在同一 Wi-Fi'+'</div>');
   } else if(castState==='connecting'){
-    p.push('<div class="cast-center"><span class="cast-spin"></span><div class="ct-t">'+'正在连接'+' '+escHtml(castDev?castDev.n:'')+'…</div><div class="ct-s">'+'请稍候'+'</div></div>');
+    p.push('<div class="cast-center"><span class="cast-spin"></span><div class="ct-t">'+'正在连接'+' '+escHtml(castDev?castDev.n:'')+'…</div><div class="ct-s">'+'请稍候，正在建立投屏会话'+'</div></div>');
+    p.push('<div class="cast-ctl"><button class="pillbtn danger" data-act="cast-stop">'+'取消'+'</button></div>');
   } else if(castState==='error'){
-    p.push('<div class="cast-center"><span class="cast-err">'+mi(M.close)+'</span><div class="ct-t">'+'连接失败'+'</div><div class="ct-s">'+'无法连接到该设备，请检查网络后重试'+'</div></div>');
-    p.push('<div class="pad16"><button class="pillbtn primary" style="width:100%" data-act="cast-retry">'+'重试'+'</button></div>');
+    p.push('<div class="cast-center"><span class="cast-err">'+mi(M.close)+'</span><div class="ct-t">'+'连接失败'+'</div>'+
+      '<div class="ct-s">'+escHtml(castLastErr||('无法连接到'+(castDev?castDev.n:'该设备')+'，请检查网络后重试'))+'</div></div>');
+    p.push('<div class="cast-ctl"><button class="pillbtn primary" data-act="cast-retry">'+'重试'+'</button>'+
+      '<button class="pillbtn" data-act="cast-again">'+'换个设备'+'</button></div>');
   } else {
-    p.push('<div class="cast-center"><span class="cast-ok">'+mi(M.cast)+'</span><div class="ct-t">'+'已连接'+' · '+escHtml(castDev?castDev.n:'')+'</div><div class="ct-s">'+'正在投屏'+'</div></div>');
-    p.push('<div class="cast-vol"><span>'+mi(M.sound)+'</span><input type="range" min="0" max="100" value="'+castVol+'" data-act="cast-vol"><b id="castVolVal">'+castVol+'%</b></div>');
+    p.push('<div class="cast-center"><span class="cast-ok">'+mi(M.cast)+'</span><div class="ct-t">'+'已连接'+' · '+escHtml(castDev?castDev.n:'')+'</div>'+
+      '<div class="ct-s">'+(castPlaying?'正在投屏播放':'已暂停投屏')+'</div></div>');
+    p.push('<div class="cast-vol"><span>'+mi(castVol===0?M.volume_off:M.sound)+'</span><input type="range" min="0" max="100" value="'+castVol+'" data-act="cast-vol" aria-label="投屏音量"><b id="castVolVal">'+castVol+'%</b></div>');
     p.push('<div class="cast-ctl"><button class="pillbtn" data-act="cast-play" id="castPlayBtn">'+(castPlaying?'暂停':'播放')+'</button><button class="pillbtn danger" data-act="cast-stop">'+'断开连接'+'</button></div>');
+    p.push('<div class="cast-note">'+'音量与播放控制会同步到 '+escHtml(castDev?castDev.n:'设备')+'</div>');
   }
   card.innerHTML=p.join('');
   /* 面板可见性由 castOpen()/castClose() 决定：renderCast 只更新内容，
      除非面板本来就开着（否则后台刷新会把关闭的面板重新弹出来）。 */
   if(s.dataset.opened==='1')s.classList.add('on');
+  castSyncChip();
 }
 function castOpen(){
   if(castTimer){clearTimeout(castTimer);castTimer=null;}
@@ -6475,33 +6730,59 @@ function castOpen(){
   const s=castSheet();
   if(s)s.dataset.opened='1';
   renderCast();
-  if(s)s.classList.add('on');
+  if(s){ s.classList.add('on'); s.removeAttribute('aria-hidden'); }
+  castSyncChip();
+  /* 首次打开时自动做一次设备发现（有可见的扫描反馈） */
+  if(castState==='idle'&&!castScanned&&!castScanning)castScan();
+}
+/* 真正的连接流程：connecting → connected / error，两种入口（选设备、重试）共用 */
+function castConnect(d){
+  if(!d)return;
+  castDev=d;castLastErr='';
+  castPickCount[d.id]=(castPickCount[d.id]||0)+1;
+  castState='connecting';renderCast();
+  toast('正在连接'+' '+d.n+'…');
+  castTimer=setTimeout(function(){
+    castTimer=null;
+    /* 模拟设备：标注 ok:false 的设备第一次连不上，重试一次即可成功 */
+    const ok=d.ok||castPickCount[d.id]>=2;
+    if(!ok){
+      castState='error';
+      castLastErr='无法连接到'+d.n+'，请确认设备已开机并处于同一网络';
+      renderCast();
+      toast('连接失败：'+d.n);
+      return;
+    }
+    castState='connected';castPlaying=true;castVol=castVol||60;
+    renderCast();
+    toast('已连接到'+' '+d.n);
+  },1200);
 }
 function castPick(id){
   const d=CAST_DEVICES.find(x=>x.id===id);
   if(!d)return;
-  castDev=d;castState='connecting';renderCast();
-  toast('正在连接'+' '+d.n+'…');
-  castTimer=setTimeout(function(){
-    castTimer=null;
-    if(!d.ok){castState='error';renderCast();toast('连接失败');return;}
-    castState='connected';renderCast();
-    toast('已连接到'+' '+d.n);
-  },1200);
+  castConnect(d);
+}
+/* 重试：重新走一次完整连接（旧实现只是 castOpen()，状态还是 error，按钮等于没反应） */
+function castRetry(){
+  if(!castDev){ castState='idle';renderCast();castScan();return; }
+  castConnect(castDev);
 }
 function castStop(){
   if(castTimer){clearTimeout(castTimer);castTimer=null;}
-  castState='idle';castDev=null;
+  const was=castDev?castDev.n:'';
+  castState='idle';castDev=null;castPlaying=true;castResetScan();
   renderCast();
-  toast('已断开投屏');
+  toast(was?('已断开 '+was):'已断开投屏');
 }
 function castClose(){
   const s=document.getElementById('castSheet');
   /* 关闭面板：若还在「连接中」则取消连接（此前会把未完成的连接当成已连接） */
   /* 连接中关闭面板 = 取消连接。此前写成 castDev?'connected':'idle'，与上一行注释正好相反：
      定时器被清掉、连接永远不会完成，状态却变成「已连接」。 */
-  if(castTimer){clearTimeout(castTimer);castTimer=null;castState='idle';castDev=null;renderCast();}
+  if(castTimer){clearTimeout(castTimer);castTimer=null;castState='idle';castDev=null;castLastErr='';renderCast();}
   if(s){ s.classList.remove('on'); s.dataset.opened='0'; s.setAttribute('aria-hidden','true'); }
+  castSyncChip();
 }
 /* 彻底结束投屏：断开并移除面板（离开 YouTube 时调用） */
 function castTeardown(){
@@ -6509,9 +6790,12 @@ function castTeardown(){
   castState='idle';
   castDev=null;
   castPlaying=true;
+  castLastErr='';
+  castResetScan();
   /* 面板可能被 renderCast() 追加到不同容器里：把所有同名节点都清掉，
      并且不要在这里调用 renderCast() —— 那会立刻把面板重新建出来。 */
   document.querySelectorAll('#castSheet').forEach(function(n){ n.remove(); });
+  castSyncChip();
 }
 /* ===== YouTube：播放页相关推荐 ===== */
 function ytRelated(){
@@ -6534,7 +6818,8 @@ function ytDecorateThumbs(){
     const realIdx=Number(card.dataset.i);
     const dbItem=(typeof YT_REAL!=='undefined'&&YT_REAL[realIdx])?YT_REAL[realIdx]:null;
     const local=(dbItem&&dbItem.p&&typeof ASSETS!=='undefined')?ASSETS[dbItem.p]:'';
-    const src=(dbItem&&dbItem.id&&!dbItem.local)?ytThumb(dbItem.id):(local||coverAsset(idx));
+    const vid=(dbItem&&dbItem.id)?dbItem.id:'';
+    const src=(vid&&!dbItem.local)?ytThumb(vid):(local||coverAsset(idx));
     if(!src)return;
     /* 先确保 img 存在，再设置地址与回退（顺序错误会触发 TDZ 报错） */
     let img=thumb.querySelector('img.yt-cover');
@@ -6543,8 +6828,16 @@ function ytDecorateThumbs(){
       img.className='yt-cover';img.alt='';img.loading='lazy';
       thumb.insertBefore(img,thumb.firstChild);
     }
-    img.onerror=function(){this.onerror=null;this.src=local||coverAsset(idx);};
-    if(img.getAttribute('src')!==src)img.setAttribute('src',src);
+    /* 与 coverImgTag 走同一条回退链，不再各写一份（旧写法最后一层是 src='' → 破图） */
+    img.dataset.fb=local||coverAsset(idx);
+    img.dataset.vid=vid;
+    if(img.dataset.covTier===undefined)img.dataset.covTier=(vid&&!dbItem.local)?'0':'2';
+    img.onerror=function(){ytCoverFail(this);};
+    img.onload=function(){ytCoverLoad(this);};
+    if(img.getAttribute('src')!==src){
+      img.dataset.covDone='0';
+      img.setAttribute('src',src);
+    }
     thumb.classList.add('has-cover');
     if(!thumb.querySelector('.yt-dur')){
       const metaEl=card.querySelector('.yt-meta,.row-sub,.s-sub');
@@ -6657,31 +6950,18 @@ function ytLoadApi(cb){
   s.onerror=function(){ytApiLoading=false;const c=ytApiCbs.slice();ytApiCbs=[];c.forEach(f=>{try{f(false);}catch(e){}});};
   document.head.appendChild(s);
 }
-function ytErrorBox(code,extra){
-  let box=document.getElementById('ytErrBox');
-  const player=document.getElementById('ytPlayer');
-  if(!player)return;
-  if(!box){box=document.createElement('div');box.id='ytErrBox';box.className='yt-errbox';
-    const stage=document.getElementById('ytStage');
-    if(stage)stage.insertAdjacentElement('afterend',box);else player.appendChild(box);}
-  const isFile=(location.protocol==='file:');
-  const reason=YT_ERR[code]||extra||'播放失败';
-  const p=[];
-  p.push('<div class="yb-t">'+escHtml('播放器报错')+' · Error '+escHtml(String(code||''))+'</div>');
-  p.push('<div class="yb-r">'+escHtml(reason)+'</div>');
-  if(code===153||isFile){
-    p.push('<div class="yb-h">'+escHtml('解决方法：用 http(s) 打开本页，让浏览器带上 Referer')+'</div>');
-    p.push('<pre class="yb-cmd" id="ytCmd">cd "'+escHtml(location.pathname.replace(/[^\\/]*$/,''))+'"'+'\n'+'python -m http.server 8080</pre>');
-    p.push('<div class="yb-btns"><button class="pillbtn" data-act="yt-copy-cmd">'+escHtml('复制命令')+'</button>'+
-      '<button class="pillbtn" data-act="yt-copy-url">'+escHtml('复制 http 地址')+'</button>'+
-      '<button class="pillbtn" data-act="yt-open-ext" data-id="'+escHtml((YT_CURV&&YT_CURV.id)||'')+'">'+escHtml('在浏览器打开视频')+'</button></div>');
-  }
-  box.innerHTML=p.join('');
-  box.classList.add('on');
-  const fb=document.getElementById('ytFallback');if(fb)fb.classList.add('show');
+/* 「播放器报错 · Error xxx」那块调试面板已按需求彻底移除：
+   不再由 file:// 的 Error 153 自动弹出，也不再由 YouTube API 的 onError 弹出，
+   更不会出现「python -m http.server 8080」「复制命令」这类开发向提示。
+   保留同名函数只为不改调用点，它现在唯一的作用是清掉历史节点。 */
+function ytErrorBox(){
+  const box=document.getElementById('ytErrBox');
+  if(box)box.remove();
+  return false;
 }
 function ytClearError(){
-  const box=document.getElementById('ytErrBox');if(box){box.classList.remove('on');box.innerHTML='';}
+  const box=document.getElementById('ytErrBox');
+  if(box)box.remove();
 }
 function ytCopy(text,okMsg){
   try{
@@ -6723,8 +7003,20 @@ function ytSetNow(meta){
       mEl.textContent=bits.join(" · ");
     }
   }
+  /* 播放页的频道关注行跟随当前视频的频道 */
+  try{ ytRenderNowChannel(); }catch(e){}
   return title;
 }
+
+/* 播放页（#ytPlayer 子页）是否正开着。
+   重新渲染首页推送时不能顺手清空“正在播放”，否则在播放页点「关注」触发 renderYt()
+   会把标题/封面信息一起抹掉（表现为点了关注视频就“没了”）。 */
+function ytPlayerOpen(){
+  const p=document.getElementById('ytPlayer');
+  return !!(p&&p.classList.contains('on'));
+}
+/* 只有不在播放页时，渲染首页才代表“当前没有在播内容” */
+function ytClearNowIfIdle(){ if(!ytPlayerOpen())ytSetNow(null); }
 
 function ytFetchMeta(videoId){
   const my=++ytToken;
@@ -6817,11 +7109,29 @@ function ytSyncTitleFromPlayer(){
    3) Chrome：正文改为内嵌浏览器视图（iframe + 地址栏 + 标签页 + 加载/错误提示），
       站点若禁止被嵌入（X-Frame-Options / CSP）不做绕过，给出提示与“在系统浏览器打开” */
 
-/* ---------- 随机推送池（公开可嵌入的官方内容；仅作出处，不做预置列表展示） ---------- */
+/* ---------- 随机推送池（公开可嵌入的官方内容；仅作出处，不做预置列表展示） ----------
+   池子经过联网校验：mqdefault.jpg 宽度 ≤120 的是 YouTube 的灰色默认图（视频已失效），
+   已全部剔除。旧池子只有 15 条且含 2 条死链，所以“换一批”很快就开始重复。 */
 const YT_POOL=[
   'M7lc1UVf-VE','jNQXAC9IVRw','aqz-KE-bpKQ','LXb3EKWsInQ','ScMzIvxBSi4',
   'dQw4w9WgXcQ','9bZkp7q19f0','kJQP7kiw5Fk','fJ9rUzIMcZQ','hFZFjoX2cGg',
-  'nmGWK_0GBB0','eRsGyueVLvQ','R6MlUcuOul8','YE7VzlLtp-4','1iIZeIy7TqM'
+  'eRsGyueVLvQ','YE7VzlLtp-4','1iIZeIy7TqM','JGwWNGJdvx8','OPf0YbXqDm0',
+  'CevxZvSJLk8','PT2_F-1esPk','pRpeEdMmmQ0','YQHsXMglC9A','09R8_2nJtjg',
+  '60ItHLz5WEA','7wtfhZwyrcc','ktvTqknDobU','ru0K8uYEZWw','nfWlot6h_JM',
+  'e-ORhEE9VVg','hLQl3WQQoQ0','rYEDA3JcQqw','uelHwf8o7_U','YVkUvmDQ3HY',
+  'XbGs_qK2PQA','pAgnJDJN4VA','1w7OgIMMRc4','hTWKbfoikeg','djV11Xbc914',
+  'sOnqjkJTMaA','Zi_XLOBDo_Y','L_jWHffIx5E','y6120QOlsfU','astISOttCQ0',
+  'kffacxfA7G4','RgKAFK5djSk','0KSOMA3QBU0','98WtmW-lfeE','QK8mJJJvaes',
+  'fLexgOxsZu0','lp-EO5I60KA','2Vv-BfVoq4g','y83x7MgzWOA','nfs8NYg7yQM',
+  'oyEuk8j8imI','PMivT7MJ41M','SR6iYWJxHqs','LjhCEhWiKXk','fRh_vgS2dFE',
+  'QcIy9NiNbmo','FTQbiNvZqaY','btPJPFnesV4','L0MK7qz13bU','moSFlvxnbgk',
+  'eVTXPUF4Oz4','5abamRO41fE','kXYiU_JCYtU','YykjpeuMNEk','RB-RcX5DS5A',
+  'dvgZkm1xWPE','1G4isv_Fylg','k4V3Mo61fJM','hT_nvWreIhg','aircAruvnKk',
+  'IHZwWFHWa-w','Ilg3gGewQ5U','tIeHLnjs5U8','3JZ_D3ELwOQ','V-_O7nl0Ii0',
+  'kOkQ4T5WO9E','iLBBRuVDOo4','K4DyBUG242c','mWRsgZuwf_8','JRfuAukYTKg',
+  'SlPhMPnQ58k','ixkoVwKQaJg','5dmQ3QWpy1Q','2Z4m4lnjxkY','tt2k8PGm-TI',
+  'PIh2xe4jnpk','ZyhrYis509A','Qq4j1LtCdww','F90Cw4l-8NY','aJOTlE1K90k',
+  'wJyUtbn0O5Y','0jz0GAFNNIo','kYB8IZa5AuE','1k8craCGpgs','6ZfuNTqbHE8'
 ];
 const YTM_POOL=YT_POOL.slice();
 function ytShuffle(a){
@@ -6866,9 +7176,16 @@ function ytSearchAgain(which,q){
 function ytRandomFeed(n){return ytPoolPick(YT_POOL,n||6);}
 function ytmRandomFeed(n){return ytPoolPick(YTM_POOL,n||6);}
 /* ================= 真随机推送（任务 5） =================
-   旧实现的“随机”只有 Math.random，池子仅 15 条且不做去重，所以看起来总在重复。
-   现在：① 混入 crypto 熵；② 记住最近展示过的 id；③「换一批」保证给出没看过的一批。 */
+   旧实现的“随机”只做 Math.random，池子仅 15 条、历史只记最近 6 条，
+   于是「换一批」第 3 轮就把第 1 轮的内容原样搬回来（实测 6 条里重复 4 条）。
+   现在改成「洗牌袋 + 无重复轮转」：
+   ① 熵来自 crypto.getRandomValues（无 crypto 时退回 Math.random）；
+   ② 每个入口（首页 / Shorts / YT Music）各自维护一副洗好的牌，抽完才重新洗；
+   ③ 重新洗牌时屏蔽最近出现过的 id，保证连续很多轮都不重复；
+   ④ 历史窗口放宽到 48 条，而不是只记 6 条。 */
 const YT_HIST_KEY='a17_yt_seen';
+const YT_BAG_KEY='a17_yt_bag';
+const YT_SEEN_MAX=48;
 function ytEntropy(){
   try{
     if(window.crypto&&crypto.getRandomValues){
@@ -6893,29 +7210,64 @@ function ytSeenLoad(){
   }catch(e){return [];}
 }
 function ytSeenSave(ids){
-  /* 只保留最近的一小段历史：池子只有十几条，记太多会导致“换一批”永远只能重复 */
-  try{ localStorage.setItem(YT_HIST_KEY,JSON.stringify(ids.slice(-6))); }catch(e){}
+  /* 记录最近展示过的 id。窗口越大，“换一批”越不容易撞回旧内容；
+     洗牌袋会在池子见底时用它做屏蔽名单。 */
+  try{ localStorage.setItem(YT_HIST_KEY,JSON.stringify(ids.slice(-YT_SEEN_MAX))); }catch(e){}
 }
-function ytPickFresh(pool,n){
+/* 把一批刚展示的 id 追加进历史（同一 id 不重复占位，越新越靠后） */
+function ytSeenPush(ids){
+  const hist=ytSeenLoad();
+  (ids||[]).forEach(function(id){
+    if(typeof id!=='string'||!id)return;
+    const i=hist.indexOf(id);
+    if(i>=0)hist.splice(i,1);
+    hist.push(id);
+  });
+  ytSeenSave(hist);
+  return hist.length;
+}
+function ytBagLoad(){
+  try{
+    const o=JSON.parse(localStorage.getItem(YT_BAG_KEY)||'{}');
+    return (o&&typeof o==='object'&&!Array.isArray(o))?o:{};
+  }catch(e){return {};}
+}
+function ytBagSave(o){ try{ localStorage.setItem(YT_BAG_KEY,JSON.stringify(o)); }catch(e){} }
+/* 洗牌袋抽取：从剩下的牌里发，发完才重新洗；重洗时屏蔽最近出现过的 id。 */
+function ytPickFresh(pool,n,kind){
   /* 防御性默认值：调用方有时不传参（ytPickFresh() / ytmRandomFeedFresh()），
      旧实现在这里直接 pool.slice 抛 TypeError，整条“换一批”链路会中断。 */
   const src=(Array.isArray(pool)&&pool.length)?pool:(typeof YT_POOL!=='undefined'&&Array.isArray(YT_POOL)?YT_POOL:[]);
-  const want=Math.max(1,Number(n)||src.length||1);
   if(!src.length)return [];
-  const seen=new Set(ytSeenLoad());
-  const sh=ytShuffleStrong(src);
-  const out=sh.filter(function(id){return !seen.has(id);}).slice(0,want);
-  if(out.length<want){
-    sh.forEach(function(id){ if(out.length<want&&out.indexOf(id)<0)out.push(id); });
+  const want=Math.max(1,Math.min(Number(n)||src.length||1,src.length));
+  const key=kind||'home';
+  const bags=ytBagLoad();
+  /* 只保留仍然存在于当前池子里的牌（池子换版后旧牌自动作废） */
+  let deck=(bags[key]&&Array.isArray(bags[key].deck))?bags[key].deck.filter(function(id){return src.indexOf(id)>=0;}):[];
+  const recent=ytSeenLoad().filter(function(id){return src.indexOf(id)>=0;});
+  const out=[];
+  let guard=0;
+  while(out.length<want&&guard++<want*4+16){
+    if(!deck.length){
+      /* 重新洗牌：屏蔽最近出现过的 id，但必须留够 want 条可用，
+         所以最多屏蔽 (池子大小 - want) 条，避免把池子锁死。 */
+      const maxBan=Math.max(0,src.length-want);
+      const ban={};
+      recent.slice(-maxBan).forEach(function(id){ban[id]=1;});
+      let fresh=ytShuffleStrong(src).filter(function(id){return !ban[id];});
+      if(fresh.length<want)fresh=ytShuffleStrong(src);
+      deck=fresh;
+    }
+    const id=deck.shift();
+    if(typeof id==='string'&&out.indexOf(id)<0)out.push(id);
   }
-  /* 去重后写入：同一 id 不重复占位，保证下次还有新鲜内容可取 */
-  const hist=ytSeenLoad();
-  out.forEach(function(id){ if(hist.indexOf(id)<0)hist.push(id); });
-  ytSeenSave(hist);
+  bags[key]={deck:deck};
+  ytBagSave(bags);
+  ytSeenPush(out);
   return out;
 }
-function ytRandomFeedFresh(n){return ytPickFresh(YT_POOL,n||6);}
-function ytmRandomFeedFresh(n){return ytPickFresh(YTM_POOL,n||6);}
+function ytRandomFeedFresh(n,kind){return ytPickFresh(YT_POOL,n||6,kind||'home');}
+function ytmRandomFeedFresh(n){return ytPickFresh(YTM_POOL,n||6,'music');}
 
 /* ================= 联网状态（任务 6） ================= */
 function ytOfflineHtml(){
@@ -6933,10 +7285,11 @@ function ytOfflineHtml(){
     '</div></div>';
 }
 function ytOfflineBarHtml(){
-  return '<span class="yo-ic"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">'+
-    '<path fill="currentColor" d="'+M.wifi_off+'"/><circle cx="19" cy="6" r="5" fill="#D93025"/>'+
-    '<path fill="#fff" d="M18.1 3.2h1.8l-.3 3.6h-1.2zM18 8.6h2v1.9h-2z"/></svg></span>'+
-    '<span class="yo-t">未联网</span><span class="yo-s">部分内容可能无法加载</span>';
+  /* WiFi 图标 + 感叹号，下面一行小字「未联网」（再下一行说明影响范围） */
+  return '<span class="yo-ic"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true">'+
+    '<path fill="currentColor" d="'+M.wifi_off+'"/></svg><i class="yo-bang">!</i></span>'+
+    '<span class="yo-col"><span class="yo-t">未联网</span>'+
+    '<span class="yo-s">部分内容可能无法加载</span></span>';
 }
 function ytSyncOfflineBar(){
   const bar=document.getElementById('ytOffline');
@@ -6945,20 +7298,59 @@ function ytSyncOfflineBar(){
   bar.hidden=!off;
   if(off)bar.innerHTML=ytOfflineBarHtml();
 }
+/* ================= 播放页的「未联网」状态（任务 6） =================
+   未联网时不显示「视频未能加载，可尝试以下方式」那张排错卡片 —— 那会让人以为
+   视频本身有问题。此时只给一个状态：WiFi 图标 + 感叹号，下面一行小字「未联网」。
+   网络恢复后由 netchange 自动收起并重新挂载播放器，不用手动点任何按钮。 */
+function ytPlayerOfflineHtml(){
+  return offlineView('网络恢复后将自动重新连接');
+}
+/* 同步播放页的未联网状态；返回当前是否离线 */
+function ytSyncPlayerOffline(){
+  const box=document.getElementById('ytPlayerOffline');
+  const off=!netOnline();
+  if(box){
+    box.hidden=!off;
+    if(off){ if(!box.innerHTML)box.innerHTML=ytPlayerOfflineHtml(); }
+    else box.innerHTML='';
+  }
+  if(off){
+    /* 离线期间清掉可能残留的排错节点，保证画面上只有「未联网」这一处提示 */
+    const fb=document.getElementById('ytFallback');
+    if(fb)fb.remove();
+    try{ ytClearError(); }catch(e){}
+  }
+  return off;
+}
+/* 网络恢复：收起「未联网」并把当前视频重新挂载，自动回到正常播放状态 */
+function ytRecoverPlayer(){
+  if(!netOnline())return false;
+  const player=document.getElementById('ytPlayer');
+  if(!player||!player.classList.contains('on'))return false;      /* 播放页没开就不用管 */
+  const box=document.getElementById('ytPlayerOffline');
+  const wasOffline=!!(box&&!box.hidden);                          /* 之前确实处在「未联网」状态 */
+  ytSyncPlayerOffline();
+  /* 没进过未联网状态就别重挂播放器，免得把正在播的视频从头开始 */
+  if(!wasOffline)return false;
+  const v=(typeof YT_CURV!=='undefined'&&YT_CURV)?YT_CURV:null;
+  if(!v||!(v.id||v.list)||v.local)return false;
+  try{
+    ytFrameLoaded=false;
+    ytRebuild(v);                    /* 重新挂载官方播放器 */
+  }catch(e){ return false; }
+  return true;
+}
 function ytRenderChips(){
   const host=document.getElementById('ytChips');
   if(!host)return;
+  /* 只保留一条 tab 栏：我的 / 关注 / Shorts。
+     首页推送不再分栏目（旧版这里还渲染「全部/音乐/游戏/科技」分类 chip，
+     和 APP_FUNC.youtube() 注入的另一排分类 chip 重叠成两条栏目行）。 */
   const tabs=[['all','我的'],['subs','关注'],['shorts','Shorts']];
-  const cats=[['all','全部'],['音乐','音乐'],['游戏','游戏'],['科技','科技']];
-  let h='<div class="chipline-inner">'+tabs.map(function(c){
+  const h='<div class="chipline-inner">'+tabs.map(function(c){
     return '<button class="ph-chip'+(ytTab===c[0]?' on':'')+'" data-act="yt-tab" data-k="'+c[0]+'">'+c[1]+'</button>';
-  }).join('');
-  if(ytTab==='all'){
-    h+='<span class="chipsep"></span>'+cats.map(function(c){
-      return '<button class="ph-chip sub'+(ytChip===c[0]?' on':'')+'" data-act="yt-chip" data-k="'+c[0]+'">'+c[1]+'</button>';
-    }).join('');
-  }
-  host.innerHTML=h+'</div>';
+  }).join('')+'</div>';
+  host.innerHTML=h;
 }
 /* 分类标签 → YouTube videoCategoryId（让分类真正生效，而不是只换高亮） */
 function ytCatId(cat){
@@ -6968,15 +7360,22 @@ function ytCatId(cat){
 
 /* ================= 关注列表（任务 7，本地管理） ================= */
 const YT_SUBS_KEY='a17_yt_subs';
+const YT_SUBS_SEED_KEY='a17_yt_subs_seeded';
 let YT_SUBS=[];
 function ytSubsSave(){ try{ localStorage.setItem(YT_SUBS_KEY,JSON.stringify(YT_SUBS)); }catch(e){} }
+function ytSubsSeeded(){
+  try{ return localStorage.getItem(YT_SUBS_SEED_KEY)==='1'; }catch(e){ return false; }
+}
 function ytSubsLoad(){
   try{
     const arr=JSON.parse(localStorage.getItem(YT_SUBS_KEY)||'null');
     YT_SUBS=Array.isArray(arr)?arr.filter(function(x){return x&&typeof x.n==='string';})
       .map(function(x){return {n:String(x.n),t:x.t||'已关注频道',c:x.c||'#D93025'};}):[];
   }catch(e){ YT_SUBS=[]; }
-  if(!YT_SUBS.length){
+  /* 只在「第一次运行」时铺示例频道。
+     旧实现每次列表为空都重新铺一遍，于是把 3 个频道全部取消关注后，
+     再进一次 YouTube 它们又回来了——取消关注等于没生效。 */
+  if(!YT_SUBS.length&&!ytSubsSeeded()){
     YT_SUBS=[
       {n:'Android Developers',t:'官方频道 · 每周更新',c:'#34A853'},
       {n:'Google',t:'官方频道',c:'#4285F4'},
@@ -6984,6 +7383,8 @@ function ytSubsLoad(){
     ];
     ytSubsSave();
   }
+  /* 记录「已经铺过示例」，这样用户把所有频道都取消关注后不会被重新铺回来 */
+  try{ localStorage.setItem(YT_SUBS_SEED_KEY,'1'); }catch(e){}
   return YT_SUBS;
 }
 function ytSubIndex(name){ return YT_SUBS.findIndex(function(x){return x.n===name;}); }
@@ -7007,11 +7408,47 @@ function ytChannelRow(c){
     '<button class="pillbtn small'+(on?'':' primary')+'" data-act="yt-follow" data-name="'+escHtml(c.n)+'">'+
     (on?'已关注':'关注')+'</button></div>';
 }
+/* 播放页的频道行：看视频时直接关注/取消关注该频道（本地管理，立即持久化） */
+function ytRenderNowChannel(){
+  const host=document.getElementById('ytChRow');
+  if(!host)return;
+  const ch=(typeof ytNow!=='undefined'&&ytNow&&ytNow.channel)?String(ytNow.channel).trim():'';
+  if(!ch){ host.hidden=true; host.innerHTML=''; return; }
+  host.hidden=false;
+  const on=ytIsFollowed(ch);
+  host.innerHTML='<span class="yt-ch-av" style="background:#D93025">'+escHtml(ch.slice(0,1).toUpperCase())+'</span>'+
+    '<span class="yt-ch-main"><span class="yt-ch-n">'+escHtml(ch)+'</span>'+
+    '<span class="yt-ch-s">'+escHtml(on?'已关注 · 保存在本机':'关注后可在「关注」里管理')+'</span></span>'+
+    '<button class="pillbtn small'+(on?'':' primary')+'" data-act="yt-follow" data-name="'+escHtml(ch)+'" data-sub="当前视频频道">'+
+    (on?'已关注':'关注')+'</button>';
+}
 function ytFollowBtnHtml(name,sub){
   if(!name)return '';
   const on=ytIsFollowed(name);
   return '<button class="pillbtn small'+(on?'':' primary')+'" data-act="yt-follow" data-name="'+escHtml(name)+'" data-sub="'+escHtml(sub||'')+'">'+
     (on?'已关注':'关注')+'</button>';
+}
+/* 关注状态变化后只刷新受影响的视图：
+   · 播放页      → 只更新频道行（不重渲染首页，免得白白消耗一批随机内容）
+   · Shorts      → 就地改按钮文字（整屏换一批会很跳）
+   · 关注列表    → 重渲染列表
+   · 其他        → 重渲染首页 */
+function ytRefreshAfterFollow(){
+  try{ ytRenderNowChannel(); }catch(e){}
+  const tab=(typeof ytTab!=='undefined')?ytTab:'all';
+  if(tab==='shorts'){
+    document.querySelectorAll('#ytFeed [data-act="yt-short-follow"]').forEach(function(b){
+      const sv=(typeof YT_REAL!=='undefined'&&YT_REAL)?YT_REAL.find(function(x){return x.id===b.dataset.id;}):null;
+      const nm=(sv&&sv.ch)||('频道 '+String(b.dataset.id||'').slice(0,6));
+      const on=ytIsFollowed(nm);
+      b.textContent=on?'已关注':'关注';
+      b.classList.toggle('primary',!on);
+    });
+    return;
+  }
+  if(ytPlayerOpen())return;
+  if(tab==='subs'){ ytRenderSubs(); return; }
+  renderYt();
 }
 function ytRenderSubs(){
   const host=document.getElementById('ytFeed');
@@ -7034,14 +7471,14 @@ function ytRenderShorts(){
   const host=document.getElementById('ytFeed');
   if(!host)return;
   ytSyncOfflineBar();
-  const ids=ytRandomFeedFresh(4);
+  const ids=ytRandomFeedFresh(4,'shorts');
   const p=[];
   p.push('<div class="yt-push-head"><span>Shorts</span>'+
     '<button class="pillbtn small" data-act="yt-refresh-shorts">换一批</button></div>');
   p.push('<div class="yt-shorts">');
   ids.forEach(function(id,i){
     p.push('<div class="yt-short"><button class="yt-short-card" data-act="yt-random-open" data-id="'+escHtml(id)+'">'+
-      coverImgTag(ytThumb(id),coverAsset(i),'yt-cover')+
+      coverImgTag(ytThumb(id),coverAsset(i),'yt-cover',id)+
       '<span class="ys-play">'+mi(M.play_circle,34)+'</span></button>'+
       '<div class="yt-short-meta"><span class="ys-t" id="yps-'+escHtml(id)+'">短影音</span>'+
       '<button class="pillbtn small" data-act="yt-short-follow" data-id="'+escHtml(id)+'">关注</button></div></div>');
@@ -7094,9 +7531,10 @@ function ytKeyStatus(){
   if(!k)return {ok:false,text:'未配置'};
   return {ok:true,text:'已配置 · '+cfgMask(k)};
 }
-function relayStatus(){
+/* urlOverride 仅用于测试/诊断：不传时按真实配置（?crws= › localStorage.cr_ws › 内置默认）判定 */
+function relayStatus(urlOverride){
   let u='',mine='';
-  try{ u=crWs(); }catch(e){}
+  try{ u=(typeof urlOverride==='string')?urlOverride:crWs(); }catch(e){}
   try{ mine=(localStorage.getItem('cr_ws')||'').trim()||(new URLSearchParams(location.search).get('crws')||'').trim(); }catch(e){}
   if(!u)return {ok:false,text:'未配置'};
   /* 没有任何覆盖值（既没在设置页填过、也没带 ?crws=）时，用的是内置默认地址。
@@ -7209,9 +7647,9 @@ function ytRenderItems(host,items,opts){
   p.push('<div class="yt-push-head"><span>'+escHtml(o.title||'随机推送')+'</span>');
   p.push('<button class="pillbtn small" data-act="'+(o.refreshAct||'yt-refresh-feed')+'">'+escHtml('换一批')+'</button></div>');
   p.push('<div class="yt-push-grid">');
-  (items||[]).forEach(function(it){
+  (items||[]).forEach(function(it,i){
     p.push('<button class="yt-push-card" data-act="yt-random-open" data-id="'+escHtml(it.id)+'">'+
-      '<img class="yt-cover" loading="lazy" alt="" src="'+escHtml(it.thumb||ytThumb(it.id))+'" onerror="ytCoverFail(this)">'+
+      coverImgTag(it.thumb||ytThumb(it.id),coverAsset(i),'yt-cover',it.id)+
       '<span class="yp-t">'+escHtml(it.title||('视频'+' '+it.id))+'</span>'+
       (it.channel?'<span class="yp-s">'+escHtml(it.channel)+(it.views?(' · '+escHtml(String(it.views))+' '+escHtml('次观看')):'')+'</span>':'')+
       '</button>');
@@ -7263,7 +7701,7 @@ function ytPurgePresets(){
   }
 }
 
-/* ---------- YouTube：单条 tab 栏 + 随机推送 ---------- */
+/* ---------- YouTube：单条 tab 栏 + 随机推送（首页不分栏目） ---------- */
 var ytRandomMode=false;
 function ytRenderRandomFeed(cat){
   ytRandomMode=true;
@@ -7273,7 +7711,10 @@ function ytRenderRandomFeed(cat){
   const host0=document.getElementById('ytFeed');
   ytApiTrending({cat:ytCatId(cat),max:20}).then(function(items){
     if(!items.length)throw new Error('empty');
-    ytRenderItems(host0,items.slice(0,8),{title:'随机推送 · 热门',refreshAct:'yt-refresh-feed',
+    const shown=items.slice(0,8);
+    /* 走 API 的这批也要记进历史，否则它和本地池子会互相“重复” */
+    ytSeenPush(shown.map(function(x){return x.id;}));
+    ytRenderItems(host0,shown,{title:'随机推送 · 热门',refreshAct:'yt-refresh-feed',
       onRefresh:function(){ytRenderRandomFeed(cat);}});
   }).catch(function(){ ytRenderRandomFeedLocal(cat); });
 }
@@ -7282,15 +7723,17 @@ function ytRenderRandomFeedLocal(cat){
   if(!host)return;
   ytSyncOfflineBar();
   const off=!netOnline();
-  const ids=ytRandomFeedFresh(6);
+  const ids=ytRandomFeedFresh(6,'home');
   const p=[];
   p.push('<div class="yt-push-head"><span>'+escHtml(cat?('随机推送 · '+cat):'随机推送')+'</span>'+
     '<button class="pillbtn small" data-act="yt-refresh-feed" data-cat="'+escHtml(cat||'')+'">换一批</button></div>');
-  if(off)p.push(ytOfflineHtml());
+  /* 离线时顶部的「未联网」提示条已经说明了原因，这里就不再重复第二遍；
+     只有当真的一张卡片都渲染不出来时，才用整屏离线视图兜底。 */
+  if(off&&!ids.length)p.push(ytOfflineHtml());
   p.push('<div class="yt-push-grid">');
   ids.forEach(function(id,i){
     p.push('<button class="yt-push-card" data-act="yt-random-open" data-id="'+escHtml(id)+'">'+
-      coverImgTag(ytThumb(id),coverAsset(i),'yt-cover')+
+      coverImgTag(ytThumb(id),coverAsset(i),'yt-cover',id)+
       '<span class="yp-t" id="yp-'+escHtml(id)+'">'+escHtml(off?('视频 '+id):'加载中…')+'</span></button>');
   });
   p.push('</div>');
@@ -7310,7 +7753,7 @@ function ytRenderRandomFeedLocal(cat){
       });
     });
   }
-  ytSetNow(null);
+  ytClearNowIfIdle();
 }
 function ytFetchTitleOnlyLegacy(id){
   const url='https://www.youtube.com/oembed?url='+encodeURIComponent('https://www.youtube.com/watch?v='+id)+'&format=json';
@@ -7345,9 +7788,9 @@ function ytmRenderRandomFeedLocal(){
   p.push('<div class="yt-push-head"><span>'+escHtml('随机推送')+'</span>');
   p.push('<button class="pillbtn small" data-act="ytm-refresh-feed">'+escHtml('换一批')+'</button></div>');
   p.push('<div class="yt-push-grid ytm-grid">');
-  ids.forEach(function(id){
+  ids.forEach(function(id,i){
     p.push('<button class="yt-push-card" data-act="ytm-random-open" data-id="'+escHtml(id)+'">'+
-      '<img class="yt-cover" loading="lazy" alt="" src="'+ytThumb(id)+'" onerror="ytCoverFail(this)">'+
+      coverImgTag(ytThumb(id),coverAsset(i),'yt-cover',id)+
       '<span class="yp-t" id="ypm-'+escHtml(id)+'">'+escHtml('加载中')+'…</span></button>');
   });
   p.push('</div>');
@@ -7999,23 +8442,33 @@ function camWireShutter(){
   },true);
 }
 /* ===== 桌面时钟/日历图标实时更新 ===== */
-const DESK_TICK={lastMin:-1,lastDay:-1,lastTz:'',lastLang:'',lastSec:-1,lastYear:-1,timer:null,raf:0};
-function deskClockSVG(d){
-  /* 表盘 / 圆环 / 径向渐变 / 画笔的比例都按 _reficons/clock.png 重绘：
-     蓝盘半径 = 白圆的 0.75，笔尖到蓝盘半径的 0.83，笔杆与笔尖成对开。
-     姿态按小时缓转：参考时刻（10:17）正好是参考姿态。 */
-  const m=d.getMinutes(), h=d.getHours()%12;
+const DESK_TICK={lastMin:-1,lastDay:-1,lastTz:'',lastLang:'',lastSec:-1,lastYear:-1,timer:null,raf:0,tzChanged:false};
+function deskClockSVG(d,fracSec){
+  /* 表盘 / 圆环 / 径向渐变 / 两根指针的比例都按 _reficons/clock.png 重绘：
+     蓝盘半径 = 白圆的 0.75，指针长度 53/48 与蓝盘半径 0.83 的关系照抄参考图。
+     参考图本来就是**两根独立指针**（不是一支对开笔）：
+       · 深色短针 = 时针，长 23，粗 12.7，#20224E→#2A2F63
+       · 白色长针 = 分针，长 29，粗 7.8，#DCE3F5→#EEF3FF
+     配色、粗细、长度、粉轴 r3.2 与参考图一模一样（一个像素都没改），
+     改的只是「每根针指向哪里」：
+       时针 = (h%12 + m/60) * 30      —— 0 点/12 点指正上，3 点指正右
+       分针 = (m + s/60) * 6          —— 0 分指正上，每分钟走 6°
+     所以两根针的位置和现在时间严格对应；分针按秒插值连续匀速走动，
+     肉眼随时能看到它在走。 */
+  const m=d.getMinutes(), s=d.getSeconds();
   const R_ICON=64, R_RING=61.8, R_DISC=48, HUB_X=61, HUB_Y=62;
-  const DARK_LEN=23, TIP_LEN=29, POSE=39.8;
+  const HOUR_LEN=23, MIN_LEN=29;
   const rot=function(len,ang){
     /* 屏幕坐标 y 向下：0° 指上，90° 指右 */
     const a=ang*Math.PI/180;
     return [(HUB_X+Math.sin(a)*len).toFixed(2), (HUB_Y-Math.cos(a)*len).toFixed(2)];
   };
-  const hFrac=h+m/60;
-  const delta=(hFrac-10.283)*30;      /* 10:17 时 delta=0，即参考姿态 */
-  const dk=rot(DARK_LEN,POSE+delta);
-  const tp=rot(TIP_LEN,POSE+180+delta);
+  /* fracSec 为空时按整秒取；由 rAF 走针时传入带小数的秒，得到逐帧连续的角度 */
+  const sFrac=(typeof fracSec==='number'&&isFinite(fracSec))?fracSec:(s+d.getMilliseconds()/1000);
+  const hourAng=(((d.getHours()%12)+m/60+sFrac/3600)%12)*30;   /* 时针：0..360 */
+  const minAng =((m+sFrac/60)%60)*6;                           /* 分针：0..360 */
+  const hh=rot(HOUR_LEN,hourAng);
+  const mm=rot(MIN_LEN,minAng);
   return '<svg viewBox="0 0 128 128" aria-hidden="true">'
     +'<circle cx="64" cy="64" r="'+R_ICON+'" fill="#FFFFFF"/>'
     +'<circle cx="64" cy="64" r="'+(R_ICON-0.4)+'" fill="#C9CFDC"/>'
@@ -8024,12 +8477,17 @@ function deskClockSVG(d){
     +'<defs><radialGradient id="ckDisc" cx="0.5" cy="0.42" r="0.62">'
       +'<stop offset="0" stop-color="#8FA3F6"/><stop offset=".45" stop-color="#7A90F3"/>'
       +'<stop offset="1" stop-color="#4B7CF4"/></radialGradient>'
-      +'<linearGradient id="ckPen" x1="0" y1="0" x2="0.5" y2="1">'
+      /* 指针必须用 userSpaceOnUse：默认的 objectBoundingBox 在直线恰好垂直/水平时
+         包围盒面积为 0，渐变解析不出来，整根针会被画成「无描边」而消失
+         （整点、整刻就是这种情况）。坐标取参考图那两根针的两个端点，
+         所以端点颜色与参考图完全一致。 */
+      +'<linearGradient id="ckPen" gradientUnits="userSpaceOnUse" x1="61" y1="39" x2="72.5" y2="85">'
       +'<stop offset="0" stop-color="#20224E"/><stop offset="1" stop-color="#2A2F63"/></linearGradient>'
-      +'<linearGradient id="ckTip" x1="0" y1="0" x2="0" y2="1">'
+      +'<linearGradient id="ckTip" gradientUnits="userSpaceOnUse" x1="61" y1="33" x2="61" y2="91">'
       +'<stop offset="0" stop-color="#DCE3F5"/><stop offset="1" stop-color="#EEF3FF"/></linearGradient></defs>'
-    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+dk[0]+'" y2="'+dk[1]+'" stroke="url(#ckPen)" stroke-width="12.7" stroke-linecap="round"/>'
-    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+tp[0]+'" y2="'+tp[1]+'" stroke="url(#ckTip)" stroke-width="7.8" stroke-linecap="round"/>'
+    /* 先画时针，再画分针：两针重叠时（整点）长针在上，符合真实钟表的观感 */
+    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+hh[0]+'" y2="'+hh[1]+'" stroke="url(#ckPen)" stroke-width="12.7" stroke-linecap="round"/>'
+    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+mm[0]+'" y2="'+mm[1]+'" stroke="url(#ckTip)" stroke-width="7.8" stroke-linecap="round"/>'
     +'<circle cx="'+HUB_X+'" cy="'+HUB_Y+'" r="3.2" fill="#E6B4D4"/>'
     +'</svg>';
 }
@@ -8049,7 +8507,7 @@ function deskCalendarSVG(d){
   const two=num.length>1;
   return '<svg viewBox="0 0 48 48" aria-hidden="true">'
     +'<circle cx="24" cy="24" r="24" fill="#FFFFFF"/>'
-    +'<g transform="translate(24 24) scale(0.114075) translate(-179 -174)">'
+    +'<g id="calDay" transform="translate(24 24) scale(0.114075) translate(-179 -174)">'
     +'<image href="'+CAL_ART+'" x="0" y="0" width="352" height="362"/>'
     +'<text x="'+(two?184:CAL_ONE[d.getDate()])+'" y="256" text-anchor="middle"'
     +' font-weight="400" font-size="202"'+(two?' letter-spacing="-13"':'')
@@ -8068,57 +8526,150 @@ function deskIconsTick(force){
     const secKey=Math.floor(d.getTime()/1000);
     const tzChanged=(DESK_TICK.lastTz&&DESK_TICK.lastTz!==tz)||(DESK_TICK.lastLang&&DESK_TICK.lastLang!==lang);
     const dayChanged=dayKey!==DESK_TICK.lastDay;
-    /* 无障碍：开启「减少动态效果」时只按分钟刷新，不做每秒重绘 */
+    /* 无障碍：开启「减少动态效果」时只按分钟刷新，不做逐秒重绘，也不播放跨天动画 */
     const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    const clockNeed=force||(reduce?minKey!==DESK_TICK.lastMin:secKey!==DESK_TICK.lastSec);
+    const clockWant=(typeof DESK_SWEEP!=='undefined')?DESK_SWEEP.want:null;   /* 逐帧走针时返回当前应画的角度（-1 表示本帧不用重画） */
+    const clockNeed=force||clockWant!==null||(reduce?minKey!==DESK_TICK.lastMin:secKey!==DESK_TICK.lastSec);
     const calNeed=force||dayChanged||tzChanged||secKey===0;
     if(!clockNeed&&!calNeed){
       /* 图标无需重绘时，状态栏时间仍要按分钟对齐刷新 */
       if(minKey!==DESK_TICK.lastMin){ DESK_TICK.lastMin=minKey; try{ if(typeof updateClock==='function')updateClock(); }catch(e){} }
       return;
     }
-    DESK_TICK.lastSec=secKey;DESK_TICK.lastMin=minKey;DESK_TICK.lastDay=dayKey;
+    if(force||clockWant===null||calNeed){ DESK_TICK.lastSec=secKey; }
+    DESK_TICK.lastMin=minKey;DESK_TICK.lastDay=dayKey;
     DESK_TICK.lastTz=tz;DESK_TICK.lastLang=lang;DESK_TICK.lastYear=d.getFullYear();
-    /* 同一帧内合并写入，避免连续两次重排 */
+    /* 同一帧内合并写入，避免连续两次重排（用包装函数，别把 rAF 的时间戳当成 force） */
     if(DESK_TICK.raf)return;
-    DESK_TICK.raf=requestAnimationFrame(function(){
-      DESK_TICK.raf=0;
-      try{
-        /* 在真正绘制的这一帧重新取时间：帧被延后时也不会画出旧时间 */
-        const dn=new Date();
-        const minNow=dn.getHours()*60+dn.getMinutes();
-        const secNow=Math.floor(dn.getTime()/1000);
-        const dayNow=dn.getFullYear()*10000+dn.getMonth()*100+dn.getDate();
-        /* 与「上一次真正画出来的状态」比较：帧在同一秒内执行时也能正确判断，
-           并且在时间被外部改动（系统校时 / 用户改时区）时一定会重绘 */
-        const offNow=(typeof window.__FAKE!=='undefined'&&window.__FAKE)?(window.__FAKE.offset||0):0;
-        const moved=offNow!==DESK_TICK.lastOffset;
-        const clockNow=force||moved||(reduce?minNow!==DESK_TICK.lastMin:secNow!==DESK_TICK.lastSec);
-        const calNow=force||moved||dayNow!==DESK_TICK.lastDay||tzChanged;
-        DESK_TICK.lastSec=secNow;DESK_TICK.lastMin=minNow;DESK_TICK.lastDay=dayNow;DESK_TICK.lastOffset=offNow;
-        if(clockNow){
-          const svg=deskClockSVG(dn);
-          document.querySelectorAll('.app-item[data-app="clock"] .app-icon').forEach(function(el){el.innerHTML=svg;});
-        }
-        if(calNow){
-          const svg=deskCalendarSVG(dn);
-          document.querySelectorAll('.app-item[data-app="calendar"] .app-icon').forEach(function(el){el.innerHTML=svg;});
-        }
-        document.querySelectorAll('.sd-head .app-icon').forEach(function(el){
+    DESK_TICK.raf=requestAnimationFrame(function(){ deskIconsPaint(0); });
+  }catch(e){}
+}
+/* 真正把图标画到 DOM 上：由 rAF 调用（合帧），也可以被同步强制调用（force=1） */
+function deskIconsPaint(force){
+  DESK_TICK.raf=0;
+  try{
+    /* 在真正绘制的这一帧重新取时间：帧被延后时也不会画出旧时间 */
+    const dn=new Date();
+    const minNow=dn.getHours()*60+dn.getMinutes();
+    const secNow=Math.floor(dn.getTime()/1000);
+    const dayNow=dn.getFullYear()*10000+dn.getMonth()*100+dn.getDate();
+    const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    /* 与「上一次真正画出来的状态」比较：帧在同一秒内执行时也能正确判断，
+       并且在时间被外部改动（系统校时 / 用户改时区）时一定会重绘 */
+    const offNow=(typeof window.__FAKE!=='undefined'&&window.__FAKE)?(window.__FAKE.offset||0):0;
+    const moved=offNow!==DESK_TICK.lastOffset;
+    const swWant=((typeof DESK_SWEEP!=='undefined')?DESK_SWEEP.want:null);
+    const clockNow=!!force||moved||swWant!==null||(reduce?minNow!==DESK_TICK.lastMin:secNow!==DESK_TICK.lastSec);
+    /* 抽屉/应用信息/商店页每次重建都会把图标写回静态参考位图（PNG），
+       所以「日历图标当前还是位图」本身就当作需要重画（自愈），
+       否则它要等到第二天 0 点才会恢复成动态版；时钟因为逐帧重画不会遇到这个问题 */
+    const calStale=Array.prototype.some.call(
+      document.querySelectorAll('[data-app="calendar"] .app-icon'),
+      function(el){ const c=el.firstElementChild; return !c||c.tagName.toLowerCase()!=='svg'||!el.querySelector('#calDay'); }
+    );
+    const calNow=!!force||moved||dayNow!==DESK_TICK.lastDay||!!DESK_TICK.tzChanged||calStale;
+    if(moved||swWant===null){ DESK_TICK.lastSec=secNow; }
+    DESK_TICK.tzChanged=false;
+    DESK_TICK.lastMin=minNow;DESK_TICK.lastDay=dayNow;DESK_TICK.lastOffset=offNow;
+    const swFrac=((typeof DESK_SWEEP!=='undefined')?DESK_SWEEP.frac:null);
+    const svgFrac=(typeof swFrac==='number')?swFrac:undefined;
+    if(clockNow||calNow){
+      /* 一个选择器把抽屉、应用信息页、商店页的图标一起覆盖（去重后只画一次） */
+      const seen=[];
+      document.querySelectorAll('[data-app] .app-icon').forEach(function(el){
+        try{
           const host=el.closest('[data-app]');
           if(!host)return;
-          if(host.dataset.app==='clock')el.innerHTML=deskClockSVG(dn);
-          if(host.dataset.app==='calendar')el.innerHTML=deskCalendarSVG(dn);
-        });
-        /* 状态栏时间：跟随时钟一起刷新，不再只依赖启动时的一次写入 */
-        try{ if(typeof updateClock==='function')updateClock(); }catch(e){}
-        const gd=document.getElementById('glanceDate');
-        if(gd&&(force||dayNow!==DESK_TICK.glanceDay)){
-          DESK_TICK.glanceDay=dayNow;
-          try{ gd.textContent=new Intl.DateTimeFormat(navigator.language||'zh-CN',
-            {month:'long',day:'numeric',weekday:'long'}).format(dn); }catch(e){}
-        }
-      }catch(e){}
+          const id=host.dataset.app;
+          if(id!=='clock'&&id!=='calendar')return;
+          if(seen.indexOf(el)>=0)return;
+          seen.push(el);
+          if(id==='clock'){ if(clockNow)el.innerHTML=deskClockSVG(dn,svgFrac); }
+          else if(calNow){ el.innerHTML=deskCalendarSVG(dn); }
+        }catch(e){}
+      });
+      if(calNow){
+        /* 跨天时给新一天的数字播一次「翻页」动画（图标本体与数字样式都不变） */
+        if(!reduce&&(moved||dayNow!==DESK_TICK.animDay)){ deskCalendarRoll(); }
+        DESK_TICK.animDay=dayNow;
+      }
+    }
+    /* 状态栏时间：跟随时钟一起刷新，不再只依赖启动时的一次写入 */
+    try{ if(typeof updateClock==='function')updateClock(); }catch(e){}
+    const gd=document.getElementById('glanceDate');
+    if(gd&&dayNow!==DESK_TICK.glanceDay){
+      DESK_TICK.glanceDay=dayNow;
+      try{ gd.textContent=new Intl.DateTimeFormat(navigator.language||'zh-CN',
+        {month:'long',day:'numeric',weekday:'long'}).format(dn); }catch(e){}
+    }
+  }catch(e){}
+}
+/* 需要「立刻画出来」的路径（测试 / 外部钩子）用这个：不经过 rAF 合帧，
+   保证同一个任务里改完时间就能读到新图标 */
+function deskIconsPaintNow(){
+  try{
+    if(DESK_TICK.raf){ cancelAnimationFrame(DESK_TICK.raf); DESK_TICK.raf=0; }
+    const d=new Date();
+    const tz=(Intl.DateTimeFormat().resolvedOptions().timeZone)||'';
+    const lang=navigator.language||'';
+    DESK_TICK.tzChanged=!!((DESK_TICK.lastTz&&DESK_TICK.lastTz!==tz)||(DESK_TICK.lastLang&&DESK_TICK.lastLang!==lang));
+    DESK_TICK.lastTz=tz;
+    DESK_TICK.lastLang=lang;
+    DESK_TICK.lastMin=d.getHours()*60+d.getMinutes();
+    DESK_TICK.lastDay=d.getFullYear()*10000+d.getMonth()*100+d.getDate();
+    DESK_TICK.lastSec=Math.floor(d.getTime()/1000);
+    DESK_TICK.lastOffset=(typeof window.__FAKE!=='undefined'&&window.__FAKE)?(window.__FAKE.offset||0):0;
+    if(typeof DESK_SWEEP!=='undefined')DESK_SWEEP.want=null;
+    deskIconsPaint(1);
+  }catch(e){}
+}
+/* ===== 秒级走针：让时钟图标肉眼可见地一直在走 =====
+   画笔每分钟整整一圈（6°/分钟），逐帧用 requestAnimationFrame 推进角度，
+   所以指针是连续匀速转动而不是每分钟跳一格；1 秒定时器仍保留，负责跨天、
+   时区、状态栏与兜底对齐。只有真正画到 DOM 上时才更新 lastSec，
+   保证保留的那条「同一秒内不重复重绘」的约束依旧成立。
+   「减少动态效果」开启时不启动，退回每分钟一格的静态刷新。 */
+const DESK_SWEEP={raf:0,frac:null,want:null,last:-1};
+function deskSweepFrame(){
+  DESK_SWEEP.raf=0;
+  try{
+    if(document.hidden||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){
+      DESK_SWEEP.want=null;DESK_SWEEP.frac=null;DESK_SWEEP.last=-1;
+      return;                                    /* 息屏/降级：停针，回前台由 visibilitychange 补画 */
+    }
+    const d=new Date();
+    const frac=d.getSeconds()+d.getMilliseconds()/1000;
+    /* 指针角度由秒决定：1 分钟 360°，每帧约 0.1°，肉眼可见地匀速走 */
+    if(DESK_SWEEP.last!==frac){ DESK_SWEEP.frac=frac; DESK_SWEEP.want=frac; }
+    deskIconsTick(false);
+  }catch(e){}
+  DESK_SWEEP.raf=requestAnimationFrame(deskSweepFrame);
+}
+/* 日历跨天：数字原地翻一下（淡出下移 → 淡入归位），底图与数字本身完全不改 */
+function deskCalendarRoll(){
+  try{
+    if(DESK_TICK.calTimer){ clearTimeout(DESK_TICK.calTimer); DESK_TICK.calTimer=0; }
+    document.querySelectorAll('.app-item[data-app="calendar"] .app-icon #calDay').forEach(function(g){
+      if(g.animate){
+        try{ g.animate(
+          [{opacity:1,transform:'translateY(0px) scale(1)'},
+           {opacity:0,transform:'translateY(7px) scale(0.9)'},
+           {opacity:0,transform:'translateY(-7px) scale(0.9)'},
+           {opacity:1,transform:'translateY(0px) scale(1)'}],
+          {duration:560,easing:'cubic-bezier(.2,0,0,1)'}); return; }catch(e){}
+      }
+      /* 没有 WAAPI 时的兜底：给整个图标做一次轻微缩放淡入，绝不动数字样式 */
+      const host=g.closest('.app-icon');
+      if(!host)return;
+      host.classList.remove('cal-roll');
+      void host.offsetWidth;
+      host.classList.add('cal-roll');
+      if(!DESK_TICK.calTimer){
+        DESK_TICK.calTimer=setTimeout(function(){
+          DESK_TICK.calTimer=0;
+          document.querySelectorAll('.app-icon.cal-roll').forEach(function(el){el.classList.remove('cal-roll');});
+        },460);
+      }
     });
   }catch(e){}
 }
@@ -8131,10 +8682,30 @@ function deskIconsStart(){
     /* 每 30 秒强制对齐一次，抵消定时器被节流造成的漂移（不引入第二个定时器） */
     if(!document.hidden&&++DESK_TICK.drift>=30){ DESK_TICK.drift=0; deskIconsTick(true); }
   },1000);
+  /* 秒级走针（rAF 只注册一次，内部自己续帧；拿不到 rAF 时 1 秒定时器照常兜底） */
+  try{
+    if(!DESK_SWEEP.raf&&typeof requestAnimationFrame==='function')DESK_SWEEP.raf=requestAnimationFrame(deskSweepFrame);
+  }catch(e){}
+  /* 「减少动态效果」是运行时可切换的：关掉后要马上恢复走针，不能等重新加载 */
+  try{
+    const rmq=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(rmq&&rmq.addEventListener&&!DESK_TICK.rmq){
+      DESK_TICK.rmq=rmq;
+      rmq.addEventListener('change',function(){
+        try{
+          if(!rmq.matches){
+            DESK_SWEEP.last=-1;
+            if(!DESK_SWEEP.raf&&typeof requestAnimationFrame==='function')DESK_SWEEP.raf=requestAnimationFrame(deskSweepFrame);
+          }
+          deskIconsTick(true);
+        }catch(e){}
+      });
+    }
+  }catch(e){}
   /* 回到前台 / 获得焦点 / 从缓存恢复 / 系统时间变化：立即强制补一次，保证不依赖手动刷新 */
   ['visibilitychange','focus','pageshow','resume'].forEach(function(ev){
     var target=(ev==='visibilitychange')?document:window;
-    target.addEventListener(ev,function(){ deskIconsTick(true); });
+    target.addEventListener(ev,function(){ DESK_SWEEP.last=-1;deskIconsTick(true); });
   });
   window.addEventListener('resize',function(){deskIconsTick(true);});
   /* 兜底校正并入同一个 1 秒定时器（计数触发），避免第二个定时器与调用方竞争状态 */
@@ -9472,8 +10043,12 @@ function chromeOpenExternal(url){
 function ytEmbedHelp(){
   let s=document.getElementById('ytHelpSheet');
   if(!s){
-    s=document.createElement('div');s.id='ytHelpSheet';s.className='sheet';
-    s.innerHTML='<div class="sheet-backdrop" data-act="yt-help-close"></div><div class="sheet-card" id="ytHelpCard"></div>';
+    s=document.createElement('div');s.id='ytHelpSheet';s.className='sheet-layer';
+    /* 与 #appMenu 相同的结构：遮罩与面板是兄弟，面板在遮罩之上；
+       旧写法把遮罩塞进 .sheet 里会盖住面板（压暗 + 抢走点击）。
+       内部 .sheet 常驻 on，这样开合只需切换本层的 on，调用方无需改动。 */
+    s.innerHTML='<div class="sheet-backdrop" data-act="yt-help-close"></div>'+
+      '<div class="sheet on"><div class="sheet-card" id="ytHelpCard"></div></div>';
     document.querySelector('#screen').appendChild(s);
   }
   const p=[];
@@ -9526,9 +10101,9 @@ function ytMountPlayer(v,opt){
         onReady:function(){ytClearError();ytSyncTitleFromPlayer();},
         onStateChange:function(ev){if(ev&&ev.data===0){ytSyncTitleFromPlayer();}},
         onError:function(e){
-          const code=e&&e.data;
-          ytErrorBox(code);
-          toast('播放失败'+' · Error '+code);
+          /* 未联网：给「未联网」状态；在线播放失败只留一句轻提示，不再弹调试面板 */
+          if(!netOnline()){ ytSyncPlayerOffline(); return; }
+          toast('无法播放该视频');
         }
       }};
       if(ytHost==='nocookie')cfg.host='https://www.youtube-nocookie.com';   /* 官方 API 的 host 选项：隐私保护增强模式 */
@@ -9544,12 +10119,12 @@ function ytPlainIframe(v,opt){
   const url=ytEmbedUrl(v.id,ytHost,opt||{list:v.list||null,start:v.start||0,cc:ytCc});
   stage.innerHTML='<iframe id="ytFrame" class="yt-frame" src="'+url+'" title="'+escHtml(v.t||'')+'" allow="'+__allow+'" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
   const fr=document.getElementById('ytFrame');
-  if(fr)fr.addEventListener('load',function(){ytFrameLoaded=true;const fb=document.getElementById('ytFallback');if(fb)fb.classList.remove('show');});
+  if(fr)fr.addEventListener('load',function(){ytFrameLoaded=true;ytShowFallbackBar();});
   if(ytFrameTimer){clearTimeout(ytFrameTimer);ytFrameTimer=null;}
   ytFrameTimer=setTimeout(function(){
     if(ytFrameLoaded)return;
-    const fb=document.getElementById('ytFallback');if(fb)fb.classList.add('show');
-    toast('视频未加载：可切换域名或在浏览器打开');
+    /* 加载不出来时不再弹任何排错卡片：离线给「未联网」状态，在线则保持安静 */
+    if(!netOnline())ytSyncPlayerOffline();
   },8000);
 }
 function ytLoadEmbed(v,host){
@@ -9560,28 +10135,13 @@ function ytLoadEmbed(v,host){
   if(host)ytHost=host;
   ytMountPlayer(v,{list:v.list||null,start:v.start||0,cc:ytCc});
 }
-function ytShowFallbackBar(v){
-  const player=document.getElementById('ytPlayer');
-  if(!player)return;
-  let bar=document.getElementById('ytFallback');
-  if(!bar){
-    bar=document.createElement('div');bar.id='ytFallback';bar.className='yt-fallback';
-    const body=player.querySelector('.appbody')||player;
-    body.appendChild(bar);
-  }
-  const idTxt=escHtml(v&&v.id?v.id:'');
-  const isFile=(location.protocol==='file:');
-  const hostTxt=(ytHost==='nocookie')?'改用 www.youtube.com':'改用 youtube-nocookie';
-  const isFileTxt=(location.protocol==='file:');
-  bar.innerHTML='<div class="yf-t">'+escHtml('视频未能加载，可尝试以下方式')+(isFile?'（当前为 file:// 打开，建议用 http(s) 或本地服务器）':'')+'</div>'
-    +'<div class="yf-btns">'
-    +'<button class="pillbtn" data-act="yt-retry">'+escHtml('重新加载')+'</button>'
-    +'<button class="pillbtn" data-act="yt-open-ext" data-id="'+idTxt+'">'+escHtml('在浏览器打开')+'</button>'
-    +'<button class="pillbtn" data-act="yt-switch-host">'+escHtml(hostTxt)+'</button>'
-    +'<button class="pillbtn" data-act="yt-cc">'+escHtml(ytCc?'关闭字幕':'开启字幕')+'</button>'
-    +'<button class="pillbtn" data-act="yt-embed-help">'+escHtml('嵌入规范')+'</button>'
-    +'<button class="pillbtn" data-act="yt-use-local">'+escHtml('改用本地示例影片')+'</button>'
-    +'</div>';
+/* 「视频未能加载，可尝试以下方式」那张排错卡片已按需求彻底移除：任何情况下都不再出现。
+   保留同名函数只是为了让原有调用点（ytOpenReal / yt-switch-host / yt-cc）不用改，
+   它现在的唯一作用是把历史节点清掉；连不上时统一由「未联网」状态表达。 */
+function ytShowFallbackBar(){
+  const fb=document.getElementById('ytFallback');
+  if(fb)fb.remove();
+  return false;
 }
 function ytLoadMedia(v){
   const stage=document.getElementById('ytStage');
@@ -9594,7 +10154,8 @@ function ytLoadMedia(v){
   const m=document.getElementById('ytMedia');
   if(m){
     m.addEventListener('error',()=>{
-      const n=document.getElementById('ytErr'); if(n)n.textContent='加载失败：请检查网络或改用本地示例影片';
+      /* 中性文案：不再输出「请检查网络 / 改用本地示例影片」这类操作指引 */
+      const n=document.getElementById('ytErr'); if(n)n.textContent='无法播放该视频';
     });
     m.addEventListener('timeupdate',()=>{
       const b=document.getElementById('ytProg');
@@ -9609,11 +10170,10 @@ function ytOpenReal(v){
   player.classList.add('on');   /* 打开播放面板（缺这步面板尺寸为 0，看不到画面） */
   const __feed=document.getElementById('ytFeed');if(__feed)__feed.classList.remove('on');
   const tEl=document.getElementById('ytTitle'), mEl=document.getElementById('ytMeta');
-  const __real=(v&&(v.id||v.list)&&!v.local)?v:null;
   if(tEl)tEl.textContent=v.t;
   if(mEl)mEl.textContent=v.ch+' · '+v.d+' · '+(v.local?'本地内嵌':(v.v?v.v+' · ':'')+(v.list?'播放列表':'youtu.be 在线视频'));
-  if(__real)ytShowFallbackBar(v);else{const fb=document.getElementById('ytFallback');if(fb)fb.remove();}
-  if(__real&&location.protocol==='file:')ytErrorBox(153);   /* file:// 必然缺 Referer，直接给出 Error 153 说明与解法 */
+  ytShowFallbackBar();   /* 只做清理：排错卡片与报错面板都已彻底移除 */
+  ytErrorBox();          /* 同上 */
   let stage=document.getElementById('ytStage');
   if(!stage){stage=document.createElement('div');stage.id='ytStage';stage.className='yt-stage';}
   const __hdr=player.querySelector('header.appbar');
@@ -10109,7 +10669,7 @@ let s=document.getElementById(id);
     s=document.createElement('div');
     s.id=id;s.className='sheet-layer';
     s.innerHTML='<div class="sheet-backdrop" data-act="fs-sheet-close"></div>'+
-      '<div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" id="'+id+'T"></div>'+
+      '<div class="sheet on"><div class="sheet-handle"></div><div class="sheet-title" id="'+id+'T"></div>'+
       '<div id="'+id+'B"></div></div>';
     document.getElementById('app-files').appendChild(s);
   }
@@ -10244,8 +10804,10 @@ function filesMoveSheet(){
   if(!sec)return;
   let sheet=sec.querySelector('#filesMoveSheet');
   if(!sheet){
-    sheet=document.createElement('div');sheet.id='filesMoveSheet';sheet.className='sheet';
-    sheet.innerHTML='<div class="sheet-backdrop" data-act="files-move-cancel"></div><div class="sheet-card"><div class="sheet-title">'+'移动到'+'</div><div id="filesMoveList"></div></div>';
+    sheet=document.createElement('div');sheet.id='filesMoveSheet';sheet.className='sheet-layer';
+    /* 同 #appMenu：遮罩与面板为兄弟节点，面板才不会被遮罩盖住（压暗 + 无法点击） */
+    sheet.innerHTML='<div class="sheet-backdrop" data-act="files-move-cancel"></div>'+
+      '<div class="sheet on"><div class="sheet-card"><div class="sheet-title">'+'移动到'+'</div><div id="filesMoveList"></div></div></div>';
     sec.appendChild(sheet);
   }
   const list=sheet.querySelector('#filesMoveList');
@@ -11302,7 +11864,7 @@ function driveSheet(kind,title,body){
     s=document.createElement('div');
     s.id='driveSheet';s.className='sheet-layer';
     s.innerHTML='<div class="sheet-backdrop" data-act="drive-sheet-close"></div>'+
-      '<div class="sheet"><div class="sheet-handle"></div>'+
+      '<div class="sheet on"><div class="sheet-handle"></div>'+
       '<div class="sheet-title" id="driveSheetTitle"></div><div id="driveSheetBody"></div></div>';
     document.getElementById('app-drive').appendChild(s);
   }
@@ -11533,11 +12095,11 @@ function renderYt(){
   if(!host)return;
   host.classList.add('on');
   if(!netOnline()){host.innerHTML=ytOfflineHtml();return;}
-  const ids=ytRandomFeedFresh(6);
+  const ids=ytRandomFeedFresh(6,'home');
   host.innerHTML='<div class="yt-push-head"><span>推荐</span></div><div class="yt-push-grid">'+
     ids.map(function(id,i){
       return '<button class="yt-push-card" data-act="yt-random-open" data-id="'+escHtml(id)+'">'+
-        coverImgTag(ytThumb(id),coverAsset(i),'yt-cover')+
+        coverImgTag(ytThumb(id),coverAsset(i),'yt-cover',id)+
         '<span class="yp-t" id="yp-'+escHtml(id)+'">加载中…</span></button>';
     }).join('')+'</div>';
   ytBatchTitles(ids,function(map){
@@ -11546,7 +12108,7 @@ function renderYt(){
       if(el)el.textContent=map[id]||('视频 '+id);
     });
   });
-  ytSetNow(null);
+  ytClearNowIfIdle();
 }
 function openVideo(i){
   const v=YT_FEED[i];
@@ -14719,8 +15281,11 @@ function acctSwitchSheet(){
   let sheet=document.getElementById('acctSheet');
   if(!sheet){
     const host=document.querySelector('#screen');
-    sheet=document.createElement('div');sheet.id='acctSheet';sheet.className='sheet';
-    sheet.innerHTML='<div class="sheet-backdrop" data-act="acct-sheet-close"></div><div class="sheet-card"><div class="sheet-title">'+'切换账号'+'</div><div id="acctList"></div><button class="pillbtn" style="width:100%;margin-top:8px" data-act="acct-add">'+'添加其他账号'+'</button></div>';
+    sheet=document.createElement('div');sheet.id='acctSheet';sheet.className='sheet-layer';
+    /* 同 #appMenu：遮罩与面板为兄弟节点，面板才不会被遮罩盖住（压暗 + 无法点击） */
+    sheet.innerHTML='<div class="sheet-backdrop" data-act="acct-sheet-close"></div>'+
+      '<div class="sheet on"><div class="sheet-card"><div class="sheet-title">'+'切换账号'+'</div><div id="acctList"></div>'+
+      '<button class="pillbtn" style="width:100%;margin-top:8px" data-act="acct-add">'+'添加其他账号'+'</button></div></div>';
     host.appendChild(sheet);
   }
   const list=sheet.querySelector('#acctList');
@@ -15098,8 +15663,11 @@ const APP_FUNC={
     return '<div class="chipline">'+chips.map(c=>`<button class="ph-chip${gmailChip===c[0]?' on':''}" data-act="gmail-chip" data-k="${c[0]}">${c[1]}</button>`).join('')+'</div>';
   },
   youtube(){
-    const cats=[['all','全部'],['音乐','音乐'],['游戏','游戏'],['科技','科技']];
-    return '<div class="chipline">'+cats.map(c=>`<button class="ph-chip${ytChip===c[0]?' on':''}" data-act="yt-chip" data-k="${c[0]}">${c[1]}</button>`).join('')+'</div>';
+    /* 首页推送不分栏目：这里不再注入分类 chip 行。
+       旧实现在 #ytFeed 前面又插了一排「全部/音乐/游戏/科技」，
+       和 #ytChips 里的分类重复，看起来像两排栏目。
+       tab 栏（我的/关注/Shorts）统一由 ytRenderChips() 渲染。 */
+    return '';
   },
   play(){
     const installed=Object.keys(STORE_STATE).filter(k=>STORE_STATE[k]==='installed');
@@ -15461,12 +16029,19 @@ function scheduleSecondaryRender(){
     secondaryRenderTimer=setTimeout(run,0);
   }
 }
-/* 网络状态变化时刷新 YouTube 的离线提示与内容（任务 6） */
+/* 网络状态变化时刷新 YouTube 的离线提示与内容（任务 6）
+   只动 YouTube 应用与状态栏，其他界面完全不受影响。 */
 addEventListener('netchange',function(){
   try{
+    const online=netOnline();
     if(typeof ytSyncOfflineBar==='function')ytSyncOfflineBar();
+    if(typeof ytSyncPlayerOffline==='function')ytSyncPlayerOffline();
     const ytEl=document.getElementById('app-youtube');
-    if(ytEl&&ytEl.classList.contains('on')&&typeof renderYt==='function')renderYt();
+    if(ytEl&&ytEl.classList.contains('on')){
+      /* 恢复联网：先让播放器自己回到正常状态，再刷新首页推送 */
+      if(online&&typeof ytRecoverPlayer==='function')ytRecoverPlayer();
+      if(typeof renderYt==='function')renderYt();
+    }
   }catch(e){}
 });
 /* ============ 初始化 ============ */
@@ -15928,7 +16503,7 @@ function init(){
         const nm=el.dataset.name||'';
         const followed=ytToggleFollow(nm,el.dataset.sub||'');
         toast(followed?('已关注 '+nm):('已取消关注 '+nm));
-        renderYt();
+        ytRefreshAfterFollow();
         break;
       }
       case 'yt-short-follow':{
@@ -15936,7 +16511,7 @@ function init(){
         const snm=(sv&&sv.ch)||('频道 '+String(el.dataset.id||'').slice(0,6));
         const sfol=ytToggleFollow(snm,'来自 Shorts');
         toast(sfol?('已关注 '+snm):('已取消关注 '+snm));
-        renderYt();
+        ytRefreshAfterFollow();
         break;
       }
       case 'yt-retry-net':{
@@ -16806,8 +17381,10 @@ function init(){
       case 'cast-pick':castPick(el.dataset.id);break;
       case 'cast-close':castClose();break;
       case 'cast-stop':castStop();break;
-      case 'cast-retry':castOpen();break;
-      case 'cast-play':{castPlaying=!castPlaying;renderCast();toast(castPlaying?'继续播放':'已暂停');break;}
+      case 'cast-retry':castRetry();break;
+      case 'cast-again':{castDev=null;castState='idle';castLastErr='';renderCast();castScan();break;}
+      case 'cast-scan':castScan();break;
+      case 'cast-play':{castPlaying=!castPlaying;renderCast();toast(castPlaying?'继续播放':'已暂停投屏');break;}
       case 'cast-toggle':castOpen();break;
       case 'cast-legacy-toggle':{
         castOn=!castOn;
