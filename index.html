@@ -836,8 +836,8 @@ html.dark .gb-key.fn{color:#9A9AA1}
 .chipline::-webkit-scrollbar{display:none}
 .mail-row.unread .row-title{font-weight:700}
 .mail-row.unread .row-sub{color:var(--txt)}
-#app-chrome.incog .chrome-bar{background:#2B2B30;color:#E3E3E3}
-#app-chrome.incog .urlbar{background:#3C3C43;color:#E3E3E3}
+#app-chrome.incog .chrome-bar,#app-google.incog .chrome-bar{background:#2B2B30;color:#E3E3E3}
+#app-chrome.incog .urlbar,#app-google.incog .urlbar{background:#3C3C43;color:#E3E3E3}
 .incog-badge{display:flex;align-items:center;gap:8px;background:#3C3C43;color:#E3E3E3;border-radius:16px;padding:10px 14px;font-size:12.5px;margin:2px 0 8px}
 .incog-badge svg{width:18px;height:18px;fill:currentColor;flex:none}
 /* T-Mobile 用量条</ 通用详情页收藏态 */
@@ -1283,12 +1283,16 @@ html.dark .dpv-table td{border-top-color:#4a4b50}
 .ac-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-size:11.5px;color:var(--txt2)}
 .ac-legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
 /* ==== 远程浏览器（Chrome 风格，嵌在 Chrome 应用内） ==== */
-.cr-wrap{position:absolute;inset:0;display:none;flex-direction:column;background:#202124;z-index:6}
+/* 远程浏览器：整块占满应用区，但要给底部手势导航条让出 --nav-h，
+   否则 .cr-bar（46px）会压在导航条下面 → 看起来“被遮挡 / 装不下手机框” */
+.cr-wrap{position:absolute;inset:0 0 var(--nav-h) 0;display:none;flex-direction:column;background:#202124;z-index:6}
 .cr-wrap.cr-on{display:flex}
 .cr-progress{height:2px;background:transparent;flex:none}.cr-progress i{display:block;height:100%;width:0;background:#8ab4f8;transition:width .25s}
-.cr-stage{position:relative;flex:1;min-height:0;background:#000;overflow:hidden}
-.cr-canvas{width:100%;height:100%;display:block;object-fit:fill;background:#000}
-.cr-stage{display:flex}
+/* 画布按远端视口比例居中留边（letterbox）：不拉伸变形，
+   也让 crPoint() 的换算与真实显示位置严格一致 */
+.cr-stage{position:relative;flex:1;min-height:0;background:#000;overflow:hidden;
+  display:flex;align-items:center;justify-content:center}
+.cr-canvas{display:block;background:#000;max-width:100%;max-height:100%}
 .cr-overlay{position:absolute;inset:0;outline:none;touch-action:none}
 .cr-kb{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0}
 .cr-hint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#9aa0a6;font-size:12.5px;text-align:center;padding:0 18px;pointer-events:none}
@@ -1722,13 +1726,37 @@ img.ytm-cover.now{width:40px;height:40px}
 /* chrome */
 .chrome-bar{background:var(--bg1);box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .urlbar{flex:1;height:40px;margin:0 4px;background:var(--bg2);border-radius:22px;padding:0 14px;font-size:13.5px;color:var(--txt);min-width:0}
-.chrome-home{padding:44px 22px 0;display:flex;flex-direction:column;align-items:center;gap:20px}
-.g-big svg{width:76px;height:76px}
-.g-big img{width:76px;height:76px;display:block;margin:0 auto}
-.chrome-search{display:flex;align-items:center;gap:8px;width:100%;height:48px;background:var(--bg1);border-radius:24px;padding:0 10px 0 16px;box-shadow:0 1px 5px rgba(0,0,0,.09)}
-.chrome-search input{flex:1;font-size:14px}
-.chrome-chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.chrome-chips span{padding:8px 16px;border-radius:18px;background:var(--bg1);font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+/* ===== Chrome 新标签页（照搬真机 Chrome NTP）
+   Google 标志 → 圆角搜索框（放大镜 + 麦克风 + Lens）→ 快捷方式磁贴 → Discover 信息流 ===== */
+.chrome-home{padding:20px 14px 0;display:flex;flex-direction:column;gap:16px;text-align:left}
+.chrome-home .g-big{display:flex;justify-content:center;padding:2px 0 4px}
+.chrome-home .g-big img,.chrome-home .g-big svg{height:52px;width:auto;max-width:170px;display:block;margin:0}
+.chrome-search{display:flex;align-items:center;gap:4px;width:100%;height:50px;background:var(--bg1);
+  border-radius:25px;padding:0 6px 0 14px;box-shadow:0 1px 6px rgba(0,0,0,.10)}
+.chrome-search>i{display:flex;flex:none;color:var(--txt3)}
+.chrome-search>i svg{width:19px;height:19px;fill:currentColor}
+.chrome-search input{flex:1 1 auto;min-width:0;font-size:14px;background:none;border:0;outline:none;color:var(--txt)}
+.chrome-search .cs-ico{width:36px;height:36px;flex:none;border-radius:50%;color:var(--txt2)}
+.chrome-search .cs-ico svg{width:19px;height:19px;fill:currentColor}
+/* 快捷方式：4 列圆形图标磁贴（真机默认一行 4 个） */
+.chrome-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px;padding:2px 2px 0}
+.cs-item{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;
+  color:var(--txt);min-width:0;padding:0}
+.cs-fav{width:48px;height:48px;border-radius:50%;background:var(--bg1);display:flex;align-items:center;
+  justify-content:center;color:#fff;font-size:17px;font-weight:600;overflow:hidden;flex:none;
+  box-shadow:0 1px 4px rgba(0,0,0,.10)}
+.cs-fav img{width:22px;height:22px;object-fit:contain}
+.cs-lbl{font-size:11px;color:var(--txt2);max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;text-align:center}
+/* Discover 信息流卡片 */
+.chrome-discover{display:flex;flex-direction:column;gap:10px;padding-bottom:8px}
+.cs-card{display:flex;gap:12px;align-items:flex-start;background:var(--bg1);border-radius:18px;padding:12px;
+  text-align:left;color:var(--txt);box-shadow:0 1px 4px rgba(0,0,0,.05);width:100%}
+.cs-thumb{width:62px;height:62px;border-radius:14px;flex:none}
+.cs-card-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px}
+.cs-card-src{font-size:10.5px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cs-card-t{font-size:13px;font-weight:500;line-height:1.35;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .results-head{display:flex;align-items:center;gap:2px;padding:4px 8px;border-bottom:1px solid var(--divider);font-weight:500;background:var(--bg1)}
 .res-list{padding:4px 16px 70px}
 .result-card{padding:13px 2px;border-bottom:1px solid var(--divider)}
@@ -2238,8 +2266,11 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
 .yt-chipline .chipsep{width:1px;height:18px;background:var(--divider);flex:none;margin:0 2px}
 .ph-chip.sub{font-size:11.5px;padding:5px 11px;opacity:.85}
 .yt-push-head .yp-count{font-size:12px;color:var(--txt3);font-weight:400}
-.yt-ch-list{display:flex;flex-direction:column}
-.yt-ch-row{display:flex;align-items:center;gap:11px;padding:10px 14px}
+/* ===== YouTube 关注列表：整列左对齐 =====
+   行内固定为「头像 | 文字块 | 关注按钮」，文字块左对齐、按钮靠右不参与伸缩。 */
+.yt-ch-list{display:flex;flex-direction:column;align-items:stretch;text-align:left;min-width:0}
+.yt-ch-row{display:flex;align-items:center;justify-content:flex-start;gap:11px;padding:10px 14px;
+  text-align:left;min-width:0}
 /* 作者样式里的 display:flex 会盖过 UA 的 [hidden]{display:none}，必须显式补一条 */
 .yt-now-ch[hidden]{display:none}
 .yt-now-ch{padding:8px 2px 2px;gap:10px}
@@ -2247,19 +2278,51 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
 .yt-now-ch .yt-ch-s{font-size:11.5px;color:var(--txt2)}
 .yt-ch-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   color:#fff;font-size:16px;font-weight:600;flex:none}
-.yt-ch-main{flex:1;min-width:0;display:flex;flex-direction:column}
-.yt-ch-n{font-size:14px;color:var(--txt);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.yt-ch-s{font-size:11.5px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.yt-shorts{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 12px 20px}
-.yt-short{display:flex;flex-direction:column;gap:6px}
-.yt-short-card{position:relative;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#111;
+.yt-ch-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
+  align-items:flex-start;text-align:left}
+.yt-ch-n{font-size:14px;color:var(--txt);font-weight:500;text-align:left;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yt-ch-s{font-size:11.5px;color:var(--txt3);text-align:left;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 关注按钮不参与伸缩：窄屏下也不会被文字挤扁或挤出屏幕 */
+.yt-ch-row>.pillbtn{flex:none;white-space:nowrap}
+/* 「关注」空状态与列表保持同一左基线（其余空状态仍居中） */
+.yt-empty.yt-empty-left{align-items:flex-start;text-align:left;padding-left:14px}
+.yt-empty.yt-empty-left .ye-s,.yt-empty.yt-empty-left .ye-t{text-align:left}
+/* ===== YouTube Shorts：适配手机框（360×808 逻辑画布，整机由 fit() 统一缩放）=====
+   要点：① 列数按可用宽度自适应；② 卡片高度封顶，矮屏/横屏也不会顶出可视区；
+        ③ 文字块与按钮都不参与横向溢出；④ 叠加层不吃点击。 */
+.yt-shorts{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));
+  gap:10px;padding:8px 12px 20px;align-items:start}
+.yt-short{display:flex;flex-direction:column;gap:6px;min-width:0;max-width:100%}
+.yt-short-card{position:relative;width:100%;aspect-ratio:9/16;max-height:230px;
+  border-radius:16px;overflow:hidden;background:#111;
   display:flex;align-items:center;justify-content:center;color:#fff}
 .yt-short-card .yt-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.yt-short-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55))}
-.yt-short-card .ys-play{position:relative;z-index:2;opacity:.92;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
-.yt-short-meta{display:flex;align-items:center;gap:6px}
-.yt-short-meta .ys-t{flex:1;font-size:12px;color:var(--txt2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yt-short-card::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55))}
+.yt-short-card .ys-play{position:relative;z-index:2;opacity:.92;pointer-events:none;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.yt-short-card .ys-play svg{width:30px;height:30px;display:block}
+.yt-short-meta{display:flex;align-items:center;gap:6px;min-width:0}
+.yt-short-meta .ys-t{flex:1 1 auto;min-width:0;font-size:12px;color:var(--txt2);text-align:left;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yt-short-meta>.pillbtn{flex:none;white-space:nowrap;height:26px;padding:0 10px;border-radius:13px;font-size:11.5px}
 .yt-thumb.cover-failed{background:linear-gradient(135deg,#3c4043,#202124);color:#fff}
+/* ===== YouTube Music：与 YouTube 应用同款卡片 + 收藏角标 ===== */
+.ytm-cell{position:relative;min-width:0}
+.ytm-fav{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;
+  background:rgba(0,0,0,.55);color:#fff;font-size:15px;line-height:1;display:flex;align-items:center;
+  justify-content:center;z-index:3;transition:transform .12s,background .16s}
+.ytm-fav.on{background:var(--primary);color:var(--onp)}
+.ytm-fav:active{transform:scale(.9)}
+.ytm-hero{display:flex;align-items:center;justify-content:center;padding:12px 0 4px}
+.ytm-art{width:190px;height:190px;border-radius:18px;overflow:hidden;background:var(--bg1);
+  display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+.ytm-art .yt-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ytm-btns{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0 2px}
+.ytm-btns .pillbtn{flex:1 1 auto;min-width:74px;height:40px;border-radius:20px;padding:0 12px;font-size:13px}
+.ytm-src{font-size:11px;color:var(--txt3);padding:10px 0 4px}
 .yt-thumb.cover-failed::before{content:'';width:26px;height:26px;border-radius:50%;
   background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
 .pillbtn.primary{border-color:transparent}
@@ -2736,14 +2799,12 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
                 <div class="g-big" id="chromeG"></div>
                 <div class="chrome-search">
                   <i data-ic="search"></i>
-                  <input id="chromeInput" placeholder="在 Google 上搜索，或输入网址">
-                  <button class="iconbtn" data-act="chrome-voice"><i data-ic="mic"></i></button>
+                  <input id="chromeInput" placeholder="搜索或输入网址" spellcheck="false" autocomplete="off">
+                  <button class="iconbtn cs-ico" data-act="chrome-voice" aria-label="语音搜索"><i data-ic="mic"></i></button>
+                  <button class="iconbtn cs-ico" data-act="chrome-lens" aria-label="用 Google Lens 搜索"><i data-ic="image"></i></button>
                 </div>
-                <div class="chrome-chips">
-                  <span data-act="chrome-chip" data-q="天气">天气</span>
-                  <span data-act="chrome-chip" data-q="翻译">翻译</span>
-                  <span data-act="chrome-chip" data-q="新闻">新闻</span>
-                </div>
+                <div class="chrome-shortcuts" id="chromeShortcuts"></div>
+                <div class="chrome-discover" id="chromeDiscover"></div>
               </div>
               <div id="chromeResults" class="hidden">
                 <div class="results-head">
@@ -5340,6 +5401,8 @@ function appOpenAnim(id){
   return true;
 }
 function openApp(id){
+  /* Google 与 Chrome 共用同一套 Chrome 界面 DOM：先把界面搬到要打开的这个窗口 */
+  try{ chromeUiMount(id); }catch(e){}
   /* 相机→相册 转场：相机窗口左移淡出，相册窗口从右侧并列滑入淡入 */
   try{
     if(app==='camera'&&id==='photos'&&typeof setScreen==='function'){
@@ -5417,7 +5480,9 @@ function openApp(id){
   if(id==='tmobile')setTimeout(()=>{try{tmoEnsureUI();}catch(e){}},40);
   if(id==='clock')setTimeout(()=>{try{clkGeoMount();swRestyle();swCenterFix();}catch(e){}},60);   /* 设置页补账户入口(MOMO)与头像 */
   setTimeout(()=>{try{acctEnsureAppAvatars();document.querySelectorAll('.acct-float').forEach(function(f){f.remove();});}catch(e){}},40);
-  if(id==='google')setTimeout(function(){try{renderGoogleApp();gRenderChips();gRenderResults();gRenderDiscover();}catch(e){}},40);
+  /* Google 应用原先在这里构建自己的搜索页（renderGoogleApp 会整块重写 #app-google）。
+     现在 Google 与 Chrome 共用同一套浏览器界面，这套构建已移除，
+     否则它会把搬进 #app-google 的浏览器界面整块冲掉。 */
 
   if(id==='youtube')setTimeout(()=>{try{
     ytPurgePresets();ytRenderRandomFeed();
@@ -5433,17 +5498,19 @@ function openApp(id){
       }).catch(function(err){if(host)host.innerHTML='<div class="ph-none">'+escHtml('搜索失败（检查 API Key 与配额）')+'：'+escHtml(String(err.message||err))+'</div>';});
     });
   }catch(e){}},60);
-  if(id==='chrome')setTimeout(()=>{try{crEnterRemote();}catch(e){}},70);
-  if(id==='chrome')setTimeout(()=>{try{crHideLegacy();}catch(e){}},90);
-  if(id==='ytmusic')setTimeout(()=>{try{ytPurgePresets();ytmRenderRandomFeed();
-    ytEnsureSearchBar('app-ytmusic','ytmApiSearch','搜索音乐（官方 API）',function(q){
-      const host=document.getElementById('ytmFeed');
-      if(host)host.innerHTML='<div class="ph-none">'+escHtml('搜索中')+'…</div>';
-      ytApiSearch(q,{max:12,cat:'10'}).then(function(items){
-        if(!items.length){toast('没有找到相关内容');return;}
-        ytRenderItems(host,items,{title:'搜索结果'+' · '+q,refreshAct:'ytm-search-again',
-          onRefresh:function(){ ytSearchAgain('music',q); }});
-      }).catch(function(err){if(host)host.innerHTML='<div class="ph-none">'+escHtml('搜索失败（检查 API Key 与配额）')+'：'+escHtml(String(err.message||err))+'</div>';});
+  /* Chrome 与 Google 现在是同一套浏览器界面：打开就停在新标签页，不上来就抢屏去连远程；
+     用户搜索/输入网址时才进入远程画面并加载真实页面。
+     （原 Google 应用自带的搜索页不再构建 —— 它的入口已经被浏览器界面取代） */
+  if(id==='chrome'||id==='google')setTimeout(function(){try{renderChromeNtp();}catch(e){}try{crExitToHome();}catch(e){}},70);
+  if(id==='ytmusic')setTimeout(()=>{try{
+    ytmEnsureUI();               /* 换成 YouTube 同款界面（tab 栏 + 推送网格 + 播放页） */
+    ytmPurgeLegacy();            /* 清掉旧的列表/电台占位内容 */
+    ytmFavLoad();
+    ytmRenderChips();
+    ytmRenderFeed();
+    ytmBridgeProbe();            /* 后台探测 ytmusicapi 桥，可用就换成真实歌曲 */
+    ytEnsureSearchBar('app-ytmusic','ytmApiSearch','搜索歌曲（YouTube Music）',function(q){
+      ytmSearchSongs(q);
     });
   }catch(e){}},60);
   if(id==='drive')setTimeout(()=>{try{driveRenderRecent()}catch(e){}},50);
@@ -7457,7 +7524,7 @@ function ytRenderSubs(){
   const p=[];
   p.push('<div class="yt-push-head"><span>关注</span><span class="yp-count">'+YT_SUBS.length+' 个频道</span></div>');
   if(!YT_SUBS.length){
-    p.push('<div class="yt-empty"><div class="ye-ic">'+mi(M.subscriptions)+'</div>'+
+    p.push('<div class="yt-empty yt-empty-left"><div class="ye-ic">'+mi(M.subscriptions)+'</div>'+
       '<div class="ye-t">还没有关注的频道</div>'+
       '<div class="ye-s">在视频页点「关注」，频道就会出现在这里</div>'+
       '<button class="pillbtn primary" data-act="yt-tab" data-k="all">去看看视频</button></div>');
@@ -7762,7 +7829,285 @@ function ytFetchTitleOnlyLegacy(id){
     .catch(function(){return null;});
 }
 
-/* ---------- YouTube Music：单条 tab 栏 + 随机推送 ---------- */
+/* ================= YouTube Music（ytmusicapi 桥接 + 本地兜底） =================
+   数据来源优先级：
+     ① 本机 ytmusicapi 桥（_ytm_bridge.py，默认 http://127.0.0.1:8722）
+     ② YouTube Data API v3（需自备 Key，走 ytApiSearch）
+     ③ 本地随机池（YT_POOL / YTM_POOL，永远可用）
+   随机推送用洗牌袋（抽完才重洗），收藏存 localStorage。 */
+const YTM_FAV_KEY='a17_ytm_favs';
+const YTM_BRIDGE_DEFAULT='http://127.0.0.1:8722';
+let YTM_FAVS=[], YTM_TAB='songs', YTM_LIST=[], YTM_FROM='local', YTM_FETCHING=false;
+function ytmBridgeUrl(){
+  try{
+    const q=new URLSearchParams(location.search).get('ytm');
+    const saved=localStorage.getItem('ytm_bridge');
+    return String(q||saved||YTM_BRIDGE_DEFAULT).replace(/\/+$/,'');
+  }catch(e){ return YTM_BRIDGE_DEFAULT; }
+}
+/* 桥探测：连不上就静默回退到本地池，不影响使用 */
+let ytmBridgeState='unknown';
+function ytmBridgeProbe(){
+  if(ytmBridgeState==='checking')return;
+  ytmBridgeState='checking';
+  ytmBridgeGet('/health',1500).then(function(){
+    if(ytmBridgeState==='ok')return;
+    ytmBridgeState='ok';
+    /* 桥可用了：丢掉本地兜底列表，重新取真实歌曲 */
+    YTM_FETCHING=false;
+    ytmSetList([],'');
+    toast('已连接 ytmusicapi');
+    ytmRenderFeed();
+  }).catch(function(){ ytmBridgeState='off'; });
+}
+function ytmBridgeGet(path,ms){
+  const ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+  const t=setTimeout(function(){ try{ctl&&ctl.abort();}catch(e){} },ms||6000);
+  return fetch(ytmBridgeUrl()+path,{signal:ctl?ctl.signal:undefined})
+    .then(function(r){ if(!r.ok)throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(j){ clearTimeout(t); return j; })
+    .catch(function(e){ clearTimeout(t); throw e; });
+}
+/* 把桥/Data API 的条目统一成同一套歌曲模型 */
+function ytmNormalizeSong(x){
+  x=x||{};
+  const id=String(x.videoId||x.id||'').trim();
+  if(!id)return null;
+  return {
+    id:id,
+    t:String(x.title||x.t||'').trim()||('歌曲 '+id),
+    a:String(x.artist||x.channel||x.a||'').trim(),
+    d:String(x.duration||x.d||'').trim(),
+    art:String(x.art||x.thumb||'').trim()
+  };
+}
+/* 本地兜底：洗牌袋抽 6 首（不会反复给同一批） */
+function ytmLocalSongs(n){
+  return ytRandomFeedFresh(n||6,'music').map(function(id){
+    return { id:id, t:'音乐 '+id, a:'YouTube Music', d:'', art:ytThumb(id) };
+  });
+}
+/* 取一批歌曲：桥 → Data API → 本地池 */
+function ytmFetchSongs(n){
+  const want=n||8;
+  const fromBridge=function(){
+    if(ytmBridgeState!=='ok')return Promise.reject(new Error('bridge off'));
+    return ytmBridgeGet('/songs?limit='+want,8000).then(function(j){
+      const list=(j&&j.songs||[]).map(ytmNormalizeSong).filter(Boolean);
+      if(!list.length)throw new Error('empty');
+      return { songs:list, from:'ytmusicapi' };
+    });
+  };
+  const fromApi=function(){
+    return ytApiSearch('热门歌曲',{max:want,cat:'10'}).then(function(items){
+      const list=(items||[]).map(ytmNormalizeSong).filter(Boolean);
+      if(!list.length)throw new Error('empty');
+      return { songs:list, from:'YouTube Data API' };
+    });
+  };
+  return fromBridge().catch(fromApi).catch(function(){
+    return { songs:ytmLocalSongs(want), from:'本地随机池' };
+  });
+}
+/* ---------- 收藏（localStorage 持久化） ---------- */
+function ytmFavLoad(){
+  try{
+    const a=JSON.parse(localStorage.getItem(YTM_FAV_KEY)||'[]');
+    YTM_FAVS=Array.isArray(a)?a.map(ytmNormalizeSong).filter(Boolean):[];
+  }catch(e){ YTM_FAVS=[]; }
+  return YTM_FAVS;
+}
+function ytmFavSave(){ try{ localStorage.setItem(YTM_FAV_KEY,JSON.stringify(YTM_FAVS)); }catch(e){} }
+function ytmFavIndex(id){ return YTM_FAVS.findIndex(function(x){return x.id===id;}); }
+function ytmIsFav(id){ return !!id&&ytmFavIndex(id)>=0; }
+function ytmFavToggle(id,title,artist){
+  if(!id)return false;
+  const i=ytmFavIndex(id);
+  let on;
+  if(i>=0){ YTM_FAVS.splice(i,1); on=false; }
+  else{
+    const s=(YTM_LIST.find(function(x){return x.id===id;}))||{id:id,t:title||('歌曲 '+id),a:artist||'',d:'',art:ytThumb(id)};
+    YTM_FAVS.unshift(s); on=true;
+  }
+  ytmFavSave();
+  return on;
+}
+/* ---------- 界面（与 YouTube 应用同款组件） ---------- */
+function ytmEnsureUI(){
+  const app=document.getElementById('app-ytmusic');
+  if(!app)return null;
+  if(app.dataset.ytmUi==='2')return app;
+  app.innerHTML=
+    '<header class="appbar">'+
+      '<div class="yt-logo">YouTube Music</div>'+
+      '<span class="flex1"></span>'+
+      '<button class="iconbtn" data-act="ytm-refresh-feed" aria-label="换一批"><i data-ic="refresh"></i></button>'+
+      '<button class="iconbtn" data-act="ytm-tab" data-k="favs" aria-label="收藏"><i data-ic="star"></i></button>'+
+    '</header>'+
+    '<div class="appbody no-pad">'+
+      '<div id="ytmOffline" class="yt-offline" role="status" aria-live="polite" hidden></div>'+
+      '<div id="ytmChips" class="chipline yt-chipline"></div>'+
+      '<div id="ytmFeed" class="yt-feed on"></div>'+
+    '</div>'+
+    '<div class="sub" id="ytmPlayer">'+
+      '<header class="appbar"><button class="iconbtn" data-act="ytm-back"><i data-ic="back"></i></button>'+
+        '<h2 class="title">正在播放</h2></header>'+
+      '<div class="appbody">'+
+        '<div class="ytm-hero"><span class="ytm-art" id="ytmArt"></span></div>'+
+        '<div class="yt-title" id="ytmNowTitle">未在播放</div>'+
+        '<div class="yt-meta" id="ytmNowArtist"></div>'+
+        '<div class="ytm-btns">'+
+          '<button class="pillbtn" data-act="ytm-prev">上一首</button>'+
+          '<button class="pillbtn primary" data-act="ytm-toggle" id="ytmPlayBtn">播放</button>'+
+          '<button class="pillbtn" data-act="ytm-next">下一首</button>'+
+          '<button class="pillbtn" data-act="ytm-fav-cur" id="ytmFavBtn">收藏</button>'+
+        '</div>'+
+        '<div class="ytm-src" id="ytmSrc"></div>'+
+      '</div>'+
+    '</div>';
+  app.dataset.ytmUi='2';
+  return app;
+}
+/* 旧的「精选/音乐应用/探索」列表与电台卡片整块不再使用 */
+function ytmPurgeLegacy(){
+  const app=document.getElementById('app-ytmusic');
+  if(!app)return;
+  app.querySelectorAll('[data-act="ytm-play"]').forEach(function(n){n.remove();});
+  app.querySelectorAll('.media-card').forEach(function(n){n.remove();});
+}
+function ytmRenderChips(){
+  const host=document.getElementById('ytmChips');
+  if(!host)return;
+  const tabs=[['songs','歌曲'],['favs','收藏'],['new','新歌']];
+  host.innerHTML='<div class="chipline-inner">'+tabs.map(function(c){
+    const n=(c[0]==='favs'&&YTM_FAVS.length)?(' · '+YTM_FAVS.length):'';
+    return '<button class="ph-chip'+(YTM_TAB===c[0]?' on':'')+'" data-act="ytm-tab" data-k="'+c[0]+'">'+c[1]+n+'</button>';
+  }).join('')+'</div>';
+}
+function ytmCardHtml(s,i){
+  const on=ytmIsFav(s.id);
+  return '<div class="ytm-cell">'+
+    '<button class="yt-push-card" data-act="ytm-open" data-id="'+escHtml(s.id)+'">'+
+      coverImgTag(s.art||ytThumb(s.id),coverAsset(i),'yt-cover',s.id)+
+      '<span class="yp-t">'+escHtml(s.t)+'</span>'+
+      (s.a?'<span class="yp-s">'+escHtml(s.a)+(s.d?(' · '+escHtml(s.d)):'')+'</span>':'')+
+    '</button>'+
+    '<button class="ytm-fav'+(on?' on':'')+'" data-act="ytm-fav" data-id="'+escHtml(s.id)+'" '+
+      'aria-label="'+(on?'取消收藏':'收藏')+'" aria-pressed="'+on+'">'+(on?'★':'☆')+'</button>'+
+  '</div>';
+}
+function ytmSetList(songs,from){
+  YTM_LIST=songs||[];
+  YTM_FROM=from||'';
+  const el=document.getElementById('ytmSrc');
+  if(el)el.textContent='数据来源：'+YTM_FROM;
+}
+/* 先出内容、再换真实数据：
+   桥第一次取歌要建候选池（几十秒），不能让界面干等着 ——
+   立刻用本地池铺满，真实歌曲到了再原地替换。 */
+function ytmPaintSongs(){
+  const host=document.getElementById('ytmFeed');
+  if(!host)return;
+  const title=(YTM_TAB==='new')?'新歌推荐':'随机推送';
+  host.innerHTML='<div class="yt-push-head"><span>'+title+'</span>'+
+    '<button class="pillbtn small" data-act="ytm-refresh-feed">换一批</button></div>'+
+    '<div class="yt-push-grid">'+YTM_LIST.map(ytmCardHtml).join('')+'</div>';
+}
+function ytmLoadReal(){
+  if(YTM_FETCHING)return;
+  YTM_FETCHING=true;
+  ytmFetchSongs(8).then(function(r){
+    YTM_FETCHING=false;
+    if(YTM_TAB==='favs')return;
+    ytmSetList(r.songs,r.from);
+    ytmPaintSongs();
+  }).catch(function(){ YTM_FETCHING=false; });
+}
+function ytmRenderFeed(){
+  ytmEnsureUI();
+  const host=document.getElementById('ytmFeed');
+  if(!host)return;
+  ytmRenderChips();
+  if(YTM_TAB==='favs'){ ytmRenderFavs(); return; }
+  if(!YTM_LIST.length)ytmSetList(ytmLocalSongs(8),'本地随机池');   /* 立刻有内容 */
+  ytmPaintSongs();
+  ytmLoadReal();                                                   /* 后台替换成真实歌曲 */
+}
+function ytmRenderNew(){ ytmRenderFeed(); }
+function ytmRenderFavs(){
+  const host=document.getElementById('ytmFeed');
+  if(!host)return;
+  if(!YTM_FAVS.length){
+    host.innerHTML='<div class="yt-empty yt-empty-left"><div class="ye-ic">'+mi(M.star)+'</div>'+
+      '<div class="ye-t">还没有收藏的歌曲</div>'+
+      '<div class="ye-s">点歌曲卡片右上角的 ☆，或在播放页点「收藏」</div></div>';
+    return;
+  }
+  host.innerHTML='<div class="yt-push-head"><span>收藏</span>'+
+      '<span class="yp-count">'+YTM_FAVS.length+' 首</span></div>'+
+    '<div class="yt-push-grid">'+YTM_FAVS.map(ytmCardHtml).join('')+'</div>';
+}
+/* 换一批：先用本地池立刻换掉（洗牌袋保证不重复），真实歌曲到了再替换 */
+function ytmRefreshBatch(){
+  YTM_FETCHING=false;
+  ytmSetList(ytmLocalSongs(8),'本地随机池');
+  if(YTM_TAB!=='favs')ytmPaintSongs();
+  ytmLoadReal();
+}
+/* ---------- 搜索 ---------- */
+function ytmSearchSongs(q){
+  const host=document.getElementById('ytmFeed');
+  if(!host)return;
+  host.innerHTML='<div class="ph-none">搜索中…</div>';
+  const done=function(list,from){
+    if(!list.length){ toast('没有找到相关歌曲'); ytmRenderFeed(); return; }
+    ytmSetList(list,from);
+    host.innerHTML='<div class="yt-push-head"><span>搜索结果 · '+escHtml(q)+'</span></div>'+
+      '<div class="yt-push-grid">'+list.map(ytmCardHtml).join('')+'</div>';
+  };
+  if(ytmBridgeState==='ok'){
+    ytmBridgeGet('/search?q='+encodeURIComponent(q)+'&limit=12',8000)
+      .then(function(j){ done((j&&j.songs||[]).map(ytmNormalizeSong).filter(Boolean),'ytmusicapi'); })
+      .catch(function(){ ytmSearchViaApi(q,done); });
+  }else{
+    ytmSearchViaApi(q,done);
+  }
+}
+function ytmSearchViaApi(q,done){
+  ytApiSearch(q,{max:12,cat:'10'}).then(function(items){
+    done((items||[]).map(ytmNormalizeSong).filter(Boolean),'YouTube Data API');
+  }).catch(function(){ done(ytmLocalSongs(8),'本地随机池'); });
+}
+/* ---------- 播放 ---------- */
+function ytmOpenSong(id){
+  const s=YTM_LIST.find(function(x){return x.id===id;})||YTM_FAVS.find(function(x){return x.id===id;});
+  const title=s?s.t:('歌曲 '+id);
+  const artist=s?s.a:'';
+  const art=document.getElementById('ytmArt');
+  if(art){
+    art.innerHTML='';
+    const im=document.createElement('img');
+    im.className='yt-cover';im.alt='';
+    im.dataset.fb=coverAsset(0);im.dataset.vid=id;
+    im.onerror=function(){ytCoverFail(this);};im.onload=function(){ytCoverLoad(this);};
+    im.src=(s&&s.art)||ytThumb(id);
+    art.appendChild(im);
+  }
+  const p=document.getElementById('ytmPlayer'); if(p)p.classList.add('on');
+  ytmPlay(title,artist);
+  ytmPaintFavBtn();
+}
+function ytmPaintFavBtn(){
+  const b=document.getElementById('ytmFavBtn');
+  if(!b)return;
+  const s=YTM_LIST.find(function(x){return x.t===YTM_CUR;})||YTM_FAVS.find(function(x){return x.t===YTM_CUR;});
+  const on=s?ytmIsFav(s.id):false;
+  b.textContent=on?'已收藏':'收藏';
+  b.classList.toggle('primary',!on);
+  b.dataset.id=s?s.id:'';
+}
+
+
 function ytmRenderRandomFeed(){
   const app0=document.getElementById('app-ytmusic');
   if(!app0)return;
@@ -8004,6 +8349,9 @@ function crBox() {
   }
   return { width: (r && r.width) || 360, height: (r && r.height) || 600 };
 }
+/* 手机 UA：远端 Chrome 默认是桌面 UA，站点会返回桌面页（没有 <meta viewport>），
+   在 mobile:true 下 Chromium 就退回 980px 布局视口再整页缩小 —— 这就是“比例不对”。 */
+const CR_UA='Mozilla/5.0 (Linux; Android 17; Pixel 10 Build/AP4A.260105.002) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36';
 async function crViewport() {
   /* 等一拍，确保 #crWrap 已显示、尺寸可测（不能用 rAF：不可见时可能永不触发，会卡死初始化） */
   await new Promise(function (r) { setTimeout(r, 50); });
@@ -8012,16 +8360,44 @@ async function crViewport() {
   const w = Math.max(280, Math.round(L.w)), h = Math.max(360, Math.round(L.h));
   const dpr = crPixelScale();
   CR.view = { w: w, h: h, dpr: dpr };
+  /* ① 手机 UA + Android 平台：站点才会返回带 viewport meta 的手机页，
+        这样 mobile 模拟的布局视口才等于设备宽度（否则退回 980px → 整体缩小） */
+  await crSend('Emulation.setUserAgentOverride', {
+    userAgent: CR_UA, acceptLanguage: 'zh-CN,zh;q=0.9,en;q=0.8', platform: 'Android'
+  }).catch(function (e) { crLog('setUserAgentOverride 失败：' + (e && e.message)); });
   try {
-    await crSend('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: dpr, mobile: true, screenWidth: w, screenHeight: h });
+    await crSend('Emulation.setDeviceMetricsOverride', {
+      width: w, height: h, deviceScaleFactor: dpr,
+      mobile: !CR.mobileOff,                  /* 退避后关掉 mobile 模拟，保证版式宽度 = 设备宽度 */
+      screenWidth: w, screenHeight: h
+    });
   } catch (e) {
     /* 视口失败不该阻断导航/录屏（远端可能不支持该域），但要说清原因 */
     crLog('setDeviceMetricsOverride 失败：' + (e && e.message));
   }
-  /* 触摸模拟：让远端页面按手机交互（点击/滚动/长按菜单） */
+  /* ② 触摸模拟：让远端页面按手机交互（点击/滚动/长按菜单） */
   await crSend('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 }).catch(function () {});
-  /* 若远端已有页面，重设视口后需要刷新一次才能应用新版式 */
-  crLog('viewport = ' + w + 'x' + h + '@' + dpr);
+  crLog('viewport = ' + w + 'x' + h + '@' + dpr + (CR.mobileOff ? '（mobile 模拟已关闭）' : ''));
+}
+/* 比例自检：页面若确实没有 viewport meta，Chromium 在 mobile 模拟下仍会用 980px 布局视口，
+   整页被缩小约 2.7 倍。检测到就关掉 mobile 模拟并把视口重设一次（无需重新加载），
+   让版式宽度严格等于设备宽度。 */
+async function crCheckLayout() {
+  if (!CR.session || CR.mobileOff) return;
+  try {
+    const m = await crSend('Page.getLayoutMetrics');
+    const v = m && (m.cssLayoutViewport || m.layoutViewport);
+    const vw = v && v.clientWidth;
+    if (!vw || !CR.view || !CR.view.w) return;
+    if (vw > CR.view.w * 1.25) {
+      CR.mobileOff = true;
+      crLog('布局视口 ' + Math.round(vw) + 'px 远大于设备宽度 ' + CR.view.w + 'px → 关闭 mobile 模拟以保证比例');
+      await crViewport();
+      await crRestartCast();
+    } else {
+      crLog('布局视口 ' + Math.round(vw) + 'px ≈ 设备宽度 ' + CR.view.w + 'px（比例正常）');
+    }
+  } catch (e) { /* 远端可能不支持该域：忽略 */ }
 }
 async function crStartCast() {
   if (!CR.session) return;
@@ -8057,6 +8433,7 @@ function crDrawLoop() {
     const c = crCanvas(); if (!c) { CR.decoding = false; return; }
     if (c.width !== img.width || c.height !== img.height) { c.width = img.width; c.height = img.height; }
     try { c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); } catch (e) {}
+    crFitCanvas();                                 /* 位图变了就重算显示尺寸，保持比例 */
     const hint = document.getElementById('crHint'); if (hint) hint.style.display = 'none';
     crSyncViewport();
     crDrawLoop();
@@ -8091,7 +8468,11 @@ function crNavigate(url) {
   const target = crNormalize(url); if (!target) return;
   CR.url = target; crSyncUrl();
   if (!CR.connected) { crConnect(); return; }
-  crSend('Page.navigate', { url: target }).catch(function (e) { crStatus('导航失败' + '：' + e.message, true); });
+  CR.mobileOff = false;                 /* 每个页面重新判定一次，别把上一页的退避状态带过来 */
+  crSend('Page.navigate', { url: target }).then(function () {
+    /* 提交后再量一次布局视口：非响应式页面会在这里被纠正比例 */
+    setTimeout(function () { crCheckLayout(); }, 1200);
+  }).catch(function (e) { crStatus('导航失败' + '：' + e.message, true); });
 }
 function crSyncUrl() {
   const i = document.getElementById('chromeUrl');
@@ -8113,16 +8494,39 @@ function crStatus(msg, err) {
 }
 
 /* ---------- 输入转发 ---------- */
+/* 画布实际显示尺寸：按远端视口比例铺满 .cr-stage（居中留边），避免拉伸变形 */
+function crFitCanvas(){
+  const st=document.querySelector('#crWrap .cr-stage'), c=crCanvas();
+  if(!st||!c||!c.width||!c.height)return;
+  const sw=st.clientWidth, sh=st.clientHeight;
+  if(!sw||!sh)return;
+  const ar=c.width/c.height;
+  let w=sw, h=Math.round(w/ar);
+  if(h>sh){ h=sh; w=Math.round(h*ar); }
+  c.style.width=w+'px'; c.style.height=h+'px';
+}
+/* 屏幕坐标 → 远端视口坐标。
+   关键：截图位图尺寸 = 逻辑尺寸 × 像素密度（crPixelScale，1~3），
+   而 CDP 的 Input.dispatchMouseEvent / dispatchTouchEvent 收的是「视口 CSS 像素」。
+   老实现直接返回位图像素，于是像素密度 >1 时点击位置整体偏移（最坏被夹到右下角）。
+   这里多做一次 位图 → 视口 的换算。 */
 function crPoint(ev) {
   const c = crCanvas(); if (!c) return { x: 0, y: 0 };
   const r = c.getBoundingClientRect();
-  const scale = Math.min(r.width / c.width, r.height / c.height);
+  if (!r.width || !r.height) return { x: 0, y: 0 };
+  const scale = Math.min(r.width / c.width, r.height / c.height) || 1;
   const offX = r.left + (r.width - c.width * scale) / 2;
   const offY = r.top + (r.height - c.height * scale) / 2;
   const p = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+  /* 先落到位图像素 */
+  const bx = Math.max(0, Math.min(c.width, (p.clientX - offX) / scale));
+  const by = Math.max(0, Math.min(c.height, (p.clientY - offY) / scale));
+  /* 再换成远端视口的 CSS 像素 */
+  const vw = (CR.view && CR.view.w) || c.width;
+  const vh = (CR.view && CR.view.h) || c.height;
   return {
-    x: Math.max(0, Math.min(c.width, (p.clientX - offX) / scale)),
-    y: Math.max(0, Math.min(c.height, (p.clientY - offY) / scale))
+    x: Math.max(0, Math.min(vw, bx * vw / c.width)),
+    y: Math.max(0, Math.min(vh, by * vh / c.height))
   };
 }
 function crMods(ev) { return (ev.altKey ? 1 : 0) | (ev.ctrlKey ? 2 : 0) | (ev.metaKey ? 4 : 0) | (ev.shiftKey ? 8 : 0); }
@@ -8156,11 +8560,40 @@ function crKey(ev, type) {
 function crTypeText(text) { if (text) crSend('Input.insertText', { text: text }).catch(function () {}); }
 
 /* ---------- Chrome 风格 UI（嵌入 #app-chrome） ---------- */
-/* 旧版 Chrome 管理 UI（模拟首页/搜索结果/信息流/标签管理页/内嵌 iframe）全部停用 */
-const CR_LEGACY_IDS=['chromeHome','chromeResults','chromeFeed','chromeTabsPage','chromeWrap','chromeSearchRow','driveSearchRow'];
-const CR_LEGACY_ACTS=['chrome-tabs','chrome-tabs-page','chrome-tab-open','chrome-tab-close','chrome-newtab','chrome-chip','chrome-feed','chrome-home','chrome-search-focus','chrome-go','chrome-open-ext','chrome-voice','chrome-bookmarks','chrome-history','chrome-incognito','chrome-back','sub-open'];
+/* 旧版 Chrome 管理 UI（模拟首页/搜索结果/信息流/标签管理页/内嵌 iframe）全部停用。
+   注意：chromeHome（新标签页）现在是正式界面，不能隐藏；搜索框上的麦克风/Lens 也要留着。 */
+const CR_LEGACY_IDS=['chromeResults','chromeFeed','chromeTabsPage','chromeWrap','chromeSearchRow','driveSearchRow'];
+const CR_LEGACY_ACTS=['chrome-tabs','chrome-tabs-page','chrome-tab-open','chrome-tab-close','chrome-newtab','chrome-chip','chrome-feed','chrome-home','chrome-go','chrome-open-ext','chrome-bookmarks','chrome-history','chrome-incognito','chrome-back','sub-open'];
+/* ===== Google 应用与 Chrome 应用：共用同一套 Chrome 界面 DOM =====
+   不复制任何代码/DOM —— 整套界面（顶栏 + 页面区）只有一份，
+   打开哪个应用就把它整体搬到哪个窗口。两边 id 永远不重复，getElementById 不会指错。
+   Google 应用原有的搜索页内容在第一次搬入时整体收起，之后 Google 就是浏览器。 */
+function crApp(){
+  /* 当前承载 Chrome 界面的应用（Chrome 或 Google）；按地址栏的实际归属判断最稳 */
+  const u=document.getElementById('chromeUrl');
+  const a=(u&&u.closest)?u.closest('.app'):null;
+  return a||document.getElementById('app-chrome');
+}
+function chromeUiMount(appId){
+  if(appId!=='chrome'&&appId!=='google')return;
+  const chromeApp=document.getElementById('app-chrome');
+  const googleApp=document.getElementById('app-google');
+  if(!chromeApp||!googleApp)return;
+  const target=(appId==='google')?googleApp:chromeApp;
+  if(target.dataset.chromeUi==='1')return;              /* 已经在这边，不用搬 */
+  /* Google 应用原有内容只收起一次（保存起来以便需要时能拿回来） */
+  if(!googleApp.dataset.origStashed){
+    googleApp._origNodes=[].slice.call(googleApp.children);
+    googleApp._origNodes.forEach(function(n){googleApp.removeChild(n);});
+    googleApp.dataset.origStashed='1';
+  }
+  const owner=(target===googleApp)?chromeApp:googleApp;
+  [].slice.call(owner.children).forEach(function(n){target.appendChild(n);});
+  target.dataset.chromeUi='1';
+  delete owner.dataset.chromeUi;
+}
 function crHideLegacy(){
-  const app=document.getElementById('app-chrome');
+  const app=crApp();
   if(!app)return;
   CR_LEGACY_IDS.forEach(function(id){const e=document.getElementById(id);if(e){e.style.display='none';e.setAttribute('aria-hidden','true');}});
   CR_LEGACY_ACTS.forEach(function(a){app.querySelectorAll('[data-act="'+a+'"]').forEach(function(b){b.style.display='none';});});
@@ -8177,6 +8610,7 @@ function crEnterRemote(){
   if(!host)return;
   crHideLegacy();
   host.classList.add('cr-on');            /* 先显示，尺寸才可测 */
+  crFitCanvas();                          /* 立即按手机框尺寸摆好画布，首帧到达前不留空档 */
   setTimeout(function(){
     (function(){
       setTimeout(function(){ if(CR.connected&&CR.session) crRestartCast().catch(function(){}); }, 700);
@@ -8196,7 +8630,7 @@ function crEnterRemote(){
   }, 60);
 }
 function crEnsureUI() {
-  const app = document.getElementById('app-chrome');
+  const app = crApp();
   if (!app) return null;
   let host = document.getElementById('crWrap');
   if (host) return host;
@@ -8230,7 +8664,7 @@ function crWire(host) {
       if (a === 'back') crHistory(-1);
       else if (a === 'fwd') crHistory(1);
       else if (a === 'reload') crSend('Page.reload', {}).catch(function () {});
-      else if (a === 'home') crNavigate(CR_START);
+      else if (a === 'home') crExitToHome();
       else if (a === 'remote') crToggle();
       else if (a === 'exit') {
         /* 退出远程模式并关闭 Chrome 应用（修复“打开后无法退出”） */
@@ -8266,7 +8700,7 @@ function crWire(host) {
   kb.addEventListener('input', function () { const v = kb.value; if (v) { crTypeText(v); kb.value = ''; } });
   kb.addEventListener('compositionend', function () { const v = kb.value; if (v) { crTypeText(v); kb.value = ''; } });
   /* 容器尺寸变化：防抖 300ms 后重设视口并重启录屏 */
-  const onR = function () { clearTimeout(CR.timer); CR.timer = setTimeout(function () { if (CR.connected) crRestartCast().catch(function () {}); }, 300); };
+  const onR = function () { crFitCanvas(); clearTimeout(CR.timer); CR.timer = setTimeout(function () { if (CR.connected) crRestartCast().catch(function () {}); }, 300); };
   if (window.ResizeObserver) { new ResizeObserver(onR).observe(host.querySelector('.cr-stage')); } else { window.addEventListener('resize', onR); }
   void canvasEl;
 }
@@ -12033,7 +12467,7 @@ let mailFilter='inbox',mailIdx=0;
 let eventCur=null;                  /* 当前打开的活动（[日期, 序号]） */
 let fileCtx=null;                   /* 当前打开的文件详情 */
 const SAVED=new Set();              /* 通用详情页里收藏过的条目 */
-let YTM_ON=false, YTM_CUR='Material You 电台';
+let YTM_ON=false, YTM_CUR='未在播放';
 let STORE_STATE={};                 /* 0/未定乐 未安装 · installing=安装与 · installed=已安装 */
 let storeQuery='';
 function renderMails(cat){
@@ -13408,7 +13842,17 @@ function ytmPlayReal(name){
   if(artist){const a1=$('#ytmNowArtist');if(a1)a1.textContent=artist;}
   ytmPaint();
   try{ytmDecorateRows();}catch(e){}
+  try{ytmPaintFavBtn();}catch(e){}
   toast('正在播放'+'，'+YTM_CUR);
+}
+/* 上一首 / 下一首：优先在当前歌曲列表里走，列表为空时退回播放队列 */
+function ytmStep(d){
+  const names=YTM_LIST.length?YTM_LIST.map(function(x){return x.t;}):YTM_QUEUE.slice();
+  if(!names.length){ toast('列表还是空的'); return; }
+  let i=names.indexOf(YTM_CUR); if(i<0)i=0;
+  const n=names[(i+d+names.length*2)%names.length];
+  const s=YTM_LIST.find(function(x){return x.t===n;});
+  ytmPlay(n,s?s.a:'');
 }
 function ytmToggle(){
   const a0=document.getElementById('ytmAudio');if(a0){if(a0.paused)a0.play().catch(()=>{});else a0.pause();}
@@ -14639,25 +15083,62 @@ function renderDiscover(){
       '<span class="g-card-s">'+escHtml(c.s)+'</span></button>';
   }).join('');
 }
-function chromeGo(){
-  const q=$('#chromeInput').value.trim()||'Android 17';
-  $('#resTitle').textContent=`${q} 的搜索结果`;
-  const cards=[
-    ['Android 17  维基百科','zh.wikipedia.org','Android 17 是 Google 于 2026 年发布的移动操作系统，带来全新的主题图标、应用气泡、实时信息与 Gemini 集成。'],
-    ['Android 17 新功能一览','blog.google','了解 Android 17 的全新设计语言、主题图标与设备端 AI 能力、'],
-    [`${q} 最新资讯`, 'news.google.com', `获取关于 ${q} 的最新闻、评测与讨论。`],
-    ['Google Pixel 10 官方页面','store.google.com','6.3 英寸 Actua 屏幕 · Tensor G5 · Android 17，体验焕然一新的 Pixel、']
+/* ===== Chrome 新标签页：快捷方式磁贴 + Discover 信息流 =====
+   结构照搬真机 Chrome NTP（Google 标志 / 圆角搜索框 / 一行 4 个快捷方式 / Discover 卡片），
+   点击任一项都交给远程浏览器加载真实页面。 */
+function chromeNtpShortcuts(){
+  return (typeof CHROME_BOOKMARKS!=='undefined'&&CHROME_BOOKMARKS.length)?CHROME_BOOKMARKS:[
+    {t:'Google',u:'google.com'},{t:'Android 开发者',u:'developer.android.com'},
+    {t:'Material Design 3',u:'m3.material.io'},{t:'Pixel 支持',u:'support.google.com/pixel'}
   ];
-  $('#resList').innerHTML=cards.map(c=>`<div class="result-card"><div class="res-url">${escHtml(c[1])}</div><div class="res-title">${escHtml(c[0])}</div><div class="res-snip">${escHtml(c[2])}</div></div>`).join('');
-  $('#chromeHome').classList.add('hidden');
-  $('#chromeResults').classList.remove('hidden');
-  $('#chromeUrl').value='www.google.com/search?q='+encodeURIComponent(q);
 }
-function chromeBack(){
-  $('#chromeResults').classList.add('hidden');
-  $('#chromeHome').classList.remove('hidden');
-  $('#chromeUrl').value='google.com';
+function chromeNtpColor(u){
+  const s=String(u||'');
+  if(/google\./.test(s))return '#4285F4';
+  if(/android|developer/.test(s))return '#34A853';
+  if(/material|m3\./.test(s))return '#9334E6';
+  if(/pixel|store/.test(s))return '#EA4335';
+  return '#5F6368';
 }
+function renderChromeNtp(){
+  const sc=document.getElementById('chromeShortcuts');
+  if(sc){
+    sc.innerHTML=chromeNtpShortcuts().map(function(b){
+      const ch=String(b.t||'?').trim().charAt(0).toUpperCase();
+      return '<button class="cs-item" data-act="chrome-shortcut" data-u="'+escHtml(b.u||'')+'">'+
+        '<span class="cs-fav" style="background:'+chromeNtpColor(b.u)+'">'+escHtml(ch)+'</span>'+
+        '<span class="cs-lbl">'+escHtml(b.t||'')+'</span></button>';
+    }).join('');
+  }
+  const dc=document.getElementById('chromeDiscover');
+  if(dc){
+    dc.innerHTML=(typeof CHROME_FEED!=='undefined'?CHROME_FEED:[]).map(function(f,i){
+      return '<button class="cs-card" data-act="chrome-discover" data-i="'+i+'">'+
+        '<span class="cs-thumb" style="background:'+f.g+'"></span>'+
+        '<span class="cs-card-main"><span class="cs-card-src">'+escHtml(f.s||'')+'</span>'+
+        '<span class="cs-card-t">'+escHtml(f.t||'')+'</span></span></button>';
+    }).join('');
+  }
+}
+/* 回到新标签页：退出远程画面，露出 Chrome NTP */
+function crExitToHome(){
+  const host=document.getElementById('crWrap');
+  if(host)host.classList.remove('cr-on');
+  const home=document.getElementById('chromeHome');
+  if(home){home.style.display='';home.classList.remove('hidden');}
+  const res=document.getElementById('chromeResults');
+  if(res)res.classList.add('hidden');
+  const inp=document.getElementById('chromeUrl');
+  if(inp)inp.value='';
+  try{crStatus('');}catch(e){}
+}
+function chromeGo(){
+  const q=$('#chromeInput').value.trim();
+  if(!q)return;
+  /* 与真机 Chrome 一致：搜索直接交给浏览器加载真实结果页，不再自造结果卡片 */
+  chromeNavigate(/^[a-z]+:\/\//i.test(q)?q:('https://www.google.com/search?q='+encodeURIComponent(q)));
+}
+function chromeBack(){ crExitToHome(); }
 
 /* ============ 天气 ============ */
 function wicon(k){
@@ -15910,7 +16391,7 @@ function chromeHistoryPage(){
 }
 function chromeIncognitoToggle(){
   chromeIncognito=!chromeIncognito;
-  $('#app-chrome').classList.toggle('incog',chromeIncognito);
+  const a=crApp(); if(a)a.classList.toggle('incog',chromeIncognito);
   refreshAppSections();
   toast(chromeIncognito?'无痕模式已开启':'无痕模式已关闭');
 }
@@ -16049,6 +16530,7 @@ function init(){
   paintIcons();
   $('#fingerBtn').innerHTML=FP_SVG;
   $$('#splashG, #pillG, #drawerG, #chromeG, #googleG').forEach(g=>g.innerHTML=`<img src="${OFFICIAL.google}" alt="Google">`);
+  try{ renderChromeNtp(); }catch(e){}   /* Chrome 新标签页：快捷方式 + Discover */
   renderHome();
   renderDrawer();
   renderTiles();
@@ -16457,15 +16939,39 @@ function init(){
       case 'ytm-play':ytmPlay(el.dataset.name,el.dataset.artist);break;
       case 'ytm-decorate':mediaDecorateAll();break;
       case 'ytm-toggle':ytmToggle();break;
-      case 'ytm-next':ytmPlay(['城市夜行','周末放松歌单','经典民谣','Material You 电台'][Math.floor(Math.random()*4)],'');break;
-      case 'ytm-prev':ytmPlay('Material You 电台','Pixel 音乐');break;
+      /* 上一首 / 下一首：在当前歌曲列表里走，列表为空时回退到本地池 */
+      case 'ytm-next':{ytmStep(1);break;}
+      case 'ytm-prev':{ytmStep(-1);break;}
+      case 'ytm-open':{ytmOpenSong(el.dataset.id);break;}
+      case 'ytm-fav':{
+        const id=el.dataset.id||'';
+        const s=YTM_LIST.find(function(x){return x.id===id;})||YTM_FAVS.find(function(x){return x.id===id;});
+        const on=ytmFavToggle(id,s?s.t:'',s?s.a:'');
+        toast(on?('已收藏 '+(s?s.t:'')):'已取消收藏');
+        if(YTM_TAB==='favs')ytmRenderFavs(); else ytmRenderFeed();
+        ytmRenderChips();
+        ytmPaintFavBtn();
+        break;
+      }
+      case 'ytm-fav-cur':{
+        const b=document.getElementById('ytmFavBtn');
+        const id=(b&&b.dataset.id)||'';
+        if(!id){toast('请先播放一首歌');break;}
+        const s=YTM_LIST.find(function(x){return x.id===id;})||YTM_FAVS.find(function(x){return x.id===id;});
+        const on=ytmFavToggle(id,s?s.t:'',s?s.a:'');
+        toast(on?('已收藏 '+(s?s.t:'')):'已取消收藏');
+        ytmPaintFavBtn();
+        ytmRenderChips();
+        if(YTM_TAB==='favs')ytmRenderFavs();
+        break;
+      }
+      case 'ytm-back':{
+        const p=document.getElementById('ytmPlayer'); if(p)p.classList.remove('on');
+        break;
+      }
       case 'ytm-tab':{
-        $$('#app-ytmusic .tabbtn').forEach(b=>b.classList.toggle('on',b===el));
-        const k=el.dataset.tab;
-        const body=$('#app-ytmusic .appbody');
-        const target=k==='音乐应用'?$('#ytmLib'):(k==='探索'?$('#ytmExplore'):null);
-        if(target&&body)body.scrollTop=Math.max(0,target.offsetTop-64);
-        else if(body)body.scrollTop=0;
+        YTM_TAB=el.dataset.k||el.dataset.tab||'songs';
+        ytmRenderFeed();
         break;
       }
       case 'appsub-back':closeAppSubs(app);break;
@@ -17261,7 +17767,7 @@ function init(){
       case 'yt-copy-cmd':{const el2=document.getElementById('ytCmd');ytCopy(el2?el2.textContent:'python -m http.server 8080','已复制命令');break;}
       case 'yt-copy-url':{const u=location.href.replace(/^file:\/\//,'http://localhost:8080/');ytCopy(u,'已复制地址');break;}
       case 'yt-refresh-feed':ytRenderRandomFeed();toast('已换一批');break;
-      case 'ytm-refresh-feed':ytmRenderRandomFeed();toast('已换一批');break;
+      case 'ytm-refresh-feed':ytmRefreshBatch();toast('已换一批');break;
       case 'yt-random-open':{ytOpenById(el.dataset.id,{source:'youtu.be'});break;}
       case 'ytm-random-open':{ytOpenById(el.dataset.id,{source:'YouTube Music'});break;}
       case 'chrome-go':{chromeNavigate((document.getElementById('chromeUrl')||{}).value);break;}
@@ -17630,6 +18136,18 @@ function init(){
       case 'yt-search-again':ytSearchAgain('page');break;
       case 'ytm-search-again':ytSearchAgain('music');break;
       case 'chrome-go':chromeGo();break;
+      /* 新标签页的快捷方式磁贴 / Discover 卡片 / Lens：都交给远程浏览器加载真实页面 */
+      case 'chrome-shortcut':{
+        const u=el.dataset.u||'';
+        if(u)chromeNavigate(u);
+        break;
+      }
+      case 'chrome-discover':{
+        const f=(typeof CHROME_FEED!=='undefined')?CHROME_FEED[Number(el.dataset.i)]:null;
+        if(f)chromeNavigate('https://www.google.com/search?q='+encodeURIComponent(String(f.t||'').replace(/[：:].*$/,'')));
+        break;
+      }
+      case 'chrome-lens':toast('Lens：请把镜头对准要搜索的对象');break;
       case 'chrome-chip':{
         const q=el.dataset.q||'搜索';
         $('#chromeInput').value=q;
