@@ -7099,9 +7099,12 @@ function relayStatus(){
   try{ u=crWs(); }catch(e){}
   try{ mine=(localStorage.getItem('cr_ws')||'').trim()||(new URLSearchParams(location.search).get('crws')||'').trim(); }catch(e){}
   if(!u)return {ok:false,text:'未配置'};
-  /* 没有用户填写、也没有 ?crws= 时，用的是内置的公共基址（且不带 token）。
-     这时不能显示「已配置」——用户什么都没配，中继实际不可用。 */
-  if(!mine)return {ok:false,defaulted:true,text:'未配置（使用内置基址 '+(function(){try{return cfgMask(new URL(u.replace(/^ws/,'http')).host);}catch(e){return '默认地址';}})()+'，需自备 token）'};
+  /* 没有任何覆盖值（既没在设置页填过、也没带 ?crws=）时，用的是内置默认地址。
+     默认地址自带 token（与 remote-browser.html 的 CDP_WS 同一份凭据）时可正常鉴权，
+     如实显示「已配置」；只有默认地址缺 token 时才提示需自备 token。 */
+  if(!mine&&!/[?&]token=/i.test(u)){
+    return {ok:false,defaulted:true,text:'未配置（使用内置基址 '+(function(){try{return cfgMask(new URL(u.replace(/^ws/,'http')).host);}catch(e){return '默认地址';}})()+'，需自备 token）'};
+  }
   try{
     const host=new URL(u.replace(/^ws/,'http')).host;
     return {ok:true,text:'已配置 · '+cfgMask(host)};
@@ -7367,9 +7370,14 @@ const CHROME_FRAME_ID='chromeFrame';
    ⚠️ 两个易错点（就是 1006 的两大来源）：
      ① 地址必须带 ?token=…：只填 wss://chrome.browserless.io 会被服务端在握手阶段拒绝（浏览器只报 code 1006）；
      ② 页面是 https 时不能用 ws://（混合内容会被浏览器直接拦截，同样只报 1006）。 */
-/* 不内置任何凭据：中继地址由用户提供（?crws=… 或「设置 › 应用与数据」），
-   默认只给不带 token 的基址；缺 token 时 crDiag 会明确提示，而不是静默失败。 */
-const CR_WS_DEFAULT = 'wss://chrome.browserless.io';
+/* 默认中继地址：与 remote-browser.html 的 CDP_WS 保持同一个凭据（同一份 token，开箱即用）。
+   仍可用 ?crws=… 或「设置 › 应用与数据 › WebSocket 中继地址」(localStorage.cr_ws) 覆盖/清除，
+   设置页里「清除」后会回退到本默认值。 */
+/* 已填入你的 Browserless token（wss://chrome.browserless.io?token=…）。
+   ⚠️ 公开仓库会暴露该凭据：如需保密，把下面这行的 token 换回你的新 token 或留空基址，
+   改用页面参数 ?crws=… 或设置页填写（两者都不写进仓库）。轮换步骤：改这一行 + 清空
+   设置页里已保存的 cr_ws，或在设置页粘贴新地址后保存。 */
+const CR_WS_DEFAULT = 'wss://chrome.browserless.io?token=2VMGn68oMqP4hOi61504b021eff48aebd50cf3c61bdb9f3ae';
 const CR_START = 'https://www.google.com/';
 const CR = {
   ws: null, connected: false, connecting: false, session: null, id: 0, pending: new Map(),
@@ -13251,7 +13259,7 @@ $('#setApps').innerHTML=`
         <button class="pillbtn primary" data-act="cfg-save-relay">保存</button>
         <button class="pillbtn" data-act="cfg-clear-relay">清除</button>
       </div>
-      <div class="hint-m3">用于 Chrome/YouTube 的远端内核视图（见 <code>relay/relay.js</code>）。未配置时 Chrome 会使用内嵌视图并给出提示。</div>
+      <div class="hint-m3">用于 Chrome/YouTube 的远端内核视图（见 <code>relay/relay.js</code>）。默认值与 <code>remote-browser.html</code> 的 <code>CDP_WS</code> 相同（<code>?crws=…</code> 可临时覆盖）；「清除」后回退到该默认值。上方两项凭据互相独立：YouTube Key 只影响搜索与「热门」。</div>
 
       <div class="section-label">本地数据</div>
       <div class="set-row" data-act="cfg-open-local"><span class="s-ic">${mi(M.storage)}</span>
