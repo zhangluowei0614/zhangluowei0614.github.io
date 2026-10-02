@@ -1,0 +1,848 @@
+{
+ "generatedAt": "2026-10-02T12:33:08Z",
+ "source": "ytmusicapi",
+ "ytmusicapi": "1.12.3",
+ "count": 120,
+ "songs": [
+  {
+   "videoId": "S2fSojJqyNY",
+   "title": "Beautiful People",
+   "artist": "David Guetta, Sia",
+   "duration": "3:25",
+   "art": "https://i.ytimg.com/vi/S2fSojJqyNY/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nEhwFk1rfL79WbvVf0Ex9WGPSugg"
+  },
+  {
+   "videoId": "gqe35LauDaA",
+   "title": "El Mago Merlín",
+   "artist": "Enigma Norteño",
+   "duration": "2:51",
+   "art": "https://i.ytimg.com/vi/gqe35LauDaA/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3m8iUU6UUTrB6O9TrpJIoHNoQoR5Q"
+  },
+  {
+   "videoId": "ebpB_QJ6Qd8",
+   "title": "Tu Jaane Naa: Lofi Mix",
+   "artist": "Pritam, Atif Aslam",
+   "duration": "5:39",
+   "art": "https://yt3.googleusercontent.com/fffI-F3w6es5j0ps83KAuqlHcu-PQwyJCOzd1N09UVS0v0F2FvG6hTdt2ZErYXWioHs_tEl0P7BX6TA=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "OT5msu-dap8",
+   "title": "Shape Of My Heart",
+   "artist": "Backstreet Boys",
+   "duration": "3:49",
+   "art": "https://i.ytimg.com/vi/OT5msu-dap8/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nfn01NNUC5TbaE1P1jRs6FNFDAfg"
+  },
+  {
+   "videoId": "RIdfPBmUAXc",
+   "title": "Waiting for a Girl like You",
+   "artist": "Foreigner",
+   "duration": "4:53",
+   "art": "https://yt3.googleusercontent.com/3Q4ThsfjfXPaqHSzrZ9Jgfud64qQWirmjFsPTTzp5VPFy7t5Nn_ykUVKsOxIy04LzKzCdT7rojLD7xw2=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "OsfAnsMY21M",
+   "title": "Levitating",
+   "artist": "Dua Lipa",
+   "duration": "3:24",
+   "art": "https://yt3.googleusercontent.com/UpJ_IhBqyhQV9b2UGcDxxWDm14kRQ2eY1o9S96AGsbE7Ol8isbpbPA0Yefvg8S8ZGAX9L1g4xaj21zVJ=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "fwK7ggA3-bU",
+   "title": "One More Night",
+   "artist": "Maroon 5",
+   "duration": "3:43",
+   "art": "https://i.ytimg.com/vi/fwK7ggA3-bU/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mrHHf_JFH6DmF91QYC5riTD93Avg"
+  },
+  {
+   "videoId": "P0lImEbrzcY",
+   "title": "Top Hits Playlist",
+   "artist": "Popular Songs, Best Music Hits",
+   "duration": "1:22",
+   "art": "https://yt3.googleusercontent.com/vNmv4cUjClPdzOzpiIupA3gJjDDlsekBCHjVFF7VXStF4sSMkvjXRDLWTkwk1s1Ow1jPOePmudlnWc6E=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "-w6xsfpukm0",
+   "title": "Like Water (Official Video)",
+   "artist": "Amy Correa Bell, Les Les, Beat Ventriloquists",
+   "duration": "3:55",
+   "art": "https://i.ytimg.com/vi/-w6xsfpukm0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lU6bnXrwkWQj18k322JhoA3bXkRw"
+  },
+  {
+   "videoId": "K--7iO-dvvY",
+   "title": "I Made It",
+   "artist": "Lil Zay Osama",
+   "duration": "2:09",
+   "art": "https://i.ytimg.com/vi/K--7iO-dvvY/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k_fQgk0xB1-i49hYXL8hV1GPliRg"
+  },
+  {
+   "videoId": "2vjPBrBU-TM",
+   "title": "Chandelier (Official Video)",
+   "artist": "Sia",
+   "duration": "3:52",
+   "art": "https://i.ytimg.com/vi/2vjPBrBU-TM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kiBzlcbrF4OucMz1oQHVh2LK8N5Q"
+  },
+  {
+   "videoId": "2wtOiMVxsuQ",
+   "title": "Gandhi (Official Video)",
+   "artist": "Money Man",
+   "duration": "2:21",
+   "art": "https://i.ytimg.com/vi/2wtOiMVxsuQ/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kJeQQugBBtW7iGJYTBIrkDNt3EjQ"
+  },
+  {
+   "videoId": "gYvpcFlKCg8",
+   "title": "Jazz Cafe Music – Coffee Shop Ambience for Work & Study",
+   "artist": "Rainy Jazz Club",
+   "duration": "2:01:09",
+   "art": "https://yt3.googleusercontent.com/hIN8i6o0t9pI2NpQ_sGNjjHOHYv6PJBLRlluWatbSY1sDXVhbIcBnE9s_9EOKRAlP6qTLtNVtJZP0GTM=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "bn8gP5N8hqM",
+   "title": "Cry For Me",
+   "artist": "The Weeknd",
+   "duration": "4:06",
+   "art": "https://i.ytimg.com/vi/bn8gP5N8hqM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nsEK16JPMt-eoeCVzCy2peIkts5A"
+  },
+  {
+   "videoId": "vzZoiw8bIRk",
+   "title": "Stars R Us (Audio)",
+   "artist": "Popcaan, Masicka",
+   "duration": "3:42",
+   "art": "https://i.ytimg.com/vi/vzZoiw8bIRk/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lKNV3h8LKjJwVspzbb572PwXXOlw"
+  },
+  {
+   "videoId": "JucvYrdSIcM",
+   "title": "That's What I Like",
+   "artist": "Bruno Mars",
+   "duration": "3:27",
+   "art": "https://yt3.googleusercontent.com/L0TeCOIXRykdcItgMBf2qrO72RDFn59k3wLd3OFlXO3y4dfrSeR-jD1NCPKiJsRN7gaf4ot_dWSVjfwXZA=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "hQ_Z-10dXSE",
+   "title": "Crazy Train",
+   "artist": "Ozzy Osbourne",
+   "duration": "4:54",
+   "art": "https://yt3.googleusercontent.com/KEXWghUU3Vt4u6iNV9SN_W7DRn5LwFfVpIUYxu42oWyQA4k-XOhJYC7_ghTU_rwi7QM8F3jBLO2xIoCh=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "3_320tpDadg",
+   "title": "Deep Focus LoFi Beats",
+   "artist": "LO-FI BEATS, lofi.dealer, Lofi Astronaut",
+   "duration": "4:00",
+   "art": "https://yt3.googleusercontent.com/Nrt5ri4vNOOGl-NxxPyhv-plYd9BoY-4V_PxJNEgC78v0f-QdY3VwVz_gyHSfQDyFEqZ7YEl8_SS1vjJRQ=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "4N15045PHEA",
+   "title": "Pink Venom",
+   "artist": "BLACKPINK",
+   "duration": "3:07",
+   "art": "https://yt3.googleusercontent.com/OeyObLE4rESv5Qu7MruXwBWsCbmXvpJl8652fUKrVzmt6SNYCvZIugmGxHRgBHN_XUSODkH3x6plN_tc=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "ObCoj8oypIk",
+   "title": "Doble Cara",
+   "artist": "Cuatro De Oro",
+   "duration": "3:50",
+   "art": "https://yt3.googleusercontent.com/DQuU-goBDUsboCnOegibjq4GKMhYehLUJY0UALz6OTj1rESXZ6EKMR9FDb5P00GTzQ7c3VCV8KEGDIt0=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "ReJAU2mXm8w",
+   "title": "O Holy Night (Official Video)",
+   "artist": "Pentatonix",
+   "duration": "4:31",
+   "art": "https://i.ytimg.com/vi/ReJAU2mXm8w/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3ls66UNhKs--Cg7OAuphifaviN4_w"
+  },
+  {
+   "videoId": "hLQl3WQQoQ0",
+   "title": "Someone Like You",
+   "artist": "Adele",
+   "duration": "4:45",
+   "art": "https://i.ytimg.com/vi/hLQl3WQQoQ0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mcDVNmdP0PlQhVET7g65r6Yomb-A"
+  },
+  {
+   "videoId": "yGi1MePEN-k",
+   "title": "Deep Sleep Music: Deeper Relaxation",
+   "artist": "Jason Stephenson",
+   "duration": "3:00:16",
+   "art": "https://yt3.googleusercontent.com/izy-xwSTCCdIGhhIC-zIbatYKoQaIqf_lTHzscee2mvj5INnAPCEoqkPGBgcLjs4WSATb75kS8nECSv_=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "I7HahVwYpwo",
+   "title": "Meet Me Halfway",
+   "artist": "The Black Eyed Peas",
+   "duration": "4:50",
+   "art": "https://i.ytimg.com/vi/I7HahVwYpwo/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lAsArvQS5K-lIpSmB3mKTIsEAMXg"
+  },
+  {
+   "videoId": "6KgoCqq6jJ0",
+   "title": "One Foot In",
+   "artist": "Stove God Cooks, Benny The Butcher",
+   "duration": "2:52",
+   "art": "https://i.ytimg.com/vi/6KgoCqq6jJ0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nJBzUlSdXEWunUgID1NXFnlKZL_w"
+  },
+  {
+   "videoId": "JhCA0y_ya6w",
+   "title": "Only Girl (In The World)",
+   "artist": "Rihanna",
+   "duration": "3:56",
+   "art": "https://yt3.googleusercontent.com/5qKDXKo8Hmm4DiKkU4OS_PZl2qVCR6wWBNd1OQCxqMYVqK8DDQY0ffKQfIzC6jLaGxrJq89f58UHUY0=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "mvUZByxfc5s",
+   "title": "Snooze",
+   "artist": "SZA",
+   "duration": "3:22",
+   "art": "https://i.ytimg.com/vi/mvUZByxfc5s/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mKDdE1-8ZlVADdmFfo-MGyuaTw7w"
+  },
+  {
+   "videoId": "vSEswwYaANA",
+   "title": "Fancy Like Christmas (Official Video)",
+   "artist": "Walker Hayes",
+   "duration": "2:42",
+   "art": "https://i.ytimg.com/vi/vSEswwYaANA/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lwyvm4GY5SrxSqViF250IFce-RtQ"
+  },
+  {
+   "videoId": "sjnRHcsDCUk",
+   "title": "Te Lo Agradezco",
+   "artist": "Kany García, Carín León",
+   "duration": "3:03",
+   "art": "https://i.ytimg.com/vi/sjnRHcsDCUk/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3l74giCOpJo4W8yb5INzqorrVk9eQ"
+  },
+  {
+   "videoId": "EUxv3AAaK_Y",
+   "title": "Blue Bossa",
+   "artist": "Joe Henderson",
+   "duration": "8:03",
+   "art": "https://yt3.googleusercontent.com/rIzsPOZ48aSFNUtbSZGFWTTqM1x9ghigYPOhzcHRe8IVXAWsvXiRigicSQPUfBKLOMdlaApBuMS1k1c=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "EPo5wWmKEaI",
+   "title": "Give Me Everything (feat. Ne-Yo, Afrojack & Nayer)",
+   "artist": "Pitbull",
+   "duration": "4:27",
+   "art": "https://i.ytimg.com/vi/EPo5wWmKEaI/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nsak9npn7ViiGD-Qc4myYjQRqGPg"
+  },
+  {
+   "videoId": "q4HWYW2XiwU",
+   "title": "Extrañándote",
+   "artist": "Zhamira, Jay Wheeler",
+   "duration": "3:04",
+   "art": "https://yt3.googleusercontent.com/G_9TKolpV2CLcP1XZNb_ZWoy1afou0G0ou5635ptoheirLxYS5_2Wu7JyyGEjPZczbepl3Jc9qaqnMQm=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "mN62Zd01COU",
+   "title": "Toretto",
+   "artist": "El Alfa, Donaty, Fuerza Regida",
+   "duration": "3:53",
+   "art": "https://i.ytimg.com/vi/mN62Zd01COU/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lCWwuwXt_p4tESUBSKYJTcSh0flA"
+  },
+  {
+   "videoId": "tnbStj-S5G0",
+   "title": "Jackboy - Keep It Goin (Official Video)",
+   "artist": "Jackboy",
+   "duration": "3:03",
+   "art": "https://i.ytimg.com/vi/tnbStj-S5G0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3m5BVIi6GI5OoKg7iNQK2sMDcJwiQ"
+  },
+  {
+   "videoId": "0mejG8Sa4lI",
+   "title": "Berserker Freestyle Live Performance",
+   "artist": "Don Trip",
+   "duration": "2:47",
+   "art": "https://i.ytimg.com/vi/0mejG8Sa4lI/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mzCM6UDCQZt-p5JS67IflEzl17iA"
+  },
+  {
+   "videoId": "mRNcPbCJNJ8",
+   "title": "Smooth Operator (Single Version)",
+   "artist": "Sade",
+   "duration": "4:19",
+   "art": "https://yt3.googleusercontent.com/jiA6FEYpRHaf6gBbPB8j8FyspyTxTWZvGNYa1IwiGnfBUWEZLZv-VAUNFiv1KJ6hYf3lUM4W5S0O9VA=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "ryA6eHZNnXY",
+   "title": "Take Five",
+   "artist": "The Dave Brubeck Quartet",
+   "duration": "5:25",
+   "art": "https://yt3.googleusercontent.com/0KGqH1h4xxoi57Giu6I2KTQfH-mBy6RVL3XjSM-YFadAeG9JRQNUFFMOKe9knFes7cGMsRXDrkGh_kcNuQ=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "Il-an3K9pjg",
+   "title": "2002",
+   "artist": "Anne-Marie",
+   "duration": "3:15",
+   "art": "https://i.ytimg.com/vi/Il-an3K9pjg/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k33gFtuRaAC-IEOmpqxiCyjtARVw"
+  },
+  {
+   "videoId": "KSgKKSny0Qo",
+   "title": "Summer",
+   "artist": "Calvin Harris",
+   "duration": "3:43",
+   "art": "https://yt3.googleusercontent.com/VwYs7-vePBLBiGfD9AtWrUIU9LloeDIY9bxly4a7qZIOEkwLwyQ0_KxMMt_4r600Nri7GOf4NSPgsqmGhA=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "rSOzN0eihsE",
+   "title": "Beautiful (feat. Colby O'Donis & Kardinal Offishall)",
+   "artist": "Akon",
+   "duration": "3:49",
+   "art": "https://i.ytimg.com/vi/rSOzN0eihsE/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kyqskenO8BJEBLZYZwH0L6Ha42lQ"
+  },
+  {
+   "videoId": "NGAW-DGkXuM",
+   "title": "run for the hills",
+   "artist": "Tate McRae",
+   "duration": "2:26",
+   "art": "https://i.ytimg.com/vi/NGAW-DGkXuM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kK2mrvdJy1LHvzDvEF8rVwK44xjQ"
+  },
+  {
+   "videoId": "zq7hltwb_yc",
+   "title": "Slightly Hung Over",
+   "artist": "BLUES DELIGHT",
+   "duration": "4:46",
+   "art": "https://yt3.googleusercontent.com/DL6mr53EkNk4-OHapvxpQjsFj393zDQXHlziOO4o1CeEmFi7Q9bUyhbh3GoXpGKs-FIq_yCSZKRNA8HF=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "_Z5-P9v3F8w",
+   "title": "Never Say Never (feat. Jaden)",
+   "artist": "Justin Bieber",
+   "duration": "3:50",
+   "art": "https://i.ytimg.com/vi/_Z5-P9v3F8w/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3m6XdSUWwXrBdmrrbMcZKBY5Xq-nA"
+  },
+  {
+   "videoId": "sT1vd6g9zes",
+   "title": "Atrapado en un Sueño",
+   "artist": "Gera MX",
+   "duration": "3:25",
+   "art": "https://i.ytimg.com/vi/sT1vd6g9zes/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kAr22pkkZefcsyDQRYL9cFTcsrLQ"
+  },
+  {
+   "videoId": "vxO7IaMRTXs",
+   "title": "Christmas Music",
+   "artist": "Chris Tomlin",
+   "duration": "2:35:50",
+   "art": "https://i.ytimg.com/vi/vxO7IaMRTXs/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3ly28VPQJ3JLSekI_svWqHeMT9CRg"
+  },
+  {
+   "videoId": "FdfoHB5ogns",
+   "title": "Closer Than This",
+   "artist": "Jimin",
+   "duration": "3:44",
+   "art": "https://yt3.googleusercontent.com/ff_Ych_l5-Tm12KBtm-hvwHPd9Dz-WGxHwgyfrVr6LuRKkhEPwlhsyqUfI2uFOhje2KEkFZgu_MdVzTA0Q=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "AZg3U2lJCZM",
+   "title": "TOESUP, Smiley - Two Feet (DJ Dark Remix)",
+   "artist": "TOESUP, Smiley",
+   "duration": "2:30",
+   "art": "https://i.ytimg.com/vi/AZg3U2lJCZM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nPrWNMkpVf2aIXxhkNDtZ3TzOApQ"
+  },
+  {
+   "videoId": "5GL9JoH4Sws",
+   "title": "Work from Home (feat. Ty Dolla $ign)",
+   "artist": "Fifth Harmony",
+   "duration": "3:40",
+   "art": "https://i.ytimg.com/vi/5GL9JoH4Sws/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kTaWM4RoX-OhiRVGPDkeVU0U6-eQ"
+  },
+  {
+   "videoId": "wMDOli6JDBQ",
+   "title": "Bad Booty",
+   "artist": "MIRA",
+   "duration": "2:34",
+   "art": "https://i.ytimg.com/vi/wMDOli6JDBQ/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3m_x3Y9PeLa__sfDgtb0ICuXgKRCw"
+  },
+  {
+   "videoId": "vOn0z0IRVN8",
+   "title": "Love Hurts",
+   "artist": "Nazareth",
+   "duration": "3:53",
+   "art": "https://yt3.googleusercontent.com/uH7ozflBt_ZNjpQfDNORZ8n4KXT3t5On2mbPY3KZ6yTm-cxKY8LSbj_RsLJc6m9VPDeUUD5Zq7g0HC0=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "4kpkDTvEgIk",
+   "title": "Open Scars",
+   "artist": "Young M.A",
+   "duration": "3:57",
+   "art": "https://yt3.googleusercontent.com/q8QhgZJFeWPLfMZ_vFN4c0ZQ4xF1JREoEtIWYRjnvrTkoc6_vimck-FRioBkjlsyl_sey7l_-8pBtWc2kA=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "UxXY_hR_wzo",
+   "title": "New Woman (feat. ROSALÍA)",
+   "artist": "LISA",
+   "duration": "3:12",
+   "art": "https://i.ytimg.com/vi/UxXY_hR_wzo/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mdh2T_aIbUnFsw67Vx5evzgcW48Q"
+  },
+  {
+   "videoId": "HzdD8kbDzZA",
+   "title": "Take on Me",
+   "artist": "a-ha",
+   "duration": "3:46",
+   "art": "https://yt3.googleusercontent.com/8YZqnYRc52GUz0iyQTRZvzh8RSbCNTTC0NSrpRlKf8UfSyu87K7ziegM8aFfAyMgUXBisxT_weHb4pFE=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "uZRwtjHI9xA",
+   "title": "Someone Like You",
+   "artist": "Myya's Diary",
+   "duration": "1:58",
+   "art": "https://i.ytimg.com/vi/uZRwtjHI9xA/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nMWuKginCi_F41Q4PSy58NDEfEtw"
+  },
+  {
+   "videoId": "tqxRidAWER8",
+   "title": "Without Me",
+   "artist": "Eminem",
+   "duration": "4:51",
+   "art": "https://yt3.googleusercontent.com/GJmbTYfaMrWuPSzhOAy7jGCQ70a2UN2-0moTq-uh_Prd73-Au51FDHhGteg543a7iBv1Y9SPm4huMSBS=w120-h120-s-l90-rj"
+  },
+  {
+   "videoId": "U0CGsw6h60k",
+   "title": "What's My Name? (feat. Drake)",
+   "artist": "Rihanna",
+   "duration": "4:25",
+   "art": "https://i.ytimg.com/vi/U0CGsw6h60k/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kv4agBxct40zw1PBoCRcTcrrEIBQ"
+  },
+  {
+   "videoId": "cF1Na4AIecM",
+   "title": "Please Please Please",
+   "artist": "Sabrina Carpenter",
+   "duration": "4:23",
+   "art": "https://i.ytimg.com/vi/cF1Na4AIecM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3n2HnPl3Jz2RAUbQdb3hHZPqW8q6Q"
+  },
+  {
+   "videoId": "e-ORhEE9VVg",
+   "title": "Blank Space",
+   "artist": "Taylor Swift",
+   "duration": "4:33",
+   "art": "https://i.ytimg.com/vi/e-ORhEE9VVg/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lqTgBmqcyKrLc5GBjvcEYlHwQrKw"
+  },
+  {
+   "videoId": "Ahha3Cqe_fk",
+   "title": "The One That Got Away (Official Music Video)",
+   "artist": "Katy Perry",
+   "duration": "4:50",
+   "art": "https://i.ytimg.com/vi/Ahha3Cqe_fk/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k_I0YL5cvu-3ov13bAFHv-3OVzqg"
+  },
+  {
+   "videoId": "e-fA-gBCkj0",
+   "title": "Locked Out of Heaven",
+   "artist": "Bruno Mars",
+   "duration": "3:55",
+   "art": "https://i.ytimg.com/vi/e-fA-gBCkj0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mF57zpsUC3uJrWoIe60JsWA8UfVg"
+  },
+  {
+   "videoId": "3K5GJB_K8sg",
+   "title": "superbowl",
+   "artist": "EBK Jaaybo, Lil Bean",
+   "duration": "2:51",
+   "art": "https://i.ytimg.com/vi/3K5GJB_K8sg/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nil1gcBqj5G5aAD9NMo1ZFdtbTAg"
+  },
+  {
+   "videoId": "ViwtNLUqkMY",
+   "title": "Crazy In Love",
+   "artist": "Beyoncé",
+   "duration": "3:57",
+   "art": "https://i.ytimg.com/vi/ViwtNLUqkMY/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mHdH_daoYaKaxIP8NYmMmQN9qxPQ"
+  },
+  {
+   "videoId": "cFdMPOvHvYA",
+   "title": "Lofi Calm Beats",
+   "artist": "Lofi Beats, Smooth Lofi Zone, ChillHop Cafe, Background Lofi Beats",
+   "duration": "2:00",
+   "art": "https://yt3.googleusercontent.com/jL1JPcALmG1ymBbePg1Z5iK1nTmyXw9O7WAX85bCtSHbsgSKBaKS3xre4iL-mUeEGxTNr0EhNrnhGDuR=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "XpqqjU7u5Yc",
+   "title": "How Deep Is Your Love (Serban Mix)",
+   "artist": "Bee Gees",
+   "duration": "4:00",
+   "art": "https://i.ytimg.com/vi/XpqqjU7u5Yc/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k49fmvx9aKF3AIMuGhus5mnQ3MPQ"
+  },
+  {
+   "videoId": "bo_efYhYU2A",
+   "title": "Shallow (from A Star Is Born) (Official Music Video)",
+   "artist": "Bradley Cooper",
+   "duration": "3:37",
+   "art": "https://i.ytimg.com/vi/bo_efYhYU2A/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kRrWbv2QyRejhpBOrt5Pd0BhK8kw"
+  },
+  {
+   "videoId": "YV8P4aEXzMU",
+   "title": "Overdrive (feat. Norma Jean Martine)",
+   "artist": "Ofenbach",
+   "duration": "3:00",
+   "art": "https://i.ytimg.com/vi/YV8P4aEXzMU/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lO9EwHD6F8HN6vwAUpOEjmNwb0bQ"
+  },
+  {
+   "videoId": "f4Y3b7un4LE",
+   "title": "Slow It Down",
+   "artist": "Benson Boone",
+   "duration": "3:04",
+   "art": "https://i.ytimg.com/vi/f4Y3b7un4LE/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mffXJNcW3fXG_uM9FGbZgM2GlGkA"
+  },
+  {
+   "videoId": "Mz4lVuykCKg",
+   "title": "Lofi for Studying and Concentration",
+   "artist": "Lofi Hip-Hop Beats, Midnight Lofi, Copyright Free Lofi",
+   "duration": "2:05",
+   "art": "https://yt3.googleusercontent.com/nnskKG3oCFb5CrUxOONAnYlQ944yo_8ZrOkYtkUEEE94SYC1uvRQs_c4xK8gzqf7xafG_3R6IJjOC_LC=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "Ia8tdTpnXQs",
+   "title": "Okay (Official Music Video)",
+   "artist": "French Montana, ATL Jacob, Lil Baby",
+   "duration": "3:24",
+   "art": "https://i.ytimg.com/vi/Ia8tdTpnXQs/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k8HfWJLW0NxE67fzPZTmS7eQ2ivw"
+  },
+  {
+   "videoId": "nL-FJofbRq4",
+   "title": "Yeah! (feat. Ludacris & Lil Jon)",
+   "artist": "USHER",
+   "duration": "4:11",
+   "art": "https://i.ytimg.com/vi/nL-FJofbRq4/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kZRnHEGrPapDr3ZBuiigP8gew_0g"
+  },
+  {
+   "videoId": "y1_Zks3Mdis",
+   "title": "TAEMIN 태민 'The Rizzness' Performance Video",
+   "artist": "SHINee",
+   "duration": "3:04",
+   "art": "https://i.ytimg.com/vi/y1_Zks3Mdis/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mltcSAsc-_x66J2Z9IiLi0cHIxYQ"
+  },
+  {
+   "videoId": "xwi83ViXEzQ",
+   "title": "Le Ando Hechando Ganas",
+   "artist": "Gerardo Coronel",
+   "duration": "2:39",
+   "art": "https://i.ytimg.com/vi/xwi83ViXEzQ/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kbVFaqTT9q_2Gkkl-AmhxLv630uw"
+  },
+  {
+   "videoId": "_eDXK2OSYog",
+   "title": "Morning Café Jazz",
+   "artist": "Jazz Music Zone",
+   "duration": "3:58",
+   "art": "https://yt3.googleusercontent.com/ryOGtcqThn-ejc6h_77NLWuSoSnPypGexHu5EPBxUBN-nienIucOcXjZ55pok4w296sNdvx5Wf4u7DA=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "1j6Pfv6xS9o",
+   "title": "Come With Me",
+   "artist": "MIRA",
+   "duration": "2:48",
+   "art": "https://i.ytimg.com/vi/1j6Pfv6xS9o/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mM9Ky_Eh8VEi0x25G7k0O5oELf6A"
+  },
+  {
+   "videoId": "nfs8NYg7yQM",
+   "title": "Attention",
+   "artist": "Charlie Puth",
+   "duration": "3:52",
+   "art": "https://i.ytimg.com/vi/nfs8NYg7yQM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mXnXdLhnJeR-cKs93jscX8qW0Vew"
+  },
+  {
+   "videoId": "SBnBTIucCSA",
+   "title": "Bandida Fina",
+   "artist": "YOVNGCHIMI, Ozuna",
+   "duration": "4:21",
+   "art": "https://i.ytimg.com/vi/SBnBTIucCSA/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3l68bIV3Y2zwePtMgutxI4joAjhyA"
+  },
+  {
+   "videoId": "Hescu0zZ75s",
+   "title": "Daydreamin'",
+   "artist": "Steve Kroeger, Skye Holland",
+   "duration": "3:12",
+   "art": "https://i.ytimg.com/vi/Hescu0zZ75s/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lUyvk72ayAdP_XYRYEzT56igHLzQ"
+  },
+  {
+   "videoId": "Q0GEeweEfeA",
+   "title": "Watchin Now",
+   "artist": "BabyDrill",
+   "duration": "2:28",
+   "art": "https://i.ytimg.com/vi/Q0GEeweEfeA/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kj5Sodb2TUH0ryKut7OJvwKstWUQ"
+  },
+  {
+   "videoId": "wp43OdtAAkM",
+   "title": "Running Up That Hill",
+   "artist": "Kate Bush",
+   "duration": "4:56",
+   "art": "https://i.ytimg.com/vi/wp43OdtAAkM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mrbKpmAN4yDHSYLuXJt96gAvDsTw"
+  },
+  {
+   "videoId": "h6TzXFARexQ",
+   "title": "Lofi Chill",
+   "artist": "Sad Music",
+   "duration": "5:42",
+   "art": "https://yt3.googleusercontent.com/0bb5M66hQ4fXd277Bjxg2WJJIny9eUoT1vT0IdqwwYb4Prjt4oVS4t9NR6KdBrXpsrKN2hnNBpzYCkY3=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "OT2IKn6ycbA",
+   "title": "Christmas Pussy",
+   "artist": "Boosie Badazz",
+   "duration": "2:46",
+   "art": "https://yt3.googleusercontent.com/7HTkaM7EbPPXk46MS_MfZKQQLTERKA8x2rIivFFUm1_n1yY99eY9ChYMhvVyDTpUomintX_1DyZnkHzY=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "dSRfHnbYIGU",
+   "title": "Chill Lofi",
+   "artist": "LO-FI BEATS, Lofi Chillhop",
+   "duration": "2:21",
+   "art": "https://yt3.googleusercontent.com/D5j52CHIYb2ZS1r_4XV_90AFTVQppGGWyORqlS5-9OOSwhpHq5s4TOxNxhCX3dq8bFV5djFMyJgcOW7s=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "LVcbpFaGc_o",
+   "title": "ICONIC BY MISTAKE",
+   "artist": "LE SSERAFIM, ILLIT, KATSEYE",
+   "duration": "2:58",
+   "art": "https://yt3.googleusercontent.com/IX-QEr9pFD41clJP-q_Yg462m02Ni_6PjBQ9TpaGtzb4sT0eH1ZC6dy_ZxcqVIEZF9ipY9FgIirPJPh6=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "ZjBZ8MUnB0E",
+   "title": "Training Season",
+   "artist": "Dua Lipa",
+   "duration": "3:47",
+   "art": "https://i.ytimg.com/vi/ZjBZ8MUnB0E/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3m-71hD3zzJuAXxlmKijkw4MXDcvA"
+  },
+  {
+   "videoId": "U4_T94V7j7Y",
+   "title": "Brainstorming",
+   "artist": "Hunxho",
+   "duration": "2:45",
+   "art": "https://i.ytimg.com/vi/U4_T94V7j7Y/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k1qRRoYHz_hqlqXYqZCbYgqoSLqg"
+  },
+  {
+   "videoId": "9p9EauIOPm8",
+   "title": "Stargazing",
+   "artist": "Myles Smith",
+   "duration": "2:55",
+   "art": "https://i.ytimg.com/vi/9p9EauIOPm8/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nDGqkqRWXuLoqFTYJpIUrt4TCtzw"
+  },
+  {
+   "videoId": "4R7vRFGJr3k",
+   "title": "BORN TO BE (Final Version) (Final Ver.)",
+   "artist": "ITZY",
+   "duration": "3:11",
+   "art": "https://i.ytimg.com/vi/4R7vRFGJr3k/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3n4qxPUrL5nXTdq7EWTVwmqJQ1f7A"
+  },
+  {
+   "videoId": "dSDbwfXX5_I",
+   "title": "I Don't Wanna Wait",
+   "artist": "David Guetta, OneRepublic",
+   "duration": "2:35",
+   "art": "https://i.ytimg.com/vi/dSDbwfXX5_I/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3n0gCd_S-3K_sRlikgpkiQb4Wii9w"
+  },
+  {
+   "videoId": "JsWG2Gry1fw",
+   "title": "It's All Coming Back to Me Now",
+   "artist": "Céline Dion",
+   "duration": "7:37",
+   "art": "https://yt3.googleusercontent.com/Eiluzg8aQku4doS78IcM_oAa7rn66ZiY_uNXegdObLu1FvQmK2jSEtqZYETZ_jHA9sN9aUhElwqXfyg=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "ZInuZ9Ae3-4",
+   "title": "Act Like You Can’t Think",
+   "artist": "Fredo Bang",
+   "duration": "3:09",
+   "art": "https://i.ytimg.com/vi/ZInuZ9Ae3-4/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nD8MOY_9OzaCr9VzCTGAfKHXRWEA"
+  },
+  {
+   "videoId": "4TZmNObLkAU",
+   "title": "What It Sounds Like",
+   "artist": "HUNTR/X, EJAE, AUDREY NUNA, REI AMI",
+   "duration": "4:11",
+   "art": "https://yt3.googleusercontent.com/ogvvJ4j4vEP1XxsfAJ1wZs-O7dRUe_9Ek_8ui-A9QZ59WaNhB4DPaND_SCsa3uYb6Wq3N69w8mJOF7oE=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "suAR1PYFNYA",
+   "title": "Houdini",
+   "artist": "Dua Lipa",
+   "duration": "3:09",
+   "art": "https://i.ytimg.com/vi/suAR1PYFNYA/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k7i_fX4l6vehNv6HezKuyNuKLyGQ"
+  },
+  {
+   "videoId": "4nJp40iOF-s",
+   "title": "Lonely Gangsta",
+   "artist": "Young Slo-Be",
+   "duration": "2:42",
+   "art": "https://i.ytimg.com/vi/4nJp40iOF-s/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lXqG9gJFh-nf_7dziwNpzCEmFhlg"
+  },
+  {
+   "videoId": "NNiTxUEnmKI",
+   "title": "The Final Countdown",
+   "artist": "Europe",
+   "duration": "5:11",
+   "art": "https://yt3.googleusercontent.com/Ng-QT35dVQKMdAvQku2fdR-Bhl1k4gMPr9pkXEFxmQ11yEN9uaY934EnqlFC-zN6tE1lwos2ChwBOR0=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "OPf0YbXqDm0",
+   "title": "Uptown Funk (feat. Bruno Mars)",
+   "artist": "Mark Ronson",
+   "duration": "4:31",
+   "art": "https://i.ytimg.com/vi/OPf0YbXqDm0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k5Vb4W1BImJ075d6qrwZ3o0YRDjQ"
+  },
+  {
+   "videoId": "gsYwq1Wj4U0",
+   "title": "Gimme Da Lite (Official Music Video)",
+   "artist": "Southside, Lil Yachty",
+   "duration": "1:54",
+   "art": "https://i.ytimg.com/vi/gsYwq1Wj4U0/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mJsDEwzIxnN_N-fxk4j6oWm5GSJA"
+  },
+  {
+   "videoId": "8c7KOGxeY3w",
+   "title": "POR EL CONTRARIO with Leonardo Aguilar & Ángela Aguilar (Perf...",
+   "artist": "Becky G, Leonardo Aguilar, Ángela Aguilar",
+   "duration": "3:55",
+   "art": "https://i.ytimg.com/vi/8c7KOGxeY3w/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nwgXXKdJ7tLlHME5iLEVOJa3xiaA"
+  },
+  {
+   "videoId": "rn1T2kMS7Qk",
+   "title": "R&B Soul Jazz _ Smooth & Relaxing Cozy Seoul Soul",
+   "artist": "Silent Waves M",
+   "duration": "1:50:43",
+   "art": "https://yt3.googleusercontent.com/L40Z-K2ecylopT2TiZCwiOSQfMfPIzowg74cNuI687CkMdyh3vacfdg7ITA4yYrr4J3Q-Yk8Z1HiRwYr5g=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "zHpSZkzxK58",
+   "title": "ONE DAY",
+   "artist": "ZLATA OGNEVICH",
+   "duration": "3:52",
+   "art": "https://i.ytimg.com/vi/zHpSZkzxK58/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3negCIY7Z9t2PIAhcTKofBa3J_mHQ"
+  },
+  {
+   "videoId": "Tn4CnANlI_k",
+   "title": "Good Kid",
+   "artist": "C-Lance , Merkules",
+   "duration": "3:02",
+   "art": "https://i.ytimg.com/vi/Tn4CnANlI_k/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nZ8_fkmR5J3bakm72UhP7WnIm6Cw"
+  },
+  {
+   "videoId": "r8guTA0vY3A",
+   "title": "Not An Angel",
+   "artist": "Tems",
+   "duration": "3:06",
+   "art": "https://yt3.googleusercontent.com/_i8c8XYjpAxeo0RYW08YNZJfZNKWBlpAPDC0ZWUg3_b7N9lYQtSRsxc-mY_nprUWL3-gKdzMEdfteU5n=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "H58vbez_m4E",
+   "title": "Not Like Us",
+   "artist": "Kendrick Lamar",
+   "duration": "5:55",
+   "art": "https://i.ytimg.com/vi/H58vbez_m4E/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mXukpTeGLdNqRicSk3lAtWkJt8hw"
+  },
+  {
+   "videoId": "ZEcqHA7dbwM",
+   "title": "Fly Me To The Moon (2008 Remastered) (feat. Count Basie And His Orchestra)",
+   "artist": "Frank Sinatra",
+   "duration": "2:28",
+   "art": "https://yt3.googleusercontent.com/GCWcP0PYxKzb0-l04KRh2th6zKS6HMPYAWGoc_3cZGO8NwIiIzvplCcXMF1NDNmWo1Ke3MpDonqddxWJ=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "PFlebNTx0nA",
+   "title": "You’re Losing Me (From The Vault)",
+   "artist": "Taylor Swift",
+   "duration": "4:38",
+   "art": "https://yt3.googleusercontent.com/Az0-AGrPHdbx8MSmaK8tAtH-rHXJjkMPDbqN0mwdBhtBkEq6Cjde-s2-FJdWpGErXEORW-FXmBJfHScP=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "t7bQwwqW-Hc",
+   "title": "A Bar Song (Tipsy)",
+   "artist": "Shaboozey",
+   "duration": "2:54",
+   "art": "https://i.ytimg.com/vi/t7bQwwqW-Hc/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3n6CObF-_fy0cxLXcTqiHVcVWxynQ"
+  },
+  {
+   "videoId": "w1-jss2mZlY",
+   "title": "You Broke My Heart",
+   "artist": "Drake",
+   "duration": "4:53",
+   "art": "https://i.ytimg.com/vi/w1-jss2mZlY/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3l_3z1_7OY4lqrpfo6PzSool1Fu9w"
+  },
+  {
+   "videoId": "NMA_isZYsYQ",
+   "title": "KICK BACK",
+   "artist": "Kenshi Yonezu",
+   "duration": "3:14",
+   "art": "https://yt3.googleusercontent.com/NzNwvpFBVqnTcsoC68ryZidkX9c0e6yH0g5txpIpHIRT95iyK9KfEgIDWURm0NhVCqrDskVWEtsPCLZP=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "N6O2ncUKvlg",
+   "title": "Just A Dream",
+   "artist": "Nelly",
+   "duration": "4:01",
+   "art": "https://i.ytimg.com/vi/N6O2ncUKvlg/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mdTmO3BrnoPlGLHmL2D1ibd7m4wQ"
+  },
+  {
+   "videoId": "muzQ0r14L2Y",
+   "title": "Shotta Flow 7",
+   "artist": "NLE Choppa",
+   "duration": "2:42",
+   "art": "https://i.ytimg.com/vi/muzQ0r14L2Y/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lUCgPhqZ1Le4Y2PxP3Db3TCX1gVw"
+  },
+  {
+   "videoId": "V9PVRfjEBTI",
+   "title": "BIRDS OF A FEATHER",
+   "artist": "Billie Eilish",
+   "duration": "3:51",
+   "art": "https://i.ytimg.com/vi/V9PVRfjEBTI/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lRu2NAdqTb7fq0hcIKTu71FkBFuA"
+  },
+  {
+   "videoId": "WsBm9QKcJUw",
+   "title": "Home",
+   "artist": "Joel Winterflood, RAZZ",
+   "duration": "2:50",
+   "art": "https://i.ytimg.com/vi/WsBm9QKcJUw/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3lG-J7O5zTsKV6Wv4p2KSPD5sveJQ"
+  },
+  {
+   "videoId": "p3zVQmoP-JM",
+   "title": "Through The Years (R&B/Jazz)",
+   "artist": "Voss",
+   "duration": "5:00",
+   "art": "https://yt3.googleusercontent.com/cXfvfFHu2OW67b45EFtBnPu7hjMVLYQ2z48YN07nYkqZJ9i0dvw4KE6dSzV8oZALWgTrqM6EB897Ylcv=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "Y_ZYnNmoAsY",
+   "title": "Ultimate Juke-Box Hits of the 50S & 60S Medley 1: The Loco-Motion / Surfin' Safari / Let's Dance / Runaway / Love Me Do / Reet Petite / Big Bad John / Bobby's Girl / A Hundred Pounds of Clay / The Girl of My Best Friend / Walk Right Back / Stupid Cupid /",
+   "artist": "Various Artists",
+   "duration": "1:06:21",
+   "art": "https://yt3.googleusercontent.com/iTfntEMDXSTrYp-lD66JcJP0nuNKi1zs9lpvm2ARYiNpcLXPxp44Jp38MCVOngrQvH8Bn8U28_v11J0=w120-h120-l90-rj"
+  },
+  {
+   "videoId": "47YClVMlthI",
+   "title": "Confident (feat. Chance The Rapper)",
+   "artist": "Justin Bieber",
+   "duration": "6:06",
+   "art": "https://i.ytimg.com/vi/47YClVMlthI/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nBNEbndqQGnUCBGzUTzy97AfsxjQ"
+  },
+  {
+   "videoId": "apdK-0joZ3w",
+   "title": "Friends Like That",
+   "artist": "LEROCQUE",
+   "duration": "3:15",
+   "art": "https://i.ytimg.com/vi/apdK-0joZ3w/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nQYv8OZFjIV89RWevQxWemd6Wb-A"
+  },
+  {
+   "videoId": "mkCaf6tuhGM",
+   "title": "Ring Ring",
+   "artist": "MIRA",
+   "duration": "2:27",
+   "art": "https://i.ytimg.com/vi/mkCaf6tuhGM/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3nM3t27mTpz0gumb3DwdktA9yR-iA"
+  },
+  {
+   "videoId": "HfWLgELllZs",
+   "title": "luther",
+   "artist": "Kendrick Lamar, SZA",
+   "duration": "2:58",
+   "art": "https://i.ytimg.com/vi/HfWLgELllZs/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3mhhZk_3dbr727Zm33-AvNOjWZ6PA"
+  },
+  {
+   "videoId": "7InTkBxPtK4",
+   "title": "Sports car",
+   "artist": "Tate McRae",
+   "duration": "3:08",
+   "art": "https://i.ytimg.com/vi/7InTkBxPtK4/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3kgWWzCfGEpId5Pbo87eqnJWfoKYw"
+  },
+  {
+   "videoId": "tD4HCZe-tew",
+   "title": "Lush Life",
+   "artist": "Zara Larsson",
+   "duration": "3:22",
+   "art": "https://i.ytimg.com/vi/tD4HCZe-tew/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3loVmMx1nTfOgptMZQoWMSo-fHoFA"
+  },
+  {
+   "videoId": "7siAvflp46s",
+   "title": "Greatest Hits of the 50S Medley 1: Oh Carol! / Dream Lover / Livin' Doll / Unchained Melody / Diana / Venus / Lipstick on Your Collar / For Your Precious Love / Maybe Tomorrow / Smoke Gets in Your Eyes / Rockin' Robin / A Kiss from Your Lips / It's All In",
+   "artist": "Various Artists",
+   "duration": "1:16:12",
+   "art": "https://yt3.googleusercontent.com/NXWHC4BtPtc-OLL8tV1H7FD0YCQqXmr9YLsztwMrWv5IwaH35YfkUz8reXFto3dIa-sSbMPsfBVPNl8=w120-h120-l90-rj"
+  }
+ ]
+}

@@ -5508,6 +5508,7 @@ function openApp(id){
     ytmFavLoad();
     ytmRenderChips();
     ytmRenderFeed();
+    YTM_WORKER_OK=null;          /* 每次进应用重新试一次远端 Worker */
     ytmBridgeProbe();            /* 后台探测 ytmusicapi 桥，可用就换成真实歌曲 */
     ytEnsureSearchBar('app-ytmusic','ytmApiSearch','搜索歌曲（YouTube Music）',function(q){
       ytmSearchSongs(q);
@@ -7887,7 +7888,96 @@ function ytmLocalSongs(n){
     return { id:id, t:'音乐 '+id, a:'YouTube Music', d:'', art:ytThumb(id) };
   });
 }
-/* 取一批歌曲：桥 → Data API → 本地池 */
+/* ---------- 远端 serverless：Cloudflare Worker（InnerTube 代理，ytm-worker/） ----------
+   已部署的地址与访问令牌。令牌会随页面公开（这是静态站点的必然结果），
+   它只用于挡掉「随手拿你的 Worker 去刷」的情况，不是机密 —— 被刷爆就到 Cloudflare 换一个。
+   也可用 URL 参数 ?ytmapi= / ?ytmtoken= 或 localStorage 的 ytm_worker / ytm_token 覆盖。 */
+const YTM_WORKER_DEFAULT='https://ytm.luoweizhang0614.workers.dev';
+const YTM_WORKER_TOKEN='Zhang567563';
+let YTM_WORKER_OK=null;
+function ytmWorkerUrl(){
+  try{
+    const q=new URLSearchParams(location.search);
+    const saved=localStorage.getItem('ytm_worker');
+    return String(q.get('ytmapi')||saved||YTM_WORKER_DEFAULT||'').replace(/\/+$/,'');
+  }catch(e){ return YTM_WORKER_DEFAULT||''; }
+}
+function ytmWorkerToken(){
+  try{
+    const q=new URLSearchParams(location.search);
+    return String(q.get('ytmtoken')||localStorage.getItem('ytm_token')||YTM_WORKER_TOKEN||'');
+  }catch(e){ return YTM_WORKER_TOKEN||''; }
+}
+/* 拼 URL 时把令牌作为查询参数追加（不是字符串直接相加）：
+   base 若自带 ?token=… 也能正确接上，不会拼出 "...?token=x/songs?limit=8" 这种烂地址。 */
+function ytmWorkerRequest(path,ms){
+  const base=ytmWorkerUrl();
+  if(!base)return Promise.reject(new Error('worker not configured'));
+  if(!/^https?:\/\//i.test(base))return Promise.reject(new Error('bad worker url'));
+  let url=base.replace(/\/+$/,'')+path;
+  const tok=ytmWorkerToken();
+  if(tok)url+=(url.indexOf('?')>=0?'&':'?')+'token='+encodeURIComponent(tok);
+  const ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+  const t=setTimeout(function(){ try{ctl&&ctl.abort();}catch(e){} },ms||9000);
+  return fetch(url,{signal:ctl?ctl.signal:undefined})
+    .then(function(r){ if(!r.ok)throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(j){ clearTimeout(t); return j; })
+    .catch(function(e){ clearTimeout(t); throw e; });
+}
+/* 兼容旧调用名 */
+function ytmWorkerGet(path,ms){ return ytmWorkerRequest(path,ms); }
+/* ---------- 静态快照数据源（给 GitHub Pages 这类纯静态托管用） ----------
+   CI 里跑 `python _ytm_bridge.py --dump ytm-songs.json` 把真实歌曲固化成同目录的 JSON，
+   页面直接同源取用 —— 访客不需要装 Python、不需要跑桥，打开就有真实歌曲。
+   注意：file:// 下 fetch 本地文件会被浏览器拦掉，所以这条只在 http(s) 下有效。 */
+const YTM_SNAP_FILE='ytm-songs.json';
+let YTM_SNAP_POOL=null, YTM_SNAP_DECK=[], YTM_SNAP_RECENT=[];
+function ytmSnapshotLoad(){
+  if(YTM_SNAP_POOL)return Promise.resolve(YTM_SNAP_POOL);
+  /* ① 优先用 <script src="ytm-songs.js"> 注入的快照：
+        file:// 下 fetch 本地文件会被浏览器拦掉，但 <script src> 照常可用。 */
+  try{
+    const inj=window.YTM_SNAPSHOT;
+    if(inj&&inj.songs&&inj.songs.length){
+      const list=inj.songs.map(ytmNormalizeSong).filter(Boolean);
+      if(list.length){ YTM_SNAP_POOL=list; return Promise.resolve(list); }
+    }
+  }catch(e){}
+  /* ② 退回到同源 JSON（http/https 才有意义） */
+  if(!/^https?:$/.test(location.protocol))return Promise.reject(new Error('not http(s)'));
+  return fetch(YTM_SNAP_FILE,{cache:'no-store'}).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(j){
+    const list=(j&&j.songs||[]).map(ytmNormalizeSong).filter(Boolean);
+    if(!list.length)throw new Error('empty');
+    YTM_SNAP_POOL=list;
+    return list;
+  });
+}
+/* 从快照里抽 n 首：洗牌袋 + 屏蔽最近出现过的，保证「换一批」不重复 */
+function ytmSnapshotDraw(n){
+  const pool=YTM_SNAP_POOL||[];
+  if(!pool.length)return [];
+  const out=[];
+  let guard=0;
+  while(out.length<n&&guard++<n*4+16){
+    if(!YTM_SNAP_DECK.length){
+      const maxBan=Math.max(0,pool.length-n);
+      const ban={};
+      YTM_SNAP_RECENT.slice(-maxBan).forEach(function(id){ban[id]=1;});
+      let fresh=ytShuffleStrong(pool).filter(function(s){return !ban[s.id];});
+      if(fresh.length<n)fresh=ytShuffleStrong(pool);
+      YTM_SNAP_DECK=fresh;
+    }
+    const s=YTM_SNAP_DECK.pop();
+    if(s&&!out.some(function(x){return x.id===s.id;}))out.push(s);
+  }
+  out.forEach(function(s){YTM_SNAP_RECENT.push(s.id);});
+  YTM_SNAP_RECENT=YTM_SNAP_RECENT.slice(-120);
+  return out;
+}
+/* 取一批歌曲：本地桥 → 远端 Worker → 静态快照 → Data API → 本地池 */
 function ytmFetchSongs(n){
   const want=n||8;
   const fromBridge=function(){
@@ -7898,6 +7988,22 @@ function ytmFetchSongs(n){
       return { songs:list, from:'ytmusicapi' };
     });
   };
+  const fromWorker=function(){
+    if(!ytmWorkerUrl()||YTM_WORKER_OK===false)return Promise.reject(new Error('worker off'));
+    return ytmWorkerGet('/songs?limit='+want,9000).then(function(j){
+      const list=(j&&j.songs||[]).map(ytmNormalizeSong).filter(Boolean);
+      if(!list.length)throw new Error('empty');
+      YTM_WORKER_OK=true;
+      return { songs:list, from:'ytmusicapi（Worker）' };
+    }).catch(function(e){ YTM_WORKER_OK=false; throw e; });
+  };
+  const fromSnapshot=function(){
+    return ytmSnapshotLoad().then(function(){
+      const list=ytmSnapshotDraw(want);
+      if(!list.length)throw new Error('empty');
+      return { songs:list, from:'ytmusicapi（静态快照）' };
+    });
+  };
   const fromApi=function(){
     return ytApiSearch('热门歌曲',{max:want,cat:'10'}).then(function(items){
       const list=(items||[]).map(ytmNormalizeSong).filter(Boolean);
@@ -7905,7 +8011,7 @@ function ytmFetchSongs(n){
       return { songs:list, from:'YouTube Data API' };
     });
   };
-  return fromBridge().catch(fromApi).catch(function(){
+  return fromBridge().catch(fromWorker).catch(fromSnapshot).catch(fromApi).catch(function(){
     return { songs:ytmLocalSongs(want), from:'本地随机池' };
   });
 }
@@ -8068,6 +8174,10 @@ function ytmSearchSongs(q){
   if(ytmBridgeState==='ok'){
     ytmBridgeGet('/search?q='+encodeURIComponent(q)+'&limit=12',8000)
       .then(function(j){ done((j&&j.songs||[]).map(ytmNormalizeSong).filter(Boolean),'ytmusicapi'); })
+      .catch(function(){ ytmSearchViaApi(q,done); });
+  }else if(ytmWorkerUrl()&&YTM_WORKER_OK!==false){
+    ytmWorkerGet('/search?q='+encodeURIComponent(q)+'&limit=12',9000)
+      .then(function(j){ done((j&&j.songs||[]).map(ytmNormalizeSong).filter(Boolean),'ytmusicapi（Worker）'); })
       .catch(function(){ ytmSearchViaApi(q,done); });
   }else{
     ytmSearchViaApi(q,done);
@@ -18993,9 +19103,14 @@ wireSafeReboot('.desk-actions [data-act="reboot"]');
   }
 }
 setTimeout(()=>$('#splash').classList.add('off'),1600);
-</script>
-  /* 桌面时钟/日历实时更新：立即启动 + 兜底重启 */
+  /* 桌面时钟/日历实时更新：立即启动 + 兜底重启
+     （这几行原先误放在脚本结束标签之后，成了页面里的纯文本、永远不会执行，已移回脚本内。
+       注意：注释里不能出现脚本结束标签的字面写法，否则 HTML 解析器会提前收尾。） */
   try{deskIconsStart();}catch(e){}
   try{setTimeout(function(){deskIconsStart();deskIconsTick(true);},400);}catch(e){}
+</script>
+<!-- YT Music 静态快照：由 .github/workflows/ytm-snapshot.yml 生成。
+     用 <script src> 而不是 fetch，这样 file:// 直接打开也能用；文件不存在时静默忽略。 -->
+<script src="ytm-songs.js"></script>
 </body>
 </html>

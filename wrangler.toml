@@ -1,0 +1,22 @@
+name = "ytm-worker"
+main = "worker.mjs"
+compatibility_date = "2024-11-01"
+
+# 部署：  npx wrangler deploy
+#
+# 两道门，建议都配上（Cloudflare 控制台 → 你的 Worker → Settings → Variables and Secrets）：
+#
+#   1) YTM_ORIGINS  —— 来源白名单，真正有用的那道
+#      只有列出的站点能在浏览器里调用这个 Worker，别的网站嵌不进来。
+#      例： https://你的用户名.github.io,http://127.0.0.1,http://localhost
+#
+#   2) YTM_TOKEN    —— 访问令牌（Secret）
+#      注意：页面是公开的，令牌写在页面里就等于公开，只能挡掉「随手 curl 一下」的人。
+#      例： npx wrangler secret put YTM_TOKEN
+#
+# 两个都不配 = 谁都能用你的 Worker 刷 YouTube Music。
+
+[vars]
+YTM_LANG = "zh-CN"
+YTM_REGION = "US"
+# YTM_ORIGINS = "https://yourname.github.io,http://127.0.0.1,http://localhost"
