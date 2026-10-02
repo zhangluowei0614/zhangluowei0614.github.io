@@ -7889,17 +7889,23 @@ function ytmLocalSongs(n){
   });
 }
 /* ---------- 远端 serverless：Cloudflare Worker（InnerTube 代理，ytm-worker/） ----------
-   已部署的地址与访问令牌。令牌会随页面公开（这是静态站点的必然结果），
-   它只用于挡掉「随手拿你的 Worker 去刷」的情况，不是机密 —— 被刷爆就到 Cloudflare 换一个。
-   也可用 URL 参数 ?ytmapi= / ?ytmtoken= 或 localStorage 的 ytm_worker / ytm_token 覆盖。 */
-const YTM_WORKER_DEFAULT='https://ytm.luoweizhang0614.workers.dev';
+   部署好的地址；连不上会自动跳过并降级到静态快照，不影响页面。
+   想换地址/关掉它，不必改这个文件：
+     · 地址栏参数：  pixel17.html?ytmapi=https://xxx.workers.dev&ytmtoken=令牌
+     · 控制台一行：  localStorage.setItem('ytm_worker','https://xxx.workers.dev')
+     · 彻底关掉：    localStorage.setItem('ytm_worker','off')
+   注意：令牌写在公开页面里等于公开，它只挡「随手 curl」的人，不是机密。 */
+const YTM_WORKER_DEFAULT='https://ytm-worker.luoweizhang0614.workers.dev';
 const YTM_WORKER_TOKEN='Zhang567563';
 let YTM_WORKER_OK=null;
+const YTM_WORKER_DEAD_TTL=24*3600*1000;
 function ytmWorkerUrl(){
   try{
     const q=new URLSearchParams(location.search);
     const saved=localStorage.getItem('ytm_worker');
-    return String(q.get('ytmapi')||saved||YTM_WORKER_DEFAULT||'').replace(/\/+$/,'');
+    const v=String(q.get('ytmapi')||saved||YTM_WORKER_DEFAULT||'');
+    if(!v||v==='off'||v==='0')return '';
+    return v.replace(/\/+$/,'');
   }catch(e){ return YTM_WORKER_DEFAULT||''; }
 }
 function ytmWorkerToken(){
@@ -7908,12 +7914,30 @@ function ytmWorkerToken(){
     return String(q.get('ytmtoken')||localStorage.getItem('ytm_token')||YTM_WORKER_TOKEN||'');
   }catch(e){ return YTM_WORKER_TOKEN||''; }
 }
+/* 失败后记住 24 小时，别每次开应用都在一个挂掉的地址上白等。
+   标记里带上地址：换了 Worker 地址就会自动重新尝试，不会被旧标记挡住。 */
+function ytmWorkerDead(){
+  try{
+    const raw=String(localStorage.getItem('ytm_worker_dead')||'');
+    const i=raw.lastIndexOf('|');
+    if(i<0)return false;
+    const u=raw.slice(0,i), t=Number(raw.slice(i+1));
+    return u===ytmWorkerUrl()&&!!t&&(Date.now()-t)<YTM_WORKER_DEAD_TTL;
+  }catch(e){ return false; }
+}
+function ytmWorkerMarkDead(dead){
+  try{
+    if(dead)localStorage.setItem('ytm_worker_dead',ytmWorkerUrl()+'|'+Date.now());
+    else localStorage.removeItem('ytm_worker_dead');
+  }catch(e){}
+}
 /* 拼 URL 时把令牌作为查询参数追加（不是字符串直接相加）：
    base 若自带 ?token=… 也能正确接上，不会拼出 "...?token=x/songs?limit=8" 这种烂地址。 */
 function ytmWorkerRequest(path,ms){
   const base=ytmWorkerUrl();
   if(!base)return Promise.reject(new Error('worker not configured'));
   if(!/^https?:\/\//i.test(base))return Promise.reject(new Error('bad worker url'));
+  if(ytmWorkerDead())return Promise.reject(new Error('worker marked dead'));
   let url=base.replace(/\/+$/,'')+path;
   const tok=ytmWorkerToken();
   if(tok)url+=(url.indexOf('?')>=0?'&':'?')+'token='+encodeURIComponent(tok);
@@ -7921,8 +7945,8 @@ function ytmWorkerRequest(path,ms){
   const t=setTimeout(function(){ try{ctl&&ctl.abort();}catch(e){} },ms||9000);
   return fetch(url,{signal:ctl?ctl.signal:undefined})
     .then(function(r){ if(!r.ok)throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(j){ clearTimeout(t); return j; })
-    .catch(function(e){ clearTimeout(t); throw e; });
+    .then(function(j){ clearTimeout(t); ytmWorkerMarkDead(false); return j; })
+    .catch(function(e){ clearTimeout(t); ytmWorkerMarkDead(true); throw e; });
 }
 /* 兼容旧调用名 */
 function ytmWorkerGet(path,ms){ return ytmWorkerRequest(path,ms); }
@@ -8183,10 +8207,41 @@ function ytmSearchSongs(q){
     ytmSearchViaApi(q,done);
   }
 }
+/* 没有远端搜索能力时，就在本机已有数据里找（快照 / 当前列表 / 收藏），
+   这样纯静态部署下搜索也是真的，而不是掉到占位数据。 */
+function ytmSearchLocal(q){
+  const k=String(q||'').trim().toLowerCase();
+  if(!k)return [];
+  const seen={},out=[];
+  const pools=[YTM_SNAP_POOL||[],YTM_FAVS||[],YTM_LIST||[]];
+  for(let i=0;i<pools.length;i++){
+    const p=pools[i];
+    for(let j=0;j<p.length;j++){
+      const s=p[j];
+      if(!s||!s.id||seen[s.id])continue;
+      const hay=((s.t||'')+' '+(s.a||'')).toLowerCase();
+      if(hay.indexOf(k)>=0){ seen[s.id]=1; out.push(s); }
+    }
+  }
+  return out.slice(0,12);
+}
+function ytmSearchLocalAsync(q){
+  const run=function(){ return ytmSearchLocal(q); };
+  if(YTM_SNAP_POOL)return Promise.resolve(run());
+  return ytmSnapshotLoad().then(run).catch(function(){ return run(); });
+}
 function ytmSearchViaApi(q,done){
+  const local=function(){
+    ytmSearchLocalAsync(q).then(function(hit){
+      if(hit.length)done(hit,'静态快照（本机匹配）');
+      else{ toast('本机数据里没有「'+q+'」'); done(ytmLocalSongs(8),'本地随机池'); }
+    });
+  };
   ytApiSearch(q,{max:12,cat:'10'}).then(function(items){
-    done((items||[]).map(ytmNormalizeSong).filter(Boolean),'YouTube Data API');
-  }).catch(function(){ done(ytmLocalSongs(8),'本地随机池'); });
+    const list=(items||[]).map(ytmNormalizeSong).filter(Boolean);
+    if(!list.length)return local();
+    done(list,'YouTube Data API');
+  }).catch(local);
 }
 /* ---------- 播放 ---------- */
 function ytmOpenSong(id){
