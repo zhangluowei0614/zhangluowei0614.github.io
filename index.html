@@ -41,6 +41,10 @@
   --hover:rgba(31,31,31,.05); --pressed:rgba(31,31,31,.10);
   /* — 几何系统（Pixel 10 · 360×808 画布）— */
   --sb-h:36px;              /* 状态栏高度（含挖孔） */
+  /* 状态栏实际占位高度：它是 content-box，height 之外还有 padding-top:7px，
+     所以真实高度是 36+7=43。任何「内容要让开状态栏」的地方都必须用这个值，
+     用 --sb-h 会差 7px —— 表现就是顶部控件和状态栏压在一起。 */
+  --sb-h-total:43px;
   /* 拨号盘配色：浅灰面板 + 白色键帽（深色模式在 html.dark 中反转） */
   --kp-panel:#EFEFF4; --kp-key:#FFFFFF; --kp-press:#E3E3E8;
   --nav-h:34px;             /* 手势导航区高度 */
@@ -2331,6 +2335,52 @@ html.dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255
 .ytm-btns{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0 2px}
 .ytm-btns .pillbtn{flex:1 1 auto;min-width:74px;height:40px;border-radius:20px;padding:0 12px;font-size:13px}
 .ytm-src{font-size:11px;color:var(--txt3);padding:10px 0 4px}
+/* ===== Google Maps：路线覆盖层 + 联网搜索结果面板 ===== */
+.map-route-svg{position:absolute;left:0;top:0;pointer-events:none;z-index:3;overflow:visible}
+.map-search-sheet{position:absolute;left:0;right:0;bottom:0;max-height:62%;z-index:9;
+  background:var(--bg);border-radius:18px 18px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.22);
+  display:none;flex-direction:column;overflow:hidden}
+.map-search-sheet.on{display:flex}
+.mss-head{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 14px 8px;font-size:12.5px;color:var(--txt2);border-bottom:1px solid var(--divider,#e3e6ea)}
+.mss-head>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mss-close{width:30px;height:30px;flex:none;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;background:var(--bg1);color:var(--txt2)}
+.mss-list{overflow-y:auto;padding:6px 8px 14px}
+.mss-row{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:10px 8px;
+  border-radius:12px;color:var(--txt);background:none}
+.mss-row:active{background:var(--bg1)}
+.mss-row>svg,.mss-row>i{flex:none;margin-top:2px;color:var(--txt3)}
+.mss-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+.mss-t{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mss-s{font-size:11.5px;color:var(--txt3);line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* ===== Google Maps = 远端 google.com/maps：app 内只显示网页内容 =====
+   自建地图那一整套（示意图/搜索框/控件/比例尺/署名/卡片/瓦片/标记/路线）全部隐藏；
+   远端浏览器自己的底部工具条也隐藏，只留网页画面本身，并铺满整个应用。
+   注意：.cr-hint 故意**不隐藏** —— 它是首帧到达前的加载提示，
+   crDrawLoop 在首帧渲染后会把它隐藏；如果这里强制 display:none，
+   加载那几秒就是纯黑屏，看起来像卡死。 */
+#app-maps.map-remote .map-svg,
+#app-maps.map-remote .map-search,
+#app-maps.map-remote .map-controls,
+#app-maps.map-remote .map-scale,
+#app-maps.map-remote .map-tile-note,
+#app-maps.map-remote .map-attrib,
+#app-maps.map-remote .map-card,
+#app-maps.map-remote .map-search-sheet,
+#app-maps.map-remote .map-pins,
+#app-maps.map-remote .map-tiles,
+#app-maps.map-remote .map-route-svg,
+#app-maps.map-remote .cr-bar,
+#app-maps.map-remote .cr-progress{display:none!important}
+/* 让出顶部状态栏与底部手势条：
+   其他应用靠 .appbar/.appbody 自动偏移，但 #app-maps 里没有 .appbody，
+   #crWrap 是直接挂在应用上的 —— 用 inset:0 会让网页顶部被状态栏压住。
+   注意这里必须用 --sb-h-total（43px）而不是 --sb-h（36px）：
+   状态栏是 content-box，height 之外还有 7px 上内边距，少让 7px 就会重叠。 */
+#app-maps.map-remote .cr-wrap{inset:var(--sb-h-total) 0 var(--nav-h) 0!important;background:#202124}
+#app-maps.map-remote .cr-stage{height:100%}
 .yt-thumb.cover-failed::before{content:'';width:26px;height:26px;border-radius:50%;
   background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
 .pillbtn.primary{border-color:transparent}
@@ -5466,16 +5516,10 @@ function openApp(id){
     }
   }
   if(id==='clock')renderWorld();
-  if(id==='maps')setTimeout(function(){
-    try{
-      const svg=document.querySelector('#app-maps .map-svg');
-      if(svg&&!svg.dataset.shanghai){shBuildShanghai(svg);svg.dataset.shanghai='1';svg.setAttribute('viewBox','0 0 1000 1000');}
-      mapInit();
-      mapGoto(MAP_HOME.lat,MAP_HOME.lng,15);
-      const note=document.getElementById('mapTileNote');
-      if(note)note.hidden=(mapState.mode!=='vector');
-    }catch(e){}
-  },70);
+  /* Google Maps：直接显示远端浏览器里的 google.com/maps，
+     app 内只有网页内容（自建地图界面与浏览器工具条都隐藏） */
+  if(id==='maps')setTimeout(function(){try{mapEnterRemote();}catch(e){}},60);
+  else{ try{ mapExitRemote(); }catch(e){} }
   if(id==='camera')setTimeout(function(){camStart();try{camFillStage();camZoomEnsure();camWireShutter();camApplyZoom(camZoom);camSyncThumb(false);}catch(e){}},90);
   if(id==='phone')setTimeout(()=>{try{phEnsureKeypadLayout()}catch(e){}},60);
   if(id==='calendar')setTimeout(()=>{try{calRenderView()}catch(e){}},60);
@@ -8551,7 +8595,7 @@ async function crBoot() {
     try { await crStartCast(); } catch (e) { crLog('startScreencast 失败：' + e.message); }
     crNavigate(CR.url || CR_START);
     /* 兜底：1.5s 后若仍无画面，再补一次录屏（此时容器尺寸一定可测） */
-    setTimeout(function () { if (!CR.frame && CR.connected) crRestartCast().catch(function () {}); }, 1500);
+    setTimeout(function () { if (!CR.frame && CR.connected) crRestartCast(true).catch(function () {}); }, 1500);
   } catch (e) {
     /* 会话初始化失败（多为 token 被拒/超额/域名不通）：给出可执行的原因并退避重试，
        且绝不覆盖掉已经在显示的 1006 握手原因 */
@@ -8597,6 +8641,13 @@ function crBox() {
 /* 手机 UA：远端 Chrome 默认是桌面 UA，站点会返回桌面页（没有 <meta viewport>），
    在 mobile:true 下 Chromium 就退回 980px 布局视口再整页缩小 —— 这就是“比例不对”。 */
 const CR_UA='Mozilla/5.0 (Linux; Android 17; Pixel 10 Build/AP4A.260105.002) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36';
+/* Google Maps 必须用桌面 UA：移动端 UA 会让 Google 弹「是否打开 Google 地图应用？」
+   的模态框，那个框会把所有输入吃掉 —— 表现就是「网页无法交互」。桌面版没这个弹窗。 */
+const MAP_DESKTOP_UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
+function crMapRemoteOn(){
+  const m=document.getElementById('app-maps');
+  return !!(m&&m.classList.contains('map-remote'));
+}
 async function crViewport() {
   /* 等一拍，确保 #crWrap 已显示、尺寸可测（不能用 rAF：不可见时可能永不触发，会卡死初始化） */
   await new Promise(function (r) { setTimeout(r, 50); });
@@ -8606,14 +8657,18 @@ async function crViewport() {
   const dpr = crPixelScale();
   CR.view = { w: w, h: h, dpr: dpr };
   /* ① 手机 UA + Android 平台：站点才会返回带 viewport meta 的手机页，
-        这样 mobile 模拟的布局视口才等于设备宽度（否则退回 980px → 整体缩小） */
+        这样 mobile 模拟的布局视口才等于设备宽度（否则退回 980px → 整体缩小）。
+        Google Maps 例外：它必须用桌面 UA，否则会弹「打开 App」模态框挡住全部交互。 */
+  const mapMode=crMapRemoteOn();
   await crSend('Emulation.setUserAgentOverride', {
-    userAgent: CR_UA, acceptLanguage: 'zh-CN,zh;q=0.9,en;q=0.8', platform: 'Android'
+    userAgent: mapMode ? MAP_DESKTOP_UA : CR_UA,
+    acceptLanguage: 'zh-CN,zh;q=0.9,en;q=0.8',
+    platform: mapMode ? 'Win32' : 'Android'
   }).catch(function (e) { crLog('setUserAgentOverride 失败：' + (e && e.message)); });
   try {
     await crSend('Emulation.setDeviceMetricsOverride', {
       width: w, height: h, deviceScaleFactor: dpr,
-      mobile: !CR.mobileOff,                  /* 退避后关掉 mobile 模拟，保证版式宽度 = 设备宽度 */
+      mobile: mapMode ? false : !CR.mobileOff,   /* Maps 用桌面视口 */
       screenWidth: w, screenHeight: h
     });
   } catch (e) {
@@ -8649,16 +8704,35 @@ async function crStartCast() {
   if (CR.castOn) return;                      /* 幂等：重复 start 会被远端拒绝（Screencast is already active） */
   const L = crLogical();
   const px = crPixelScale();
-  /* 截图像素 = 手机逻辑尺寸 × 像素密度：与屏幕实际像素一一对应，放大也不糊 */
+  /* 截图像素 = 手机逻辑尺寸 × 像素密度：与屏幕实际像素一一对应，放大也不糊。
+     但实测（Google 地图，拖动态）单帧 60 KB、链路 49 KB/s、本地 0 丢帧 ——
+     帧率完全由「公网每次往返」决定，而每帧字节数直接构成往返里的传输时间。
+     所以这里主动把采集分辨率降到 0.8×、quality 降到 45：单帧体积约减半，
+     显示尺寸不变（crFitCanvas 按位图比例放大回去），只是略软一点。 */
+  const CAP_SCALE = 0.8, CAP_Q = 45;
   await crSend('Page.startScreencast', {
-    format: 'jpeg', quality: 85, everyNthFrame: 1,
-    maxWidth: Math.round(L.w * px), maxHeight: Math.round(L.h * px)
+    format: 'jpeg', quality: CAP_Q, everyNthFrame: 1,
+    maxWidth: Math.round(L.w * px * CAP_SCALE), maxHeight: Math.round(L.h * px * CAP_SCALE)
   });
   CR.castOn = true;
-  crLog('screencast ' + Math.round(L.w * px) + 'x' + Math.round(L.h * px) + ' (logical ' + L.w + 'x' + L.h + ' @' + px.toFixed(2) + ')');
+  CR.castW = Math.round(L.w * px * CAP_SCALE); CR.castH = Math.round(L.h * px * CAP_SCALE);
+  crLog('screencast ' + CR.castW + 'x' + CR.castH + ' (logical ' + L.w + 'x' + L.h + ' @' + px.toFixed(2) + ')');
 }
-async function crRestartCast() {
+/* 录屏参数是否与当前可视区一致 —— 用来判断「重启录屏」到底有没有必要 */
+function crCastMatches() {
+  if (!CR.castOn || !CR.view) return false;
+  const L = crLogical(), px = crPixelScale();
+  return Math.abs(L.w - CR.view.w) <= 2 && Math.abs(L.h - CR.view.h) <= 2
+    && Math.abs(px - CR.view.dpr) <= 0.1
+    && Math.round(L.w * px) === CR.castW && Math.round(L.h * px) === CR.castH;
+}
+/* 重启录屏 = stopScreencast + 重设视口 + startScreencast，公网下就是 3 个往返（1~2 秒黑屏）。
+   有 5 处会调它（进应用、尺寸变化、兜底重试…），一个个都真跑的话光是这些往返就把交互拖垮了。
+   所以这里做成幂等：录屏在跑、参数又没变，直接返回。
+   需要「无论如何都重来一次」时传 force（例如连上了却一直没画面）。 */
+async function crRestartCast(force) {
   if (!CR.session || CR.restarting) return;   /* 会话就绪 + 同时只允许一次重启，避免命令交叉 */
+  if (!force && crCastMatches()) return;      /* 参数没变 → 不必来回折腾 */
   CR.restarting = true;
   try {
     if (CR.castOn) {
@@ -8670,26 +8744,58 @@ async function crRestartCast() {
   } finally { CR.restarting = false; }
 }
 /* 只画最新一帧 */
+/* 把一帧画到画布上（解码完成后的公共部分） */
+function crPaintBitmap(src, w, h) {
+  const c = crCanvas(); if (!c) return;
+  /* 只有位图尺寸真的变了才重算显示尺寸：
+     原来每帧都调 crFitCanvas()，它会读 getBoundingClientRect 再写 style，
+     等于每帧强制一次布局 —— 高帧率下这就是主要的卡顿来源。
+     容器尺寸变化由 ResizeObserver 单独负责，不会漏。 */
+  const resized = (c.width !== w || c.height !== h);
+  if (resized) { c.width = w; c.height = h; }
+  try { c.getContext('2d').drawImage(src, 0, 0, c.width, c.height); } catch (e) {}
+  if (resized) crFitCanvas();
+  try { c.dataset.painted = '1'; } catch (e) {}
+  const hint = document.getElementById('crHint'); if (hint) hint.style.display = 'none';
+}
 function crDrawLoop() {
   const f = CR.frame; if (!f) { CR.decoding = false; return; }
   CR.frame = null; CR.decoding = true;
+  const next = function () { CR.decoding = false; if (CR.frame) crDrawLoop(); };
+  /* 用 createImageBitmap 解码：JPEG 解码在后台线程完成，不占主线程。
+     原来的 new Image() + 'data:image/jpeg;base64,…' 是「主线程解码 + 每帧现拼一个
+     几十 KB 的字符串」，帧率越高越拖 —— 这是稳态帧率的主要瓶颈。 */
+  if (typeof createImageBitmap === 'function' && typeof atob === 'function') {
+    let blob;
+    try {
+      const bin = atob(f.data || '');
+      const n = bin.length, buf = new Uint8Array(n);
+      for (let i = 0; i < n; i++) buf[i] = bin.charCodeAt(i);
+      blob = new Blob([buf], { type: 'image/jpeg' });
+    } catch (e) { next(); return; }
+    createImageBitmap(blob).then(function (bmp) {
+      crPaintBitmap(bmp, bmp.width, bmp.height);
+      crSyncViewport();
+      try { bmp.close(); } catch (e) {}
+      next();
+    }).catch(function () { next(); });
+    return;
+  }
+  /* 老浏览器兜底 */
   const img = new Image();
-  img.onload = function () {
-    const c = crCanvas(); if (!c) { CR.decoding = false; return; }
-    if (c.width !== img.width || c.height !== img.height) { c.width = img.width; c.height = img.height; }
-    try { c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); } catch (e) {}
-    crFitCanvas();                                 /* 位图变了就重算显示尺寸，保持比例 */
-    const hint = document.getElementById('crHint'); if (hint) hint.style.display = 'none';
-    crSyncViewport();
-    crDrawLoop();
-  };
-  img.onerror = function () { crDrawLoop(); };
+  img.onload = function () { crPaintBitmap(img, img.width, img.height); crSyncViewport(); next(); };
+  img.onerror = next;
   img.src = 'data:image/jpeg;base64,' + (f.data || '');
 }
 
-/* 画面尺寸自校正：手机框变了（或首次测量偏差）就重设远端视口并重启录屏 */
-let crSyncTimer = null;
+/* 画面尺寸自校正：手机框变了（或首次测量偏差）就重设远端视口并重启录屏。
+   注意别每帧都调：crLogical()/crPixelScale() 会读 offsetWidth/getBoundingClientRect，
+   每帧一次等于每帧强制一次布局 —— 高帧率下这是看不见的性能税。 */
+let crSyncTimer = null, crSyncLast = 0;
 function crSyncViewport() {
+  const now = Date.now();
+  if (now - crSyncLast < 1000) return;
+  crSyncLast = now;
   const L = crLogical();
   const px = crPixelScale();
   const dw = Math.abs(L.w - CR.view.w), dh = Math.abs(L.h - CR.view.h), dp = Math.abs(px - CR.view.dpr);
@@ -8819,6 +8925,14 @@ function crApp(){
   const a=(u&&u.closest)?u.closest('.app'):null;
   return a||document.getElementById('app-chrome');
 }
+/* 远端画面（#crWrap）全局只有一个实例，
+   所以「谁在用就挂到谁的应用里」：浏览器界面挂在 Chrome/Google，
+   Google Maps 直接挂到地图应用里（它只显示网页内容）。 */
+function crHostApp(){
+  const m=document.getElementById('app-maps');
+  if(m&&m.classList.contains('map-remote'))return m;
+  return crApp();
+}
 function chromeUiMount(appId){
   if(appId!=='chrome'&&appId!=='google')return;
   const chromeApp=document.getElementById('app-chrome');
@@ -8861,7 +8975,7 @@ function crEnterRemote(){
       setTimeout(function(){ if(CR.connected&&CR.session) crRestartCast().catch(function(){}); }, 700);
       setTimeout(function(){ if(CR.connected&&CR.session) crRestartCast().catch(function(){}); }, 1600);
       if(CR.connected&&CR.session){
-        /* 已连接：立刻按手机框重设视口并重启录屏 */
+        /* 已连接：按手机框重设视口并重启录屏（幂等：参数没变就不会真的重启） */
         crRestartCast().then(function(){crNavigate(CR.url||CR_START);}).catch(function(e){crLog('restart '+e.message);});
       }else if(CR.connected){
         /* 连上了但会话还没建好：等 crBoot 收尾，不要并发重设 */
@@ -8875,10 +8989,16 @@ function crEnterRemote(){
   }, 60);
 }
 function crEnsureUI() {
-  const app = crApp();
+  const app = crHostApp();
   if (!app) return null;
   let host = document.getElementById('crWrap');
-  if (host) return host;
+  if (host) {
+    /* 换了应用就把画面搬过去。以前这里直接 return —— 于是切到另一个
+       应用（例如 Google Maps）后，画面还留在上一个应用里，新应用一片空白。 */
+    const b = app.querySelector('.appbody') || app;
+    if (host.parentElement !== b) b.appendChild(host);
+    return host;
+  }
   ['chromeHome', 'chromeResults', 'chromeFeed'].forEach(function (id) { const e = document.getElementById(id); if (e) e.style.display = 'none'; });
   const wrap = document.getElementById('chromeWrap'); if (wrap) wrap.style.display = 'none';
   host = document.createElement('div');
@@ -8920,17 +9040,31 @@ function crWire(host) {
   });
   /* 触摸（手机）/ 鼠标（桌面）双通道转发到远端 */
   let moved = false, lastTouch = 0, lastX = 0, lastY = 0;
+  /* 指针移动按帧合并：mousemove/touchmove 的原始频率远高于 CDP 往返，
+     逐个转发会把链路塞满、拖不动。只保留每帧最后一个位置。 */
+  let mvRaf = 0, mvEv = null, mvKind = '';
+  const queueMove = function (kind, e) {
+    mvKind = kind; mvEv = e;
+    if (mvRaf) return;
+    mvRaf = requestAnimationFrame(function () {
+      mvRaf = 0;
+      const ev = mvEv; mvEv = null;
+      if (!ev) return;
+      try { if (mvKind === 'touch') crTouch('touchMove', ev); else crMouse('mouseMoved', ev); } catch (err) {}
+    });
+  };
+  const dropMove = function () { if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = 0; } mvEv = null; };
   ov.addEventListener('touchstart', function (e) { e.preventDefault(); moved = false; const p = crPoint(e); lastX = p.x; lastY = p.y; crTouch('touchStart', e); }, { passive: false });
   ov.addEventListener('touchmove', function (e) {
     e.preventDefault();
     const p = crPoint(e);
     if (Math.abs(p.x - lastX) > 3 || Math.abs(p.y - lastY) > 3) moved = true;
-    crTouch('touchMove', e);
+    queueMove('touch', e);
   }, { passive: false });
-  ov.addEventListener('touchend', function (e) { e.preventDefault(); crTouch('touchEnd', e); }, { passive: false });
-  ov.addEventListener('mousemove', function (e) { crMouse('mouseMoved', e); });
+  ov.addEventListener('touchend', function (e) { e.preventDefault(); dropMove(); crTouch('touchEnd', e); }, { passive: false });
+  ov.addEventListener('mousemove', function (e) { queueMove('mouse', e); });
   ov.addEventListener('mousedown', function (e) { ov.focus(); crMouse('mousePressed', e, { clickCount: 1 }); });
-  ov.addEventListener('mouseup', function (e) { crMouse('mouseReleased', e, { clickCount: 1 }); });
+  ov.addEventListener('mouseup', function (e) { dropMove(); crMouse('mouseReleased', e, { clickCount: 1 }); });
   ov.addEventListener('wheel', function (e) { e.preventDefault(); crMouse('mouseWheel', e); }, { passive: false });
   ov.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   /* 键盘：用一个隐藏输入框承接系统输入法，再把文本/按键转发到远端 */
@@ -8949,6 +9083,47 @@ function crWire(host) {
   if (window.ResizeObserver) { new ResizeObserver(onR).observe(host.querySelector('.cr-stage')); } else { window.addEventListener('resize', onR); }
   void canvasEl;
 }
+/* ===== 开机后台预热 =====
+   远端会话要经历「WebSocket 握手 → 建 target → Page.enable → 设视口」这一串，
+   冷启动时用户要干等几秒。开机后趁空闲先把会话建好（不显示、不录屏），
+   再把 Google 地图预载进去，这样打开 Maps 就只剩「开录屏 + 首帧」。
+   关掉：localStorage.setItem('cr_prewarm','off') */
+function crPrewarmBusy(){
+  try{
+    if(document.querySelector('.cr-wrap.cr-on'))return true;      /* 正在看远端 */
+    if(crMapRemoteOn())return true;                                /* 正在看地图 */
+    if(curScreen==='app'&&(app==='chrome'||app==='google'))return true;
+  }catch(e){}
+  return false;
+}
+function crPrewarmNav(){
+  try{
+    if(crPrewarmBusy())return;
+    if(/google\.[a-z.]+\/maps|\/maps\?/i.test(CR.url||''))return;   /* 已经是地图页 */
+    const target=mapRemoteUrl();
+    CR.url=target;
+    crSend('Page.navigate',{url:target}).catch(function(){});
+    crLog('后台预热：已预载 Google 地图（'+(target===MAP_REMOTE_URL_EMBED?'嵌入版':(target===MAP_REMOTE_URL_FULL?'完整版':'自定义'))+'）');
+  }catch(e){}
+}
+function crPrewarm(){
+  try{
+    if(localStorage.getItem('cr_prewarm')==='off')return;
+    const url=crWs();
+    if(!url||crPreflight(url))return;        /* 没配中继就别白试一遍 */
+    if(CR.connected||CR.connecting){ if(CR.session)crPrewarmNav(); return; }
+    CR.prewarm=true;
+    crLog('后台预热：开始建立远端会话');
+    crConnect();
+    let n=0;
+    const iv=setInterval(function(){
+      n++;
+      if(CR.session){ clearInterval(iv); crPrewarmNav(); return; }
+      if(n>48||(!CR.connected&&!CR.connecting)){ clearInterval(iv); crLog('后台预热：未成功，已放弃'); }
+    },250);
+  }catch(e){}
+}
+
 /* 在“模拟浏览”和“远程浏览器”之间切换 */
 function crToggle() {
   const host = crEnsureUI(); if (!host) return;
@@ -12965,10 +13140,14 @@ function mapShowRoute(){
   const sheet=mapSheet('mapRouteSheet');
   if(!sheet)return;
   const info=mapRouteInfo();
+  const real=(MAP_ROUTE&&MAP_ROUTE.coords.length&&MAP_ROUTE.mode===mapRouteMode);
   const p=[];
   p.push('<div class="ms-head"><span class="ms-ic">'+mi(M.directions)+'</span><div class="ms-main">'+
     '<div class="ms-t">'+escHtml(info.from.n)+' → '+escHtml(info.to.n)+'</div>'+
-    '<div class="ms-s">约 '+mapDistFrom(info.to.lat,info.to.lng,info.from.lat,info.from.lng)+' · 直线距离</div></div>'+
+    '<div class="ms-s">'+(real
+      ? ('全程 '+escHtml(mapFmtDist(MAP_ROUTE.meters))+' · 实际道路路线')
+      : ('约 '+mapDistFrom(info.to.lat,info.to.lng,info.from.lat,info.from.lng)+' · 直线距离（正在取真实路线…）'))+
+    '</div></div>'+
     '<button class="ms-close" data-act="map-plan-close">'+mi(M.close)+'</button></div>');
   p.push('<div class="ms-tabs">'+MAP_MODES.map(function(m){
     return '<button class="ms-tab'+(mapRouteMode===m.id?' on':'')+'" data-act="map-plan" data-r="'+m.id+'">'+
@@ -13351,6 +13530,7 @@ function mapPlaceMarkers(){
 function mapRenderAll(){
   if(mapState.mode==='tiles')mapRenderTiles();
   mapPlaceMarkers();
+  mapDrawRoutePath();          /* 路线要跟着平移/缩放重画，否则会「粘」在屏幕上 */
 }
 function mapInitGeo(){
   if(mapState.inited)return;
@@ -13492,13 +13672,50 @@ const MAP_MODES=[
 ];
 let mapRouteMode='walk';
 function mapRouteEta(meters,mode){
+  /* 已经取到真实路线时，用 OSRM 给的真实耗时，而不是按经验速度估算 */
+  if(MAP_ROUTE&&MAP_ROUTE.seconds&&MAP_ROUTE.mode===mode+'' && MAP_ROUTE.coords.length){
+    return mapFmtDur(MAP_ROUTE.seconds);
+  }
   const m=MAP_MODES.find(function(x){return x.id===mode;})||MAP_MODES[0];
   const sec=Math.round(meters*m.mul/m.sp);
   if(sec<60)return sec+' 秒';
   const min=Math.round(sec/60);
   return min<60?min+' 分钟':(Math.floor(min/60)+' 小时 '+(min%60)+' 分钟');
 }
-function mapDrawRoute(a,b,mode){
+/* ===== 联网路线：OSRM（真实道路几何 + 真实里程/耗时） =====
+   以前这里画的是一条贝塞尔曲线、距离按大圆算 —— 看着像路线，其实和道路无关。
+   现在向 OSRM 要真实路径：overview=full 返回整条道路的坐标序列。
+   两个公共实例互为备份（实测浏览器里都可直连，且带 CORS 头）。 */
+const MAP_ROUTE_HOSTS={
+  drive:['https://router.project-osrm.org/route/v1/driving/',
+         'https://routing.openstreetmap.de/routed-car/route/v1/driving/'],
+  walk: ['https://routing.openstreetmap.de/routed-foot/route/v1/driving/',
+         'https://router.project-osrm.org/route/v1/driving/'],
+  bike: ['https://routing.openstreetmap.de/routed-bike/route/v1/driving/',
+         'https://router.project-osrm.org/route/v1/driving/']
+};
+let MAP_ROUTE=null;      /* {coords:[[lat,lng]…], meters, seconds, mode, from, to} */
+function mapRouteFetch(a,b,mode){
+  const hosts=MAP_ROUTE_HOSTS[mode]||MAP_ROUTE_HOSTS.drive;
+  const qs=a.lng+','+a.lat+';'+b.lng+','+b.lat+'?overview=full&geometries=geojson';
+  let i=0;
+  const next=function(){
+    if(i>=hosts.length)return Promise.reject(new Error('路线服务不可用'));
+    return fetch(hosts[i++]+qs).then(function(r){
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(j){
+      const rt=j&&j.routes&&j.routes[0];
+      const g=rt&&rt.geometry&&rt.geometry.coordinates;
+      if(!g||!g.length)throw new Error('empty');
+      /* GeoJSON 是 [lng,lat]，地图内部统一用 [lat,lng] */
+      return {coords:g.map(function(c){return [c[1],c[0]];}),meters:rt.distance,seconds:rt.duration};
+    }).catch(function(){ return next(); });
+  };
+  return next();
+}
+/* 把路线画到覆盖层上；平移/缩放后要重画，所以单独抽出来 */
+function mapDrawRoutePath(){
   const surf=mapSurfaceEl();
   if(!surf)return;
   let svg=surf.querySelector('.map-route-svg');
@@ -13509,26 +13726,77 @@ function mapDrawRoute(a,b,mode){
   }
   const W=surf.clientWidth||360,H=surf.clientHeight||700;
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  svg.setAttribute('width',W);svg.setAttribute('height',H);
+  if(!MAP_ROUTE||!MAP_ROUTE.coords.length){ svg.innerHTML=''; return; }
   const z=Math.round(mapState.z);
   const scale=Math.pow(2,mapState.z-z);
   const cx=mapLngToX(mapState.center.lng,z), cy=mapLatToY(mapState.center.lat,z);
   const ox=W/2-cx*scale, oy=H/2-cy*scale;
   const px=function(lat,lng){ return [ox+mapLngToX(lng,z)*scale, oy+mapLatToY(lat,z)*scale]; };
-  const A=px(a.lat,a.lng), B=px(b.lat,b.lng);
-  /* 用一条轻微弯曲的贝塞尔模拟路径（避免直线观感太假），实际距离按大圆距离算 */
-  const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2;
-  const nx=-(B[1]-A[1]), ny=(B[0]-A[0]);
-  const len=Math.max(1,Math.hypot(nx,ny));
-  const bend=Math.min(90,len*0.16);
-  const C=[mx+nx/len*bend,my+ny/len*bend];
-  const col=(MAP_MODES.find(function(x){return x.id===mode;})||MAP_MODES[0]).c;
+  /* 抽稀：屏幕上距离过近的点没必要画 */
+  const pts=[];
+  MAP_ROUTE.coords.forEach(function(c){
+    const p=px(c[0],c[1]);
+    const last=pts[pts.length-1];
+    if(!last||Math.hypot(p[0]-last[0],p[1]-last[1])>=3)pts.push(p);
+  });
+  if(pts.length<2)return;
+  const col=(MAP_MODES.find(function(x){return x.id===MAP_ROUTE.mode;})||MAP_MODES[0]).c;
+  const d='M'+pts.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' L');
+  const A=pts[0],B=pts[pts.length-1];
   svg.innerHTML=
-    '<path d="M'+A[0]+' '+A[1]+' Q'+C[0]+' '+C[1]+' '+B[0]+' '+B[1]+'" fill="none" stroke="'+col+'" '+
-    'stroke-width="6" stroke-linecap="round" stroke-opacity="0.92"/>'+
-    '<circle cx="'+A[0]+'" cy="'+A[1]+'" r="7" fill="#fff" stroke="'+col+'" stroke-width="3"/>'+
-    '<circle cx="'+B[0]+'" cy="'+B[1]+'" r="7" fill="'+col+'" stroke="#fff" stroke-width="3"/>';
+    '<path d="'+d+'" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.85"/>'+
+    '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<circle cx="'+A[0].toFixed(1)+'" cy="'+A[1].toFixed(1)+'" r="7" fill="#fff" stroke="'+col+'" stroke-width="3"/>'+
+    '<circle cx="'+B[0].toFixed(1)+'" cy="'+B[1].toFixed(1)+'" r="7" fill="'+col+'" stroke="#fff" stroke-width="3"/>';
+}
+function mapDrawRoute(a,b,mode){
+  if(!a||!b)return;
+  MAP_ROUTE={coords:[],meters:0,seconds:0,mode:mode||'walk',from:a,to:b};
+  mapDrawRoutePath();
+  mapRouteFetch(a,b,mode||'walk').then(function(r){
+    MAP_ROUTE={coords:r.coords,meters:r.meters,seconds:r.seconds,mode:mode||'walk',from:a,to:b};
+    mapDrawRoutePath();
+    /* 路线面板此刻通常已经打开：用真实里程/耗时重渲染一次 */
+    const sheet=document.getElementById('mapRouteSheet');
+    if(sheet&&sheet.classList.contains('on'))mapShowRoute();
+  }).catch(function(){
+    MAP_ROUTE=null;
+    mapDrawRoutePath();
+    toast('取不到真实路线（网络不可用），已改为直线示意');
+    mapDrawRouteFallback(a,b,mode);
+  });
+}
+/* 网络不可用时的兜底：画直线并标注是示意 */
+function mapDrawRouteFallback(a,b,mode){
+  const surf=mapSurfaceEl();
+  if(!surf)return;
+  const svg=surf.querySelector('.map-route-svg');
+  if(!svg)return;
+  const W=surf.clientWidth||360,H=surf.clientHeight||700;
+  const z=Math.round(mapState.z);
+  const scale=Math.pow(2,mapState.z-z);
+  const cx=mapLngToX(mapState.center.lng,z), cy=mapLatToY(mapState.center.lat,z);
+  const ox=W/2-cx*scale, oy=H/2-cy*scale;
+  const px=function(lat,lng){ return [ox+mapLngToX(lng,z)*scale, oy+mapLatToY(lat,z)*scale]; };
+  const A=px(a.lat,a.lng),B=px(b.lat,b.lng);
+  svg.innerHTML='<path d="M'+A[0].toFixed(1)+' '+A[1].toFixed(1)+' L'+B[0].toFixed(1)+' '+B[1].toFixed(1)+
+    '" fill="none" stroke="#9aa0a6" stroke-width="4" stroke-dasharray="9 7" stroke-linecap="round"/>'+
+    '<circle cx="'+A[0].toFixed(1)+'" cy="'+A[1].toFixed(1)+'" r="6" fill="#fff" stroke="#9aa0a6" stroke-width="3"/>'+
+    '<circle cx="'+B[0].toFixed(1)+'" cy="'+B[1].toFixed(1)+'" r="6" fill="#9aa0a6" stroke="#fff" stroke-width="3"/>';
+}
+function mapFmtDist(m){
+  m=Math.round(m||0);
+  return m>=1000?((m/1000).toFixed(m>=10000?0:1)+' 公里'):(m+' 米');
+}
+function mapFmtDur(s){
+  s=Math.round(s||0);
+  if(s<60)return s+' 秒';
+  const min=Math.round(s/60);
+  return min<60?(min+' 分钟'):(Math.floor(min/60)+' 小时 '+(min%60)+' 分钟');
 }
 function mapClearRoute(){
+  MAP_ROUTE=null;
   const surf=mapSurfaceEl();
   const svg=surf?surf.querySelector('.map-route-svg'):null;
   if(svg)svg.innerHTML='';
@@ -13536,16 +13804,88 @@ function mapClearRoute(){
 function mapRouteInfo(){
   const place=mapCurrentPlace();
   const from=mapMe?{n:'我的位置',lat:mapMe.lat,lng:mapMe.lng}:{n:'人民广场',lat:MAP_HOME.lat,lng:MAP_HOME.lng};
-  const meters=Math.round((function(lat1,lng1,lat2,lng2){
-    const R=6371000,rad=Math.PI/180;
-    const dLat=(lat2-lat1)*rad,dLng=(lng2-lng1)*rad;
-    const a2=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dLng/2)*Math.sin(dLng/2);
-    return 2*R*Math.asin(Math.min(1,Math.sqrt(a2)));
-  })(from.lat,from.lng,place.lat,place.lng));
+  /* 有真实路线就用它的里程；否则退回大圆距离（仅用于未取到路线时的预览） */
+  let meters;
+  if(MAP_ROUTE&&MAP_ROUTE.coords.length){
+    meters=Math.round(MAP_ROUTE.meters);
+  }else{
+    meters=Math.round((function(lat1,lng1,lat2,lng2){
+      const R=6371000,rad=Math.PI/180;
+      const dLat=(lat2-lat1)*rad,dLng=(lng2-lng1)*rad;
+      const a2=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dLng/2)*Math.sin(dLng/2);
+      return 2*R*Math.asin(Math.min(1,Math.sqrt(a2)));
+    })(from.lat,from.lng,place.lat,place.lng));
+  }
   return {from:from,to:place,meters:meters};
 }
 function mapRoutes(){ return MAP_MODES; }
 
+/* ===== Google Maps = 远端浏览器里的 google.com/maps =====
+   app 内只呈现网页内容本身：原本自建的 OSM 地图界面整体隐藏，
+   远端浏览器自己的工具条也一并隐藏（.map-remote 规则在样式表里）。 */
+/* 两种远端地址，随时可切，不用改代码：
+     · full（默认）—— 完整的 google.com/maps。实测可用，本地中继 19.1 fps。
+     · embed       —— 旧的嵌入页 output=embed。
+                      ⚠ 实测**不可用**：Google 已废弃直开，会重定向到
+                      google.com/maps/embed 并显示「must be used in an iframe」，页面空白。
+                      要用的话得改成「先导航到 about:blank，再用 Runtime.evaluate 注入 iframe」，
+                      嵌入地址用重定向给出的那个 pb= 形式。留在这里仅供后续试验。
+   切换方式（任选其一）：
+     · 地址栏参数：  pixel17.html?maptype=full  /  ?maptype=embed
+     · 控制台一行：  localStorage.setItem('map_remote','full')
+     · 也可以直接给一个自定义地址： localStorage.setItem('map_remote','https://…') */
+const MAP_REMOTE_URL_EMBED='https://maps.google.com/maps?q=31.2304,121.4737&z=13&output=embed&hl=zh-CN';
+const MAP_REMOTE_URL_FULL='https://www.google.com/maps/@31.2304,121.4737,13z';
+const MAP_REMOTE_DEFAULT='full';
+function mapRemoteUrl(){
+  let m='';
+  try{ m=String(new URLSearchParams(location.search).get('maptype')||localStorage.getItem('map_remote')||'').trim(); }catch(e){}
+  if(!m)m=MAP_REMOTE_DEFAULT;
+  if(m==='full')return MAP_REMOTE_URL_FULL;
+  if(m==='embed')return MAP_REMOTE_URL_EMBED;
+  return m;                                   /* 自定义地址直接使用 */
+}
+function mapEnterRemote(){
+  const app=document.getElementById('app-maps');
+  if(!app)return;
+  const target=mapRemoteUrl();
+  app.classList.add('map-remote');     /* 只显示远端网页画面 */
+  /* 画布已有画面时不要再盖加载提示：页面没变化就不会有新帧，
+     而提示是靠「首帧到达」隐藏的，不然它会一直挂在那里。 */
+  let painted=false;
+  try{ const cv=crCanvas(); painted=!!(cv&&cv.dataset&&cv.dataset.painted==='1'&&CR.url===target); }catch(e){}
+  if(!painted){
+    const hint=document.getElementById('crHint');
+    if(hint)hint.style.display='';     /* 首帧到达前显示加载提示（crDrawLoop 会再隐藏） */
+    crStatus('正在加载 Google 地图…');
+  }
+  CR.url=target;                       /* 让首次连接/重连后也导航到这里 */
+  crEnterRemote();                     /* 挂载 + 显示 + 连接/重启录屏 */
+  crNavigate(target);
+}
+function mapExitRemote(){
+  const app=document.getElementById('app-maps');
+  if(!app||!app.classList.contains('map-remote'))return;
+  app.classList.remove('map-remote');
+  /* 离开地图时把远端画面搬回浏览器应用。
+     #crWrap 是单例，留在已经退出的应用里虽然看不见（.cr-on 已移除），
+     但状态是脏的 —— 下次进 Chrome 必须先正回来才干净。 */
+  try{
+    const host=document.getElementById('crWrap');
+    if(host&&host.parentElement!==app)return;      /* 不在我这里就不用管 */
+    if(host){
+      host.classList.remove('cr-on');
+      const target=crApp();
+      const b=target?(target.querySelector('.appbody')||target):null;
+      if(b&&host.parentElement!==b)b.appendChild(host);
+    }
+  }catch(e){}
+  /* 把 UA / 视口恢复成手机模式，并重启录屏，免得影响浏览器应用 */
+  try{
+    if(CR.connected&&CR.session)crRestartCast().catch(function(){});
+    else crViewport().catch(function(){});
+  }catch(e){}
+}
 function shBuildShanghai(svg){
   if(!svg)return;
   const P=[];
@@ -13625,10 +13965,11 @@ function mapInit(){
   mapRenderAll();
   if(surf&&!surf.dataset.bound){
     surf.dataset.bound='1';
-    let drag=null,raf=0;
+    let drag=null,raf=0,accX=0,accY=0;
     const down=function(e){
       if(e.button!==undefined&&e.button!==0)return;
       mapDragActive=true;
+      accX=0;accY=0;
       drag={x:e.clientX,y:e.clientY,moved:0,t:Date.now(),id:e.pointerId};
       surf.classList.add('dragging');
       try{ surf.setPointerCapture(e.pointerId); }catch(err){}
@@ -13639,12 +13980,17 @@ function mapInit(){
       const dx=e.clientX-drag.x, dy=e.clientY-drag.y;
       drag.x=e.clientX;drag.y=e.clientY;
       drag.moved+=Math.abs(dx)+Math.abs(dy);
-      if(raf)return;
-      raf=requestAnimationFrame(function(){
-        raf=0;
-        if(drag)mapPanBy(dx,dy);
-        else mapPanBy(0,0);
-      });
+      /* 触摸的 move 频率高于帧率：位移必须先累加再在帧里一次应用。
+         以前只用了「第一帧那次」的 dx/dy，帧间位移全被丢掉 ——
+         表现就是地图跟不上手指；手势若在下一帧前结束，位移直接归零。 */
+      accX+=dx;accY+=dy;
+      if(!raf){
+        raf=requestAnimationFrame(function(){
+          raf=0;
+          const px=accX,py=accY;accX=0;accY=0;
+          if(px||py)mapPanBy(px,py);
+        });
+      }
       e.stopPropagation();
       e.preventDefault();
     };
@@ -13655,6 +14001,12 @@ function mapInit(){
       surf.classList.remove('dragging');
       try{ surf.releasePointerCapture(e.pointerId); }catch(err){}
       mapDragActive=false;
+      /* 收尾：把还没应用的位移补上（手势可能在下一帧之前就结束了） */
+      if(accX||accY){
+        const px=accX,py=accY;accX=0;accY=0;
+        mapPanBy(px,py);
+      }
+      if(raf){cancelAnimationFrame(raf);raf=0;}
       if(e&&e.stopPropagation)e.stopPropagation();
       /* 位移很小且时间短 → 视为地图点选：命中最近的标记 */
       if(moved<8&&held<520)mapTapAt(x,y);
@@ -13745,6 +14097,72 @@ function mapFocusPoi(q){
   mapPlaceDetail(hit.n);
   toast('已定位到「'+hit.n+'」');
   return true;
+}
+/* ===== 联网搜索：Nominatim（OpenStreetMap 官方地理编码） =====
+   以前搜索只查本文件里写死的 MAP_POIS 表和一张区名表，
+   搜索框甚至只弹一个 toast —— 也就是说从来没有真的搜过。 */
+const MAP_NOMINATIM='https://nominatim.openstreetmap.org/search';
+let mapSearchHits=[];
+function mapSearchOnline(q){
+  const url=MAP_NOMINATIM+'?format=jsonv2&limit=8&accept-language=zh-CN&q='+encodeURIComponent(q);
+  return fetch(url,{headers:{Accept:'application/json'}}).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(list){
+    return (list||[]).map(function(x){
+      const full=String(x.display_name||'');
+      const short=(String(x.name||'').trim())||full.split(',')[0]||String(q);
+      return {n:short,full:full,lat:parseFloat(x.lat),lng:parseFloat(x.lon),t:(x.type||x.category||'地点')};
+    }).filter(function(x){ return isFinite(x.lat)&&isFinite(x.lng); });
+  });
+}
+function mapShowSearchResults(q,hits){
+  mapSearchHits=hits;
+  let sheet=document.getElementById('mapSearchSheet');
+  if(!sheet){
+    sheet=document.createElement('div');
+    sheet.id='mapSearchSheet';
+    sheet.className='map-search-sheet';
+    (document.getElementById('app-maps')||document.body).appendChild(sheet);
+  }
+  sheet.innerHTML='<div class="mss-head"><span>'+escHtml(q)+' · '+hits.length+' 个结果</span>'+
+    '<button class="mss-close" data-act="map-search-close" aria-label="关闭">'+mi(M.close)+'</button></div>'+
+    '<div class="mss-list">'+hits.map(function(h,i){
+      return '<button class="mss-row" data-act="map-search-pick" data-i="'+i+'">'+mi(M.location)+
+        '<span class="mss-main"><span class="mss-t">'+escHtml(h.n)+'</span>'+
+        '<span class="mss-s">'+escHtml((h.full||'').slice(0,90))+'</span></span></button>';
+    }).join('')+'</div>';
+  sheet.classList.add('on');
+}
+function mapCloseSearchResults(){
+  const s=document.getElementById('mapSearchSheet');
+  if(s)s.classList.remove('on');
+}
+/* 搜索主入口：先本机（秒回），再联网（Nominatim） */
+function mapSearchGo(q){
+  q=String(q||'').trim();
+  if(!q){ toast('请输入地点'); return null; }
+  const local=shFindPoi(q);
+  if(local){
+    mapGoto(local.lat,local.lng,Math.max(mapState.z,16));
+    mapShowCard(local);
+    toast('已定位到「'+local.n+'」');
+    return local;
+  }
+  toast('正在搜索「'+q+'」…');
+  mapSearchOnline(q).then(function(hits){
+    if(!hits.length){ toast('没找到「'+q+'」'); return; }
+    if(hits.length===1){
+      mapGoto(hits[0].lat,hits[0].lng,Math.max(mapState.z,16));
+      mapShowCard(hits[0]);
+      toast('已定位到「'+hits[0].n+'」');
+      return;
+    }
+    mapShowSearchResults(q,hits);
+  }).catch(function(){
+    toast('搜索失败：网络不可用（OpenStreetMap 连不上）');
+  });
+  return null;
 }
 /* 搜索：支持标记名、区名与自由文本（自由文本用地理编码不可用时保持视图） */
 /* 搜索：标记名 / 区名 / 自由文本（见上方 MAP_POIS 引擎） */
@@ -18118,8 +18536,18 @@ function init(){
         toast(mapState.layer?'已切换到在线地图（OpenStreetMap）':'已切换到本地示意图');
         break;
       }
-      case 'map-poi':{
-        const poi=MAP_POIS[Number(el.dataset.i)];
+      case 'map-search-pick':{
+        const h=mapSearchHits[Number(el.dataset.i)];
+        if(h){
+          mapCloseSearchResults();
+          mapGoto(h.lat,h.lng,Math.max(mapState.z,16));
+          mapShowCard(h);
+          toast('已定位到「'+h.n+'」');
+        }
+        break;
+      }
+      case 'map-search-close':mapCloseSearchResults();break;
+      case 'map-poi':{        const poi=MAP_POIS[Number(el.dataset.i)];
         if(poi){mapShowCard(poi);mapPlaceDetail(poi.n);}
         break;
       }
@@ -18599,8 +19027,20 @@ function init(){
   const sts=$('#storeSearch');
   if(sts)sts.addEventListener('input',e=>{storeQuery=e.target.value;renderStore();});
   const mapS=$('#mapSearch');
-  /* 搜索框只保留一个 Enter 监听（任务 23：此前存在双监听导致双重提示） */
-  if(mapS)mapS.addEventListener('keydown',e=>{if(e.key==='Enter'){toast('已搜索「'+(mapS.value.trim()||'人民广场')+'」');}});
+  /* 搜索框以前只弹一个 toast，从来没真的搜过 —— 现在接到真实搜索上：
+     先查本机 POI/区名（秒回），没命中就联网走 Nominatim 地理编码。 */
+  if(mapS){
+    mapS.addEventListener('keydown',function(e){
+      if(e.key!=='Enter')return;
+      e.preventDefault();
+      mapSearchGo(mapS.value);
+      try{ mapS.blur(); }catch(err){}
+    });
+    /* 输入时给个清除入口，避免上一次结果残留 */
+    mapS.addEventListener('input',function(){
+      if(!mapS.value)mapCloseSearchResults();
+    });
+  }
   $('#volUpBtn').addEventListener('click',()=>changeVolume(10));
   $('#volDownBtn').addEventListener('click',()=>changeVolume(-10));
   (function(){
@@ -19252,6 +19692,8 @@ wireSafeReboot('.desk-actions [data-act="reboot"]');
   }
 }
 setTimeout(()=>$('#splash').classList.add('off'),1600);
+  /* 开机后台预热远端会话：等开机动画与首屏渲染都过去再开始，别抢带宽 */
+  try{ setTimeout(function(){ try{ crPrewarm(); }catch(e){} }, 3200); }catch(e){}
   /* 桌面时钟/日历实时更新：立即启动 + 兜底重启
      （这几行原先误放在脚本结束标签之后，成了页面里的纯文本、永远不会执行，已移回脚本内。
        注意：注释里不能出现脚本结束标签的字面写法，否则 HTML 解析器会提前收尾。） */
