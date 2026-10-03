@@ -3889,17 +3889,159 @@ const $$=s=>[...document.querySelectorAll(s)];
 const mi=(d,s=24)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="currentColor" aria-hidden="true"><path d="${d}"/></svg>`;
 const escHtml=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* ============ 联网状态（离线检测 + WiFi 感叹号提示） ============ */
-const NET={online:navigator.onLine!==false,forced:false,lastChange:Date.now()};
-function netOnline(){ return NET.forced ? false : (NET.online && navigator.onLine !== false); }
-function netSetForced(off){ NET.forced=!!off; NET.lastChange=Date.now(); try{ netBroadcast(); }catch(e){} }
+/* ============ 联网状态（离线检测 + WiFi 感叹号提示） ============
+   ⚠ macOS 版 Chromium 在「系统代理 / VPN / 虚拟网卡」环境下 navigator.onLine 会
+   长期误报 false：此时网络明明是通的，右上角状态栏却一直挂着「Wi-Fi + 感叹号」，
+   YouTube 也只给未联网视图 —— 这就是「状态栏始终显示未联网」的根因。
+
+   所以这里不再把 navigator.onLine 当成事实，而是把它当成「提示」，真正的判据是
+   「最近一次真实网络请求的结果」：
+
+     · NET.forced      显式强制离线（测试用），优先级最高，永远压过一切；
+     · NET.seen        跑通过一次真实网络请求（封面 <img>、YouTube API、中继 WebSocket…）。
+                       一旦置位就不再相信 navigator.onLine 的 false —— 请求成功本身就是
+                       最硬的在线证据，这条能把「误报离线」彻底救回来；
+     · NET.failStreak  连续失败次数，只有「浏览器自报离线 + 真实请求连续失败」才判离线，
+                       单次失败（CDN 抖动、某张图 404、接口风控）不会误判成未联网；
+     · NET.probing     正在主动探测，避免并发重复探测。
+
+   一句话：netSeen('ok') 由真实的网络成功回调调用，netSeen('fail') 由真实失败回调调用，
+   界面上就不会再出现「明明能上网却一直显示未联网」。 */
+const NET={online:navigator.onLine!==false,forced:false,seen:false,failStreak:0,probing:false,
+  grace:1,lastChange:Date.now(),lastFail:0,lastProbe:0};
+/* 开机宽限期：首屏渲染期间（前 6 秒）先不画「未联网」。
+   浏览器自报离线的误报都发生在启动瞬间，而真正的断网判定只差这 6 秒，
+   换来的是「打开页面再也不会先闪一下未联网感叹号」。 */
+setTimeout(function(){ NET.grace=0; try{ if(typeof updateSB==='function')updateSB(); }catch(e){} },6000);
+function netOnline(){
+  if(NET.forced)return false;
+  if(NET.grace)return true;                                   /* 开机宽限期：一律先按在线画 */
+  if(NET.seen)return true;                                   /* 真实请求跑通过：直接判在线 */
+  if(navigator.onLine!==false)return true;                    /* 浏览器说在线：采信 */
+  return NET.online&&NET.failStreak<2;                        /* 自报离线：要连续失败才认账 */
+}
+function netSetForced(off){
+  NET.forced=!!off;
+  /* 强制离线要立刻见效（回归脚本靠它），不能被开机宽限期挡住 */
+  if(NET.forced)NET.grace=0;
+  NET.lastChange=Date.now(); try{ netBroadcast(); }catch(e){}
+}
 function netBroadcast(){
   /* 状态栏的 WiFi 感叹号必须跟着一起变，而且和 YouTube 是否打开无关 */
   try{ if(typeof updateSB==='function')updateSB(); }catch(e){}
   try{ window.dispatchEvent(new CustomEvent('netchange',{detail:{online:netOnline()}})); }catch(e){}
 }
-addEventListener('online',()=>{ NET.online=true;NET.lastChange=Date.now();netBroadcast(); });
-addEventListener('offline',()=>{ NET.online=false;NET.lastChange=Date.now();netBroadcast(); });
+/* 真实网络请求的结果喂给状态机：任何一处「远端资源真的成功/失败」都调用它。
+   ok=true            → 在线（并清空失败计数，navigator.onLine 的误报就此结束）
+   ok=false, weight=0 → 只记一笔（单张封面/缩略图失败太常见，不作为断网证据）
+   ok=false, weight≥1 → 计入失败次数：只有浏览器也自报离线、且连续失败满 2 次，
+                        才真的显示未联网 —— 保证不误判、也不会卡死在离线态。 */
+function netSeen(ok,weight){
+  const before=netOnline();
+  const w=Math.max(0,Number(weight)||0);
+  if(ok){
+    NET.seen=true; NET.online=true; NET.failStreak=0; netSeen.lastOk=Date.now();
+  }else{
+    NET.failStreak+=w; NET.lastFail=Date.now();
+    /* 主动探测 / 中继连接失败（w≥1）是「出不去网」的有效证据：
+       之前的在线结论作废，让 netOnline() 重新判断（自报离线时就会显示未联网）。
+       单张封面失败（w=0）不在此列 —— 那是资源级问题，不是网络问题。 */
+    if(w>=1)NET.seen=false;
+    if(navigator.onLine===false)NET.online=false;
+    /* 自报在线时单次失败不改判；但连续失败太多说明真出不去网了（代理挂了 / 断网），
+       这时才回落到离线，并且不再靠 navigator.onLine 兜着。 */
+    if(NET.failStreak>=6)NET.online=false;
+  }
+  if(before!==netOnline()){ NET.lastChange=Date.now(); try{ netBroadcast(); }catch(e){} }
+  else{ try{ if(typeof updateSB==='function')updateSB(); }catch(e){} }
+}
+/* 主动探测只用来「探到就算在线」：探到一次就等于有了真实成功请求。
+   ⚠ 探不到不能反推离线（CSP、企业网络、目标被墙都会失败），所以 ok=false 分支
+   交给 netSeen(false) 的连续失败逻辑慢慢判。 */
+const NET_PROBE_URLS=[
+  'https://www.gstatic.com/generate_204',
+  'https://www.google.com/generate_204'
+];
+function netProbe(){
+  if(NET.forced||NET.probing)return;
+  if(NET.seen&&Date.now()-(netSeen.lastOk||0)<45000)return;   /* 刚跑通过：不必再探 */
+  NET.probing=true; NET.lastProbe=Date.now(); NET.probeURLs=NET_PROBE_URLS.slice();
+  let done=false;
+  const finish=function(ok){
+    if(done)return; done=true; NET.probing=false;
+    /* 探测失败的分量比一次资源加载失败重（是我们主动、专门去连的），权重按 2 计 */
+    try{ netSeen(ok,ok?1:2); }catch(e){}
+    if(!ok)try{ netWatchdog(); }catch(e){}
+  };
+  const tick=function(){
+    if(done)return;
+    const url=NET.probeURLs.shift();
+    if(!url){ finish(false); return; }
+    let t=0;
+    const nxt=function(ok){ clearTimeout(t); if(ok)finish(true); else tick(); };
+    t=setTimeout(function(){ nxt(false); },1500);
+    try{
+      const im=new Image();
+      im.referrerPolicy='no-referrer';
+      im.onload=function(){ nxt(true); };
+      im.onerror=function(){ nxt(false); };
+      im.src=url+(url.indexOf('?')<0?'?':'&')+'netprobe='+Date.now();
+    }catch(e){ nxt(false); }
+  };
+  tick();
+}
+/* 看门狗：决定「什么时候再去探一次真实网络」。
+   · 还没验证过在线（自报离线 / 连续失败）：按退避节奏持续探，探通为止
+     —— 探通后感叹号自动消失、YouTube 自动回到在线内容，不需要用户手动点重试；
+   · 已在线：60 秒后复验一次（期间又失败过就 3 秒后立刻复验），
+     避免「验证结果永久有效」导致真断网时界面还一直显示在线。 */
+let netTimer=0, netTimerDue=0;
+function netSchedule(delay){
+  const due=Date.now()+delay;
+  if(netTimer&&netTimerDue<=due)return;                 /* 已有更早的定时器：保留 */
+  if(netTimer)clearTimeout(netTimer);
+  netTimerDue=due;
+  netTimer=setTimeout(function(){
+    netTimer=0; netTimerDue=0;
+    try{ netProbe(); }catch(e){}
+    try{ netWatchdog(); }catch(e){}
+  },delay);
+}
+function netWatchdog(){
+  try{
+    if(NET.forced||NET.probing)return;
+    const lastOk=netSeen.lastOk||0, age=Date.now()-lastOk, failedLate=NET.lastFail>lastOk;
+    if(NET.seen){
+      if(age<60000&&!failedLate){ netSchedule(60000-age); return; }
+      netSchedule(3000); return;
+    }
+    if(navigator.onLine!==false&&NET.failStreak<2){ netSchedule(60000); return; }  /* 判定在线：只做复验 */
+    netSchedule(Math.min(30000,4000*Math.pow(2,Math.min(3,NET.failStreak))));
+  }catch(e){}
+}
+addEventListener('online',()=>{
+  NET.online=true;NET.seen=true;NET.failStreak=0;netSeen.lastOk=Date.now();
+  NET.lastChange=Date.now();netBroadcast();netWatchdog();
+});
+addEventListener('offline',()=>{
+  /* 浏览器自报离线只是个提示：先别画感叹号，探一次真实请求再定。
+     seen 同时清零 —— 之前跑通过不代表现在还通，让探测重新下结论。 */
+  NET.online=false;NET.seen=false;NET.lastChange=Date.now();netBroadcast();netProbe();netWatchdog();
+});
+/* 手动重试（YouTube 未联网提示条 / 设置里的网络项）：
+   先乐观恢复（失败计数清零 + 清掉过期的离线结论，界面立刻回到在线态），
+   再探测确认真实连通性 —— 探不通的话失败计数会重新累加，2 轮之后照旧显示未联网。 */
+function netRetry(quiet){
+  if(NET.forced){ if(!quiet)toast('已强制离线'); return; }
+  NET.failStreak=0; NET.probing=false; NET.online=true;
+  NET.lastChange=Date.now(); netBroadcast();
+  netProbe(); netWatchdog();
+  if(!quiet)toast('正在检测网络…');
+  setTimeout(function(){ if(!quiet)toast(netOnline()?'网络已恢复':'仍然未联网'); },1200);
+}
+/* 开机自检：navigation 事件可能早于本脚本注册，这里补一次探测；
+   注意开机时不直接画感叹号（netOnline 在连续失败前仍返回在线），避免闪一下未联网。 */
+try{ if(navigator.onLine===false){ NET.online=false;setTimeout(function(){ try{ netProbe(); netWatchdog(); }catch(e){} },0); } }catch(e){}
 /* 统一的“未联网”视图：WiFi 图标 + 感叹号，下方一行小字 */
 function offlineView(msg){
   return '<div class="offline-view" role="status">'+
@@ -3994,9 +4136,16 @@ function ytCoverStep(img){
   }
   ytCoverPlaceholder(img);
 }
-function ytCoverFail(img){ ytCoverStep(img); }
+function ytCoverFail(img){
+  /* 远端封面真的加载失败：这是「能不能出网」的证据，喂给联网状态机（误报离线时靠它纠偏） */
+  try{ netSeen(false); }catch(e){}
+  ytCoverStep(img);
+}
 function ytCoverLoad(img){
   if(!img||img.dataset.covDone==='1')return;
+  /* 远端封面拿到真实图片 = 网络确实通（navigator.onLine 误报 false 的最硬反证） */
+  const src=String(img.getAttribute('src')||'');
+  if(/^https?:/i.test(src)){ try{ netSeen(true); }catch(e){} }
   if(ytCoverIsGreyDefault(img)){ ytCoverStep(img); return; }
   /* 这一层成功了：收工，摘掉处理器 */
   img.dataset.covDone='1';
@@ -5286,8 +5435,10 @@ function updateSB(){
   if(tiles.record)p.push('<span class="sb-rec" title="正在录屏" aria-label="正在录屏"></span>');
   if(tiles.flight)p.push('<span class="sb-ic" title="飞行模式" aria-label="飞行模式">'+mi(M.flight,15)+'</span>');
   /* Wi-Fi 图标跟随真实联网状态：未联网时显示「WiFi + 感叹号」，恢复后自动还原。
-     飞行模式/关闭 Wi-Fi 仍然走原来的置灰样式。 */
-  const netUp=(typeof netOnline==='function')?netOnline():(navigator.onLine!==false);
+     飞行模式/关闭 Wi-Fi 仍然走原来的置灰样式。
+     判定统一走 netOnline()（它已经把 navigator.onLine 误报、主动探测、真实请求结果
+     都算进去了），这里不再直接读 navigator.onLine，避免状态栏和别处判断不一致。 */
+  const netUp=netOnline();
   if(!netUp&&!tiles.flight){
     p.push('<span class="sb-ic warn" title="Wi-Fi 未联网" aria-label="Wi-Fi 未联网">'+mi(M.wifi_off,15)+
       '<i class="sb-bang">!</i></span>');
@@ -8926,10 +9077,12 @@ function crConnect() {
   let ws;
   try { ws = new WebSocket(url); } catch (e) { CR.connecting = false; crStatus('中继地址无效', true); crRetrySchedule(); return; }
   CR.ws = ws;
-  ws.onopen = function () { CR.connected = true; CR.connecting = false; CR.retry = 0; CR.failStreak = 0; crRetryClear(); crStatus('已连接' + '，' + '正在打开页面' + '…'); crBoot(); };
+  ws.onopen = function () { CR.connected = true; CR.connecting = false; CR.retry = 0; CR.failStreak = 0; crRetryClear(); crStatus('已连接' + '，' + '正在打开页面' + '…'); crBoot(); try{ netSeen(true); }catch(e){} };
   ws.onmessage = function (ev) { crOnMessage(ev.data); };
   ws.onerror = function () { crLog('WebSocket error（多为握手被拒或网络不可达）'); };
   ws.onclose = function (e) {
+    /* 1006 = 非正常关闭，通常就是网络不可达：作为一次真实的失败证据 */
+    if (e.code === 1006) { try{ netSeen(false); }catch(err){} }
     const was = CR.connected;
     const intentional = CR.closing;                 /* 主动关闭（用户退出/换地址）不重连 */
     CR.closing = false;
@@ -18109,6 +18262,8 @@ function init(){
   renderNotifs();
   updateSB();
   updateClock();
+  /* 首屏之后再自检一次网络：navigator.onLine 误报时，探测一通过就自动抹掉状态栏感叹号 */
+  try{ netWatchdog(); }catch(e){}
   renderPhone();
   renderChatList();
   renderPhotos();
@@ -18593,8 +18748,8 @@ function init(){
         break;
       }
       case 'yt-retry-net':{
-        NET.online=navigator.onLine!==false;
-        toast(netOnline()?'网络已恢复':'仍然未联网');
+        /* 统一走主动探测（netRetry）：navigator.onLine 误报时可以真的把状态救回来 */
+        netRetry();
         ytSyncOfflineBar();renderYt();break;
       }
       case 'yt-open-network':{openApp('settings');setTimeout(function(){try{openSetSub('setNetwork');}catch(e){}},340);break;}
@@ -19630,8 +19785,8 @@ function init(){
         break;
       }
       case 'net-retry':{
-        NET.online=navigator.onLine!==false;
-        toast(netOnline()?'网络已恢复':'仍然未联网');
+        /* 重试 = 主动探测一次，而不是继续相信 navigator.onLine */
+        netRetry();
         if(typeof renderYt==='function'){try{renderYt();}catch(e){}}
         break;
       }
