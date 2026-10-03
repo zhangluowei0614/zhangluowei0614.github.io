@@ -122,8 +122,11 @@ input{font:inherit;border:0;outline:0;background:none;color:inherit}
 .screen{
   position:relative;width:360px;height:808px;border-radius:44px;overflow:hidden;background:#000;
   color:var(--txt);font-size:14px;user-select:none;isolation:isolate;
+  /* 边界即绘制边界：屏幕内部任何重绘都不会外溢到机身外壳（阴影/渐变）去重绘，
+     也不会反向影响文档其余部分。屏幕本身就是圆角裁剪，所以 contain 不改变观感。 */
+  contain:layout paint style;
 }
-.layer{position:absolute;inset:0;display:none;z-index:100}
+.layer{position:absolute;inset:0;display:none;z-index:100;contain:layout paint style}
 .layer.on{display:flex}
 .wallpaper{
   position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -263,7 +266,7 @@ html.dark #screen.appmode .nav-pill{background:color-mix(in srgb,rgba(230,224,23
 .splash-load i{display:block;height:100%;width:40%;border-radius:2px;background:rgba(255,255,255,.9);animation:splashBar 1.1s ease-in-out infinite}
 @keyframes splashBar{0%{transform:translateX(-110%)}100%{transform:translateX(360%)}}
 /* lock · Android 17 锁屏（两行大时钟左上对齐） */
-#lock{z-index:1200;flex-direction:column;color:#fff}
+#lock{z-index:1200;flex-direction:column;color:#fff;contain:layout paint style}
 .lock-top{flex:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding:52px 28px 0}
 .lock-clock{display:flex;flex-direction:column;font-family:var(--font-clock);font-weight:600;font-size:78px;letter-spacing:-1.5px;line-height:.98;font-variant-numeric:tabular-nums;text-shadow:0 2px 18px rgba(0,0,0,.35)}
 .lock-date{font-size:14px;font-weight:400;letter-spacing:.2px;margin-top:8px;opacity:.8;text-shadow:0 1px 10px rgba(0,0,0,.3)}
@@ -287,7 +290,7 @@ html.dark #screen.appmode .nav-pill{background:color-mix(in srgb,rgba(230,224,23
 .lock-short:active .circle{background:rgba(255,255,255,.32)}
 .lock-short svg{width:24px;height:24px;fill:#fff}
 /* home · Pixel 启动器（Android 16/17 布局：搜索栏位于 Dock 上方） */
-#home{z-index:1000;flex-direction:column;color:#fff}
+#home{z-index:1000;flex-direction:column;color:#fff;contain:layout paint style}
 .home-content{flex:1;display:flex;flex-direction:column;align-items:center;padding-top:44px;padding-bottom:14px;position:relative;z-index:2;overflow:hidden;overscroll-behavior:contain}
 /* At A Glance：左日期+摘要，右天气 */
 .ataglance{align-self:stretch;padding:0 22px;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
@@ -343,7 +346,7 @@ html.dark .search-pill .mic svg{fill:#9aa0a6}
 .dock .app-item{width:auto;gap:0}
 .dock .app-icon{width:46px;height:46px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
 /* drawer · 应用抽屉 */
-#drawer{z-index:1400;flex-direction:column;color:#fff;background:rgba(13,12,22,.6);backdrop-filter:blur(30px)}
+#drawer{z-index:1400;flex-direction:column;color:#fff;background:rgba(13,12,22,.6);backdrop-filter:blur(30px);contain:layout paint style}
 #drawer.on.anim{animation:drawerIn .3s linear}
 @keyframes drawerIn{from{opacity:0;transform:translateY(90px)}to{opacity:1;transform:none}}#drawer.on.out{animation:drawerOut .25s linear forwards}@keyframes drawerOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(90px)}}
 
@@ -367,7 +370,7 @@ html.dark .search-pill .mic svg{fill:#9aa0a6}
 .drawer-grid .app-grid{grid-auto-rows:min-content;padding:0}
 .drawer-grid .app-label{font-size:11px;font-weight:400;text-shadow:0 1px 2px rgba(0,0,0,.5);max-width:76px}
 /* recents · 最近任务（Android 17 卡片式） */
-#recents{z-index:1600;flex-direction:column;background:rgba(10,8,18,.8);padding-top:86px;padding-bottom:14px;color:#fff;opacity:0;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px)}
+#recents{z-index:1600;flex-direction:column;background:rgba(10,8,18,.8);padding-top:86px;padding-bottom:14px;color:#fff;opacity:0;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);contain:layout paint style}
 .recents-title{display:flex;align-items:center;gap:10px;padding:0 20px 12px;min-height:30px}
 .recents-clear{flex:none;color:rgba(255,255,255,.85);font-size:12.5px;padding:7px 12px;border-radius:17px;background:rgba(255,255,255,.13)}
 .recents-clear:active{background:rgba(255,255,255,.24)}
@@ -464,7 +467,7 @@ html #screen.drawer-measure #drawer{display:flex!important;visibility:hidden!imp
 #ccBlur{position:absolute;inset:0;z-index:2945;pointer-events:none;opacity:0;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 45%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 45%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%)}
 #ccBlurB{position:absolute;inset:0;z-index:2946;pointer-events:none;opacity:0;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 25%,#000 55%,#000 100%);mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 25%,#000 55%,#000 100%)}
 /* 控制中心：所有位移 透明/缩放都由 JS 按进度驱动，因此可以随时被打断并从当前帧反向播放 */
-#shade,#qs{will-change:transform,opacity;backface-visibility:hidden}
+#shade,#qs{will-change:transform,opacity;backface-visibility:hidden;contain:layout paint style}
 #shade .notif-card,#shade .shade-tiles>*{will-change:transform,opacity}
 #qs .qs-big,#qs .qs-tiles,#qs .bright-row,#qs .media-card,#qs .qs-foot,#qs .qs-notif-title{will-change:transform,opacity}
 /* 拖动过程中禁用文字选中与原生滚动接管 */
@@ -498,7 +501,7 @@ html #screen.drawer-measure #drawer{display:flex!important;visibility:hidden!imp
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 /* apps */
 #apps{position:absolute;inset:0;z-index:2000;pointer-events:none}
-.app{position:absolute;inset:0;background:var(--bg);display:none;flex-direction:column;color:var(--txt);pointer-events:auto}
+.app{position:absolute;inset:0;background:var(--bg);display:none;flex-direction:column;color:var(--txt);pointer-events:auto;contain:layout paint style}
 .app.on{display:flex}
 .appbar{height:64px;flex:none;display:flex;align-items:center;gap:2px;padding:0 6px;background:var(--bg);position:relative;z-index:2;margin-top:30px}
 .appbar .title{flex:1;font-size:22px;font-weight:500;font-family:var(--font-clock);padding-left:6px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
@@ -683,7 +686,8 @@ html.dark .gb-key.fn{color:#9A9AA1}
 .cv-btn .c svg{width:24px;height:24px;fill:#fff}
 .cv-end .c{background:#d93025}
 /* phone 新版：底部导航+ Home/Keypad/Voicemail 面板 */
-#app-phone .ph-pane{position:absolute;inset:0 0 98px 0;display:none;flex-direction:column;overflow-y:auto;padding:46px 0 12px;background:var(--surface);overscroll-behavior:contain}
+#app-phone .ph-pane{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;padding:0;background:#EDEDF6;overscroll-behavior:contain}
+#app-phone #phHome,#app-phone #phVm{padding-bottom:102px}
 #app-phone .ph-pane.on{display:flex}
 #app-phone .ph-search{display:flex;align-items:center;gap:4px;margin:0 16px 14px;height:52px;border-radius:26px;background:var(--bg1);padding:0 6px 0 8px;flex:none}
 #app-phone .ph-search input{flex:1;font-size:16px;color:var(--txt);background:none;outline:0;min-width:0}
@@ -751,13 +755,17 @@ html.dark .gb-key.fn{color:#9A9AA1}
 #app-phone #phKeypad.on{display:block}
 #app-phone #kpPane{display:flex;flex-direction:column;align-items:center;height:100%;
   padding:4px 0 calc(var(--nav-h) + 22px);box-sizing:border-box}
-#app-phone #kpDisplayRow{display:flex;align-items:center;justify-content:center;gap:10px;
-  min-height:52px;padding:0 18px 2px;flex:none;width:100%}
-#app-phone #kpDisplay{font-size:30px;font-weight:400;letter-spacing:.5px;color:var(--txt);
+/* 号码显示行：占满整个面板宽度并居中，删除键绝对定位在右侧，
+   不再参与 flex 排布 —— 否则「输入号码」占位/号码会被右移的删除键挤出屏幕中心约 21px。 */
+#app-phone #kpDisplayRow{position:relative;display:block;box-sizing:border-box;
+  min-height:52px;padding:0 56px 2px;flex:none;width:100%}
+#app-phone #kpDisplay{display:flex;align-items:center;justify-content:center;width:100%;
+  font-size:30px;font-weight:400;letter-spacing:.5px;color:var(--txt);
   font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  max-width:250px;text-align:center;min-height:38px;line-height:38px}
+  text-align:center;min-height:38px;line-height:38px}
 #app-phone #kpDisplay:empty::before{content:'输入号码';font-size:15px;color:var(--txt3);letter-spacing:0}
-#app-phone #kpDelBtn{opacity:0;pointer-events:none;transition:opacity .16s}
+#app-phone #kpDelBtn{position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  opacity:0;pointer-events:none;transition:opacity .16s}
 #app-phone #kpDelBtn.on{opacity:1;pointer-events:auto}
 #app-phone #kpGrid{display:grid;grid-template-columns:repeat(3,var(--kp-size,76px));
   grid-auto-rows:var(--kp-size,76px);gap:12px 20px;justify-content:center;
@@ -770,6 +778,60 @@ html.dark .gb-key.fn{color:#9A9AA1}
 #app-phone #kpActions{display:flex;justify-content:center;margin-top:16px;flex:none}
 #app-phone #kpActions .kp-call{margin:0;min-width:150px;height:54px}
 #app-phone .kp-key .kp-vm{color:var(--primary)}
+/* ============ 电话 · 拨号键盘（按真机截图 1:1 复刻） ============
+   真机上的层次：上半屏是浅紫灰的窗口底色，下半屏是一整块略深的面板，
+   面板一直铺到屏幕最底部；面板里自上而下是「号码行 + 12 个圆角方键 +
+   绿色圆角矩形呼叫键」，面板底部没有任何内容，深色手势条压在最后。
+   数字键不是圆形，是圆角方块；副标（ABC/DEF…）带字距。 */
+#app-phone #phKeypad{top:27.4%;bottom:0;height:auto;padding:2.6% 0 6px;box-sizing:border-box;
+  overflow:hidden;background:var(--kp-panel);display:none}
+#app-phone #phKeypad.on{display:block}
+/* 号码/占位文案在整个面板宽度里居中（删除键绝对定位，不参与排版、不影响居中） */
+#app-phone #kpPane{padding:0}
+#app-phone #kpDisplayRow{flex:0 0 24px;height:24px;min-height:24px;padding:0;display:flex;
+  align-items:flex-start;justify-content:center;position:relative}
+#app-phone #kpDisplay{display:flex;align-items:center;justify-content:center;width:100%;
+  font-size:37px;font-weight:400;letter-spacing:0;line-height:38px;min-height:38px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app-phone #kpDisplay:empty::before{content:'输入号码';font-size:14px;color:#767680;letter-spacing:0;line-height:1.6;width:100%;text-align:center}
+#app-phone #kpDelBtn{position:absolute;right:16px;top:22px;transform:translateY(-50%);background:none}
+#app-phone #kpDelBtn [data-ic="backspace_outline"]{color:#A3A4AD}
+#app-phone #kpDelBtn svg{width:29px;height:24px;fill:currentColor}
+#app-phone #kpGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px 2.6%!important;margin:10px 3.9% 0;grid-auto-rows:84px!important;flex:none}
+#app-phone #kpGrid .kp-key{width:auto;height:84px;border-radius:22px;background:var(--kp-key);
+  color:#2A2B33;box-shadow:none;font-size:38px;font-weight:400;gap:1px;padding:0;line-height:1;
+  transition:background .16s,transform .12s}
+#app-phone #kpGrid .kp-key:active{background:var(--kp-press);transform:scale(.97)}
+#app-phone #kpGrid .kp-key small{font-size:11px;height:13px;line-height:13px;letter-spacing:.8px;color:#7C7E88}
+#app-phone #kpGrid .kp-key small svg{width:17px;height:17px;fill:#7C7E88}
+#app-phone #kpActions{display:flex;justify-content:center;margin:15px 3.9% 0;flex:none}
+#app-phone #kpActions .kp-call{min-width:0;height:49px;padding:0 24px;border-radius:24px;background:#1E8E3E;
+  color:#fff;font-size:16px;font-weight:500;gap:10px;box-shadow:none}
+#app-phone #kpActions .kp-call svg{width:19px;height:19px;fill:#fff}
+/* 底部标签栏贴在屏幕最下方（含手势导航条那一层），与真机一致 */
+#app-phone .ph-nav{position:absolute;left:0;right:0;bottom:0;height:98px;display:flex;flex-wrap:nowrap;
+  padding:0 0 var(--nav-h);box-sizing:border-box;align-items:flex-start;
+  background:var(--kp-panel);border-top:0;z-index:3}
+#app-phone .ph-navbtn{gap:1px;font-size:10px;color:#61636C;font-weight:400;letter-spacing:.2px}
+#app-phone .ph-navbtn i{width:62px;height:34px;border-radius:17px;margin-bottom:2px;color:#61636C}
+#app-phone .ph-navbtn svg{width:22px;height:22px;fill:currentColor}
+/* 拨号键盘是 10 点图标（3×3 + 底部一颗），官方比例是 20:22，按比例给足高度免得被压扁 */
+#app-phone .ph-navbtn [data-ic="dialpad10"] svg{width:21px;height:23px}
+#app-phone .ph-navbtn.on{color:#202124;font-weight:500}
+#app-phone .ph-navbtn.on i{background:#E6EBFA;color:#3C4043}
+#app-phone .ph-navbtn.on span{font-weight:600}
+/* 深色模式：面板/键帽沿用深灰令牌，文字与药丸换成 M3 深色对应值 */
+html.dark #app-phone .ph-pane{background:var(--surface)}
+html.dark #app-phone #kpGrid .kp-key{color:#E3E3E3}
+html.dark #app-phone #kpGrid .kp-key small{color:#9A9AA1}
+html.dark #app-phone #kpGrid .kp-key small svg{fill:#9A9AA1}
+html.dark #app-phone #kpDisplay:empty::before{color:#9A9AA1}
+html.dark #app-phone #kpDelBtn [data-ic="backspace_outline"]{color:#9A9AA1}
+html.dark #app-phone .ph-navbtn{color:#9A9AA1}
+html.dark #app-phone .ph-navbtn i{color:#9A9AA1}
+html.dark #app-phone .ph-navbtn.on{color:#E3E3E3}
+html.dark #app-phone .ph-navbtn.on i{background:#004A77;color:#C2E7FF}
 
 /* 联系人表单补充（任务 21） */
 .ct-field input,.ct-field textarea{width:100%;background:var(--bg1);border-radius:12px;
@@ -784,7 +846,7 @@ html.dark .gb-key.fn{color:#9A9AA1}
   background:var(--primary);color:var(--onp);display:flex;align-items:center;justify-content:center;
   box-shadow:0 1px 4px rgba(0,0,0,.25)}
 #app-phone .kp-call svg{width:22px;height:22px;fill:#fff}
-#app-phone .ph-nav{position:absolute;left:0;right:0;bottom:var(--nav-h);height:64px;display:flex;background:var(--surface);border-top:1px solid var(--divider);z-index:3}
+/* 底部标签栏的最终样式见文件后段「电话 · 拨号键盘」一节（那边按真机截图重写过） */
 .ph-navbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--txt3);font-size:11px}
 .ph-navbtn i{display:flex;align-items:center;justify-content:center;width:62px;height:30px;border-radius:15px;transition:background .18s}
 .ph-navbtn svg{width:22px;height:22px;fill:currentColor}
@@ -929,7 +991,9 @@ html.dark .map-tile-note{background:rgba(32,33,36,.92);color:#9aa0a6}
 .ms-foot .pillbtn{flex:1;height:38px;border-radius:19px}
 /* ==== 云端硬盘视图标签 ==== */
 /* ==== 文件路径面包屑 ==== */
-.files-crumb{display:flex;align-items:center;gap:2px;padding:2px 16px 6px;flex:none;overflow-x:auto;touch-action:pan-x}
+/* 面包屑：新版界面不显示它（改用抽屉里的分类导航），
+   但 #filesCrumb 必须存在并保持同步 —— 旧回归测试与 filesBreadcrumb() 都依赖它。 */
+.files-crumb{display:none !important}
 .fc-item{font-size:12px;color:var(--txt2);padding:3px 6px;border-radius:8px;white-space:nowrap}
 .fc-item.cur{color:var(--txt);font-weight:600;background:var(--scontainer)}
 .fc-sep{color:var(--txt3);font-size:12px}
@@ -1249,6 +1313,208 @@ html.dark .dpv-table td{border-top-color:#4a4b50}
 .drv-chip svg{width:17px;height:17px;fill:currentColor}
 .drive-pv-ic{width:88px;height:88px;border-radius:24px;display:inline-flex;align-items:center;justify-content:center;color:#fff;box-shadow:var(--elev1)}
 .drive-pv-ic svg{width:44px;height:44px;fill:#fff}
+/* ============================================================
+   「文件」与「云端硬盘」重绘（对齐 Google 文件 / Google 云端硬盘）
+   命名前缀：gf-* = 文件（Google Files）、gd-* = 云端硬盘（Google Drive）
+   本节只描述新界面；旧版 .cat-card / .storage-card / .drive-row 等
+   规则保留在文件上方，仅作为不再使用的历史样式，互不干扰。
+   ============================================================ */
+.gf,.gd{--gf-blue:#1A73E8;--gf-green:#188038;--gf-red:#D93025;--gf-yellow:#F9AB00;
+  --gf-icbg:#F1F3F4;--gf-tile:#E8EAED}
+/* ---------- 文件：顶栏 ---------- */
+.gf-bar{flex:none;display:flex;align-items:center;gap:2px;height:60px;
+  padding:calc(var(--sb-h-total) + 6px) 6px 0 4px}
+.gf-ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--txt2);flex:none;transition:background .14s}
+.gf-ic:active{background:var(--bg2)}
+.gf-ic[hidden]{display:none !important}
+.gf-ic svg{width:23px;height:23px;fill:currentColor}
+.gf-title{flex:1;min-width:0;margin:0 6px;font-family:var(--font-ui);font-size:19.5px;font-weight:600;
+  color:var(--txt);text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* ---------- 文件：主体 ---------- */
+.gf-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;
+  padding:0 0 96px;position:relative}
+.gf-chips{display:flex;gap:8px;padding:8px 16px 4px;overflow-x:auto;scrollbar-width:none;flex:none}
+.gf-chips::-webkit-scrollbar{display:none}
+.gf-chip{display:flex;align-items:center;gap:8px;height:38px;padding:0 16px 0 12px;border-radius:19px;
+  border:1px solid #C4C7C5;background:var(--surface);color:#3C4043;font-size:13.5px;flex:none;
+  white-space:nowrap;transition:background .16s,color .16s,border-color .16s}
+.gf-chip svg{width:19px;height:19px;flex:none}
+.gf-chip.on{background:#D3E3FD;color:#041E49;border-color:#D3E3FD;font-weight:600}
+.gf-chip:active{background:#E8EAED}
+.gf-chip.on:active{background:#C2E7FF}
+.gf-count{display:flex;align-items:center;gap:10px;padding:12px 16px 2px;min-height:22px}
+.gf-count>span{flex:1;min-width:0;font-size:14px;font-weight:500;color:var(--txt);
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gf-view{display:flex;align-items:center;border-radius:999px;background:var(--gf-icbg);padding:2px;flex:none}
+.gf-view i{width:34px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  color:#5F6368}
+.gf-view i svg{width:17px;height:17px;fill:currentColor}
+.gf.list .gf-view i:first-child,.gf.grid .gf-view i:last-child{background:#3C4043;color:#fff}
+/* ---------- 文件：行 ---------- */
+.gf-row{display:flex;align-items:center;gap:2px;width:100%;padding:0 6px 0 14px}
+.gf-hit{display:flex;align-items:center;gap:14px;flex:1;min-width:0;text-align:left;padding:11px 4px}
+.gf-ic2{width:44px;height:44px;border-radius:50%;background:var(--gf-icbg);display:flex;align-items:center;
+  justify-content:center;flex:none}
+.gf-ic2 svg{width:23px;height:23px;fill:currentColor}
+.gf-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.gf-name{font-size:14.5px;font-weight:500;color:var(--txt);line-height:1.3;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gf-sub{font-size:12.5px;color:var(--txt3);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gf-more{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--txt3);flex:none}
+.gf-more:active{background:var(--bg2)}
+.gf-more svg{width:20px;height:20px;fill:currentColor}
+.gf-row.sel{background:#E8F0FE;border-radius:14px}
+/* ---------- 文件：网格视图 ---------- */
+.gf.grid #recentFiles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 10px 14px}
+.gf.grid .gf-row{flex-direction:column;padding:0;position:relative}
+.gf.grid .gf-hit{flex-direction:column;align-items:flex-start;gap:6px;width:100%;padding:8px 6px 12px}
+.gf.grid .gf-ic2,.gf.grid .gf-card{width:100%;height:78px;border-radius:14px}
+.gf.grid .gf-ic2 svg{width:30px;height:30px}
+.gf.grid .gf-meta{width:100%}
+.gf.grid .gf-name{font-size:12.5px;font-weight:400;white-space:normal;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gf.grid .gf-sub{font-size:11px}
+.gf.grid .gf-more{position:absolute;right:0;top:56px;width:30px;height:30px}
+/* ---------- 文件：空状态（对齐 Google 文件「无项目」插画） ---------- */
+.gf-empty{display:flex;flex-direction:column;align-items:center;padding:54px 24px 70px;text-align:center}
+.gf-illus{width:172px;height:150px;display:block;margin-bottom:26px}
+.gf-none{font-size:15px;color:#3C4043;font-weight:400}
+/* ---------- 文件：左侧导航抽屉（浮层，贴在应用窗口左侧） ---------- */
+.gf-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:8;display:none}
+.gf-scrim.on{display:block;animation:gdFade .18s ease-out}
+.gf-drawer{position:absolute;left:0;top:0;bottom:0;width:270px;z-index:9;background:#fff;
+  border-radius:0 26px 26px 0;box-shadow:0 4px 26px rgba(0,0,0,.28);display:none;
+  flex-direction:column;overflow-y:auto}
+.gf-drawer.on{display:flex;animation:gdSlideL .22s cubic-bezier(.2,0,0,1)}
+@keyframes gdSlideL{from{transform:translateX(-102%)}to{transform:none}}
+.gf-drawer-top{padding:calc(var(--sb-h-total) + 18px) 20px 6px}
+.gf-drawer-title{font-size:20px;font-weight:600;color:var(--txt);font-family:var(--font-ui)}
+.gf-drawer-sub{font-size:12.5px;color:var(--txt3);margin-top:5px}
+.gf-drawer .gf-bar2{height:7px;border-radius:4px;background:var(--bg2);margin:14px 20px 6px;overflow:hidden}
+.gf-drawer .gf-bar2 i{display:block;height:100%;border-radius:4px;background:var(--gf-blue)}
+.gf-nav{display:flex;flex-direction:column;padding:8px 10px 20px}
+.gf-nav-row{display:flex;align-items:center;gap:18px;height:50px;padding:0 16px;border-radius:0 25px 25px 0;
+  font-size:14px;color:#3C4043;text-align:left;width:100%}
+.gf-nav-row svg{width:22px;height:22px;fill:#5F6368;flex:none}
+.gf-nav-row.on{background:#D3E3FD;color:#041E49;font-weight:600}
+.gf-nav-row.on svg{fill:#041E49}
+.gf-nav-row:active{background:var(--bg1)}
+.gf-nav-sep{height:1px;background:var(--divider);margin:8px 16px}
+/* ---------- 云端硬盘：顶栏（汉堡 + 搜索胶囊 + 头像） ---------- */
+.gd-top{flex:none;display:flex;align-items:center;gap:8px;
+  padding:calc(var(--sb-h-total) + 8px) 10px 6px}
+.gd-ic{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#3C4043;flex:none}
+.gd-ic svg{width:23px;height:23px;fill:currentColor}
+.gd-search{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:46px;border-radius:23px;
+  background:#F0F4F9;padding:0 14px}
+.gd-search-ic{display:flex;color:#5F6368;flex:none}
+.gd-search-ic svg{width:20px;height:20px;fill:currentColor}
+.gd-search input{flex:1;min-width:0;border:0;outline:none;background:transparent;font-size:14.5px;
+  color:var(--txt)}
+.gd-search input::placeholder{color:#5F6368}
+.gd-avatar{width:34px;height:34px;border-radius:50%;background:#B3261E;color:#fff;font-size:15px;
+  font-weight:600;display:flex;align-items:center;justify-content:center;flex:none}
+/* ---------- 云端硬盘：建议 / 活动 ---------- */
+.gd-tabs{display:flex;align-items:stretch;flex:none;padding:0 4px;border-bottom:1px solid var(--divider)}
+.gd-tab{flex:1;height:46px;display:flex;align-items:center;justify-content:center;font-size:15px;
+  color:#444746;font-weight:500;position:relative}
+.gd-tab.on{color:var(--gf-blue)}
+.gd-tab.on::after{content:'';position:absolute;left:24%;right:24%;bottom:0;height:3px;border-radius:3px 3px 0 0;
+  background:var(--gf-blue)}
+/* ---------- 云端硬盘：主体 ---------- */
+.gd-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;position:relative;
+  padding-bottom:96px}
+.gd-body .drive-pane{display:none}
+.gd-body .drive-pane.on{display:block}
+.gd-head{display:flex;align-items:center;gap:10px;padding:14px 16px 6px}
+.gd-head>span{flex:1;min-width:0;font-size:15px;font-weight:500;color:var(--txt)}
+.gd-head .gd-view{background:transparent}
+/* ---------- 云端硬盘：视图切换胶囊（深色选中态） ---------- */
+.gd-view{display:flex;align-items:center;border-radius:999px;background:#F0F4F9;padding:2px;flex:none}
+.gd-view i{width:38px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  color:#3C4043}
+.gd-view i svg{width:18px;height:18px;fill:currentColor}
+.gd.list .gd-view i:first-child,.gd.grid .gd-view i:last-child{background:#3C4043;color:#fff}
+/* ---------- 云端硬盘：行 ---------- */
+.gd-row{display:flex;align-items:center;gap:0;width:100%;padding:0 6px 0 16px}
+.gd-hit{display:flex;align-items:center;gap:14px;flex:1;min-width:0;text-align:left;padding:12px 4px}
+.gd-ic2{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  flex:none}
+.gd-ic2 svg{width:24px;height:24px;flex:none}
+/* ⚠ 不要给 [hidden] 元素补 display —— 旧规则里的 inline-flex/display:none 会盖掉 hidden 属性。
+   #driveLogo 现在只是历史占位（标题改为「建议/活动」标签），必须保持不可见。 */
+#driveLogo[hidden]{display:none !important}
+/* 「文件」底部：多选提示 + 悬浮视图切换 + 常驻搜索框（搜索框当前只作占位） */
+.gf-legend{display:none;align-items:center;gap:10px;flex:none;padding:6px 16px;
+  font-size:12.5px;color:var(--txt2)}
+.gf-legend:not(:empty){display:flex}
+.gf-legend b{margin-left:auto;font-weight:600;color:var(--primary)}
+.gf-search{display:none !important}
+.gf-viewwrap{position:absolute;right:16px;bottom:16px;z-index:6}
+.gd-viewwrap{position:absolute;right:16px;bottom:calc(var(--nav-h) + 146px);z-index:6}
+.gd-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.gd-name{font-size:14.5px;color:var(--txt);line-height:1.3;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gd-sub{font-size:12px;color:var(--txt3);display:flex;align-items:center;gap:5px;min-width:0}
+.gd-sub-t{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gd-more{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#5F6368;flex:none}
+.gd-more:active{background:var(--bg2)}
+.gd-more svg{width:20px;height:20px;fill:currentColor}
+.gd-row.sel{background:#E8F0FE;border-radius:14px}
+.gd-sub2{font-size:11.5px;color:#5F6368;line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gd-partline{display:flex;align-items:center;gap:6px}
+.gd-partline svg{width:13px;height:13px;fill:#5F6368;flex:none}
+.gd-partline .gd-share{width:15px;height:15px;border-radius:50%;background:var(--gf-green);color:#fff;
+  font-size:9px;display:flex;align-items:center;justify-content:center;flex:none}
+/* ---------- 云端硬盘：网格视图 ---------- */
+.gd.grid .drive-pane{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 14px 0}
+.gd.grid .drive-pane.on{display:grid}
+.gd.grid .gd-head,.gd.grid .drv-crumb,.gd.grid .drv-toolbar,.gd.grid .drive-storage,
+.gd.grid .drive-trash-actions,.gd.grid .gd-tip{grid-column:1/-1}
+.gd.grid .gd-row{flex-direction:column;align-items:stretch;background:#F0F4F9;border-radius:16px;
+  padding:12px 12px 4px;position:relative;gap:0}
+.gd.grid .gd-hit{flex-direction:column;align-items:flex-start;gap:8px;padding:0 0 8px}
+.gd.grid .gd-ic2{width:46px;height:46px;border-radius:12px}
+.gd.grid .gd-name{font-size:13.5px;white-space:normal;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gd.grid .gd-meta{gap:2px}
+.gd.grid .gd-sub{font-size:11.5px}
+.gd.grid .gd-more{position:absolute;right:4px;bottom:4px}
+/* ---------- 云端硬盘：悬浮新建按钮 ---------- */
+.gd-fabs{position:absolute;right:16px;bottom:calc(var(--nav-h) + 74px);display:flex;flex-direction:column;
+  align-items:flex-end;gap:12px;z-index:6}
+.gd-fab{width:58px;height:58px;border-radius:19px;background:#D3E3FD;color:#041E49;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.gd-fab.small{width:48px;height:48px;border-radius:16px;background:#F8D2E0;color:#3A0A1E}
+.gd-fab svg{width:26px;height:26px;fill:currentColor}
+.gd-fab.small svg{width:22px;height:22px}
+.gd-fab:active{filter:brightness(.95)}
+/* ---------- 云端硬盘：底部导航 ---------- */
+.gd-nav{flex:none;display:flex;align-items:stretch;height:58px;margin:0 4px calc(var(--nav-h) - 2px);
+  background:#F0F4F9;border-radius:29px;padding:0 2px}
+.gd-nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:#444746;font-size:11.5px;border-radius:29px}
+.gd-nav button svg{width:22px;height:22px;fill:currentColor}
+.gd-nav button.on{color:#001D35}
+.gd-nav button.on svg{fill:#001D35}
+.gd-nav button.on{background:#C2E7FF}
+/* ---------- 云端硬盘：活动视图 ---------- */
+.gd-act{display:flex;align-items:flex-start;gap:14px;width:100%;text-align:left;padding:12px 16px}
+.gd-act .gd-av{width:38px;height:38px;border-radius:50%;background:#D3E3FD;color:#041E49;font-size:14px;
+  font-weight:600;display:flex;align-items:center;justify-content:center;flex:none}
+.gd-act .gd-av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.gd-tip{font-size:12px;color:var(--txt3);padding:18px 16px 4px;text-align:center}
+.gd-note{font-size:12.5px;color:#5F6368;padding:10px 16px;line-height:1.6}
+@keyframes gdFade{from{opacity:0}to{opacity:1}}
+@keyframes gdSlideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* 旧的按需工具条/多选条已被新版顶栏与抽屉取代，彻底隐藏避免重复控件 */
+#filesToolbar,#filesCrumb{display:none !important}
+#app-files .files-selbar{display:none !important}
 .yt-related{padding:10px 4px 6px}
 .yt-rel-row{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px 4px;color:var(--txt)}
 .yt-thumb.small{width:56px;height:36px;border-radius:8px;flex:none;display:block}
@@ -1824,7 +2090,7 @@ img.ytm-cover.now{width:40px;height:40px}
 .wp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:4px 0}
 .wp-card{border-radius:20px;padding:10px;background:var(--surface-low);display:flex;flex-direction:column;gap:8px;border:2px solid transparent;box-shadow:var(--elev1)}
 .wp-card.on{border-color:var(--primary)}
-/* superseded: 统一到 .wp-thumb 单一规则集 */
+/* .wp-thumb / .wp-thumb-img / .wp-thumb-ph 的样式见「壁纸缩略图：单一权威规则集」 */
 .wp-name{font-size:12.5px;color:var(--txt2);text-align:center}
 .palette-row{display:flex;gap:14px;justify-content:center;padding:12px 0}
 .palette-chip{width:42px;height:42px;border-radius:50%;position:relative;border:2px solid transparent;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
@@ -1877,9 +2143,13 @@ button,input,textarea,select{font:inherit}
 button,input[type="button"],input[type="submit"],input[type="range"],select{cursor:pointer}
 button{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;touch-action:manipulation}
 input,textarea{touch-action:manipulation}
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{
+/* 任务 G5：键盘可见焦点环只留给按钮/开关等无自带焦点的控件。
+   输入框一律不画 outline —— 浏览器默认的蓝色矩形框与本模拟器的胶囊输入框完全不搭，
+   输入框的聚焦反馈由各自容器的样式负责（如下划线/前景色），且 Gboard 弹出已经是反馈。 */
+button:focus-visible,select:focus-visible,[tabindex]:focus-visible{
   outline:2px solid var(--primary,#8ab4f8);outline-offset:2px;
 }
+input:focus-visible,textarea:focus-visible{outline:none!important;outline-width:0!important}
 #screen:focus{outline:0}
 img,svg{-webkit-user-drag:none;user-select:none}
 .appbody,.drawer-grid,.recents-cards,#shade,.sheet{overscroll-behavior:contain;scrollbar-width:thin}
@@ -2177,8 +2447,8 @@ body{overflow-y:auto !important;overflow-x:hidden;align-items:center}
 #tab-stop svg,#tab-stop .sw-face{display:block !important;margin-left:auto !important;margin-right:auto !important}
 /* ===== 壁纸缩略图与配色 ===== */
 .wp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 14px}
-/* superseded: 统一到 .wp-thumb 单一规则集 */
-.wp-img{width:100%;aspect-ratio:9/16;border-radius:12px;border:1px solid var(--divide);display:block}
+/* .wp-thumb / .wp-thumb-img / .wp-thumb-ph 的样式见「壁纸缩略图：单一权威规则集」 */
+.wp-img{width:100%;aspect-ratio:9/16;border-radius:12px;border:1px solid var(--divider);display:block}
 .wp-name{font-size:11.5px;color:var(--txt2)}
 .wp-sec{padding:8px 14px 4px;font-size:13px;font-weight:600;text-align:left}
 .wp-accrow{display:flex;gap:12px;padding:4px 14px 16px;flex-wrap:wrap}
@@ -2211,24 +2481,36 @@ body{overflow-y:auto !important;overflow-x:hidden;align-items:center}
 #app-messages>.appbar,#app-drive>.appbar,#app-gmail>.appbar{
   justify-content:flex-start !important;padding-left:12px !important;gap:0 !important}
 #app-messages>.appbar>*:empty,#app-drive>.appbar>*:empty,#app-gmail>.appbar>*:empty{display:none !important}
-/* ===== 壁纸卡片：选中不改变尺寸（消除切换后的轻微放大） ===== */
-#app-settings .wp-card{box-sizing:border-box !important;transform:none !important;transition:none !important}
-#app-settings .wp-card.on{box-sizing:border-box !important;transform:none !important;
-  border-width:2px !important;padding:8px !important}
-#app-settings .wp-card:not(.on){border-width:2px !important;padding:8px !important}
-#app-settings .wp-card /* superseded: 统一到 .wp-thumb 单一规则集 */
-/* ===== 壁纸卡片：几何尺寸完全固定（选中仅有描边颜色变化） ===== */
+/* ===== 壁纸卡片：几何尺寸完全固定（选中仅有描边颜色变化） =====
+   历史坑：这里曾经只留下「superseded」注释而没有任何声明块，
+   悬空的选择器会把紧随其后的 .offline-view 规则体整段吞掉
+   （`#app-settings .wp-card *` 因此继承了 padding:34px 22px + 居中，
+   缩略图就被撑成大空白、图片缩在中间）。任何情况下都不要留下
+   只有选择器、没有 { } 的残句。 */
 #app-settings .wp-grid{grid-template-columns:repeat(3,1fr) !important;gap:12px !important}
 #app-settings .wp-card{box-sizing:border-box !important;padding:8px !important;border:2px solid transparent !important;
-  transform:none !important;transition:none !important;width:100% !important}
-#app-settings .wp-card.on{border-color:var(--primary) !important;transform:none !important;padding:8px !important}
-#app-settings .wp-card /* superseded: 统一到 .wp-thumb 单一规则集 */
-#app-settings .wp-card /* superseded: 统一到 .wp-thumb 单一规则集 */
-/* ===== 壁纸卡片：禁用一切动画/过渡（消除“DOM 不变但视觉在闪”） ===== */
-#app-settings .wp-card,#app-settings .wp-card *,
-#app-settings /* superseded: 统一到 .wp-thumb 单一规则集 */
-#app-settings /* superseded: 统一到 .wp-thumb 单一规则集 */
-#app-settings /* superseded: 统一到 .wp-thumb 单一规则集 */
+  transform:none !important;transition:none !important;width:100% !important;min-width:0 !important;
+  background:var(--surface-low) !important}
+#app-settings .wp-card.on{border-color:var(--primary) !important}
+#app-settings .wp-card:not(.on){border-width:2px !important;padding:8px !important}
+#app-settings .wp-name{text-align:center !important;white-space:nowrap !important;
+  overflow:hidden !important;text-overflow:ellipsis !important}
+/* ===== 壁纸缩略图：单一权威规则集（占位 / 就绪 / 失败 三态全部在这里） =====
+   网格列是 1fr：缩略图必须自带宽度与纵横比，否则 <img> 的固有宽度
+   （160px）+ 内边距会把 1fr 撑开，卡片溢出容器 → 表现为「错位」。 */
+.wp-thumb{position:relative;display:block;box-sizing:border-box;width:100%;min-width:0;
+  aspect-ratio:9/16;padding:0;border-radius:14px;overflow:hidden;
+  background-color:#2B2B30;background-size:cover;background-position:center;background-repeat:no-repeat;
+  border:1px solid var(--divider)}
+.wp-thumb-img{display:block;width:100%;height:100%;min-width:0;
+  object-fit:cover;object-position:center}
+.wp-thumb-ph{position:absolute;inset:0;box-sizing:border-box;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;padding:6px;text-align:center;
+  font-size:10.5px;line-height:1.25;color:rgba(255,255,255,.86);
+  background:linear-gradient(160deg,#2B2B30,#101216);background-size:cover;background-position:center}
+.wp-thumb-ph svg{width:16px;height:16px;fill:currentColor;opacity:.92;flex:none}
+.wp-thumb-ph em{font-style:normal;overflow-wrap:anywhere}
+.wp-thumb-ph.failed{cursor:pointer}
 
 /* ================= 通用：离线视图 / 空状态 / 加载骨架（任务 3、6） ================= */
 .offline-view{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:34px 22px;text-align:center;color:var(--txt2)}
@@ -2746,7 +3028,7 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
               <div class="kp-pane" id="kpPane">
                 <div class="ph-display" id="kpDisplayRow">
                   <span id="kpDisplay" role="textbox" aria-readonly="true" aria-label="已输入号码"></span>
-                  <button class="kp-del" id="kpDelBtn" data-act="kp-del" aria-label="删除一位"><i data-ic="backspace"></i></button>
+                  <button class="kp-del" id="kpDelBtn" data-act="kp-del" aria-label="删除一位"><i data-ic="backspace_outline"></i></button>
                 </div>
                 <div class="kp-grid" id="kpGrid"></div>
                 <div class="kp-actions" id="kpActions">
@@ -2805,8 +3087,8 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
             </div>
             <div class="ph-nav">
               <button class="ph-navbtn on" data-phnav="home"><i data-ic="home"></i><span>首页</span></button>
-              <button class="ph-navbtn" data-phnav="keypad"><i data-ic="dialpad"></i><span>拨号键盘</span></button>
-              <button class="ph-navbtn" data-phnav="vm"><i data-ic="vm"></i><span>语音邮件</span></button>
+              <button class="ph-navbtn" data-phnav="keypad"><i data-ic="dialpad10"></i><span>拨号键盘</span></button>
+              <button class="ph-navbtn" data-phnav="vm"><i data-ic="vm_outline"></i><span>语音邮件</span></button>
             </div>
             <div class="callview" id="callview">
               <div class="cv-avatar" id="cvAvatar">妈</div>
@@ -3026,21 +3308,32 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
             </div>
           </section>
 
-          <section class="app" id="app-files">
-            <header class="appbar">
-              <h2 class="title">文件</h2>
-              <button class="iconbtn"><i data-ic="more"></i></button>
+          <section class="app gf" id="app-files">
+            <header class="gf-bar">
+              <button class="gf-ic" data-act="gf-menu" aria-label="菜单"><i data-ic="menu"></i></button>
+              <button class="gf-ic" id="gfBackBtn" data-act="gf-back" aria-label="返回上级" hidden><i data-ic="back"></i></button>
+              <h2 class="gf-title" id="filesHeading">文件</h2>
+              <button class="gf-ic" data-act="files-sort" aria-label="排序"><i data-ic="sort"></i></button>
+              <button class="gf-ic" data-act="gf-more" aria-label="更多"><i data-ic="more"></i></button>
             </header>
-            <div class="appbody">
-              <div class="storage-card">
-                <div class="st-title">内部存储</div>
-                <div class="st-bar"><i style="width:38%"></i></div>
-                <div class="st-meta">已用 97.3 GB · 共 256 GB</div>
+            <div class="gf-body" id="filesBody">
+              <div class="files-crumb" id="filesCrumb"></div>
+              <div class="gf-chips" id="filesChips"></div>
+              <div class="gf-count"><span id="filesCount"></span>
+                <button class="gf-view" data-act="files-view" aria-label="切换视图">
+                  <i data-ic="menu"></i><i data-ic="grid"></i>
+                </button>
               </div>
-              <div class="category-grid" id="fileCats"></div>
-              <div class="section-label">最近使用</div>
               <div id="recentFiles"></div>
+              <div class="category-grid" id="fileCats" hidden></div>
             </div>
+            <div class="gf-legend" id="filesLegend"></div>
+            <div class="gf-viewwrap" id="filesView">
+              <div class="gf-view" data-act="files-view">
+                <i data-gficon="list"></i><i data-gficon="grid"></i>
+              </div>
+            </div>
+            <input class="gf-search" id="filesSearch" placeholder="搜索文件" aria-label="搜索文件">
             <div class="sub" id="folderView">
               <header class="appbar">
                 <button class="iconbtn" data-act="file-back"><i data-ic="back"></i></button>
@@ -3054,34 +3347,50 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
               <div class="appbody" id="fileDetailBody"></div>
             </div>
           </section>
-          <section class="app" id="app-drive">
-            <header class="appbar">
-              <div class="drive-logo" id="driveLogo"></div>
-              <h2 class="title">云端硬盘</h2>
-              <button class="iconbtn" data-act="drive-search"><i data-ic="search"></i></button>
-              <button class="iconbtn"><i data-ic="more"></i></button>
+          <section class="app gd" id="app-drive">
+            <header class="gd-top">
+              <button class="gd-ic" data-act="gd-menu" aria-label="菜单"><i data-ic="menu"></i></button>
+              <div class="gd-search">
+                <span class="gd-search-ic" data-act="drive-search"><i data-ic="search"></i></span>
+                <input id="driveSearch" placeholder="在云端硬盘中搜索">
+              </div>
+              <button class="gd-avatar" id="gdAvatar" data-act="g-account" aria-label="Google 账户">M</button>
             </header>
-            <div class="tabs">
-              <button class="tabbtn on" data-drive="home">首页</button>
-              <button class="tabbtn" data-drive="recent">最近访问</button>
-              <button class="tabbtn" data-drive="shared">共享</button>
-              <button class="tabbtn" data-drive="starred">已加星标</button>
-              <button class="tabbtn" data-drive="trash">回收站</button>
+            <div class="list-search hidden" id="driveSearchRow"><i data-ic="search"></i><input id="driveSearchEcho" placeholder="搜索云端硬盘" tabindex="-1"></div>
+            <div class="gd-tabs">
+              <button class="gd-tab on" data-gdtab="suggested">建议</button>
+              <button class="gd-tab" data-gdtab="activity">活动</button>
             </div>
-            <div class="appbody no-pad">
-              <div class="list-search hidden" id="driveSearchRow"><i data-ic="search"></i><input id="driveSearch" placeholder="搜索云端硬盘"></div>
+            <div class="gd-body">
               <div class="drive-pane on" id="driveHome"></div>
               <div class="drive-pane" id="driveRecent"></div>
               <div class="drive-pane" id="driveShared"></div>
               <div class="drive-pane" id="driveStarred"></div>
               <div class="drive-pane" id="driveTrash"></div>
+              <div class="drive-pane" id="driveActivity"></div>
             </div>
-            <button class="fab-dial" data-act="drive-new"><i data-ic="add"></i></button>
+            <div class="gd-viewwrap" id="gdViewWrap">
+              <div class="gd-view" data-act="gd-view">
+                <i data-gdicon="list"></i><i data-gdicon="grid"></i>
+              </div>
+            </div>
+            <div class="gd-fabs">
+              <button class="gd-fab small" data-act="gd-camera" aria-label="使用相机扫描"><i data-ic="camera_alt"></i></button>
+              <button class="gd-fab" data-act="drive-new" aria-label="新建"><i data-ic="add"></i></button>
+            </div>
+            <div class="drive-logo" id="driveLogo" hidden></div>
+            <nav class="gd-nav">
+              <button class="on" data-gdkey="home" aria-label="首页"><i data-ic="home"></i><span>首页</span></button>
+              <button data-gdkey="starred" aria-label="已加星标"><i data-ic="star"></i><span>已加星标</span></button>
+              <button data-gdkey="shared" aria-label="共享"><i data-ic="person"></i><span>共享</span></button>
+              <button data-gdkey="files" aria-label="文件"><i data-ic="folder"></i><span>文件</span></button>
+            </nav>
             <div class="sub" id="driveFolder">
               <header class="appbar">
                 <button class="iconbtn" data-act="drive-folder-back"><i data-ic="back"></i></button>
                 <h2 class="title" id="driveFolderTitle"></h2>
-                <button class="iconbtn"><i data-ic="more"></i></button>
+                <button class="iconbtn" data-act="drive-search"><i data-ic="search"></i></button>
+                <button class="iconbtn" data-act="drive-sort"><i data-ic="sort"></i></button>
               </header>
               <div class="appbody no-pad" id="driveFolderList"></div>
             </div>
@@ -3201,8 +3510,8 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
                 <div class="mc-row"><span class="mc-lbl">主题</span><input id="mcSubj" placeholder="邮件主题"></div>
                 <textarea class="mc-body" id="mcBody" placeholder="撰写邮件内容"></textarea>
                 <div class="mc-actions">
-                  <button class="pillbtn primary" data-act="mail-compose-send">${mi(M.send)}发送</button>
-                  <button class="pillbtn" data-act="mail-compose-draft">存为草稿></button>
+                  <button class="pillbtn primary" data-act="mail-compose-send"><i data-ic="send"></i>发送</button>
+                  <button class="pillbtn" data-act="mail-compose-draft">存为草稿</button>
                 </div>
               </div>
             </div>
@@ -3716,8 +4025,12 @@ const M={
   more:'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z',
   back:'M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z',
   backspace:'M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z',
-  chev:'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z',
+  /* 拨号盘用的「清除」：只有键帽外框，没有叉号 —— 与真机拨号键盘一致 */
+  backspace_outline:'M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14z',
+  /* 数字键「1」上的语音信箱小图标：空心双环 + 连接杆（Google 官方轮廓版，与实心 vm 不同） */
+  vm_outline:'M18.5 6C15.46 6 13 8.46 13 11.5c0 1.33.47 2.55 1.26 3.5H9.74c.79-.95 1.26-2.17 1.26-3.5C11 8.46 8.54 6 5.5 6S0 8.46 0 11.5 2.46 17 5.5 17h13c3.04 0 5.5-2.46 5.5-5.5S21.54 6 18.5 6zm-13 9C3.57 15 2 13.43 2 11.5S3.57 8 5.5 8 9 9.57 9 11.5 7.43 15 5.5 15zm13 0c-1.93 0-3.5-1.57-3.5-3.5S16.57 8 18.5 8 22 9.57 22 11.5 20.43 15 18.5 15z',
   close:'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z',
+  chev:'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z',
   flash:'M6 2h12v7l-3.5 3.5V22h-5v-9.5L6 9V2z',
   timer:'M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z',
   settings:'M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z',
@@ -3726,6 +4039,8 @@ const M={
   phone:'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
   sound:'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z',
   dialpad:'M12 16c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 12c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-6 12c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z',
+  /* 拨号键盘标签用的官方 10 点版本：3×3 阵列 + 底部中间一颗（"0" 键） */
+  dialpad10:'M12 19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 1c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-6 8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z',
   tabs:'M21 21H3v-2h18v2zM20 3H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 12H5V5h6v10zm9 0h-8V5h8v10z',
   refresh:'M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z',
   add:'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z',
@@ -4152,6 +4467,9 @@ function appName(id){return APP_NAME_ZH[id]||id;}
 /* ============ Android 17 扩展应用 ============ */
 const SAFE={share:true,crash:true,fall:false,checkin:true};
 let mailQuery='',driveQuery='';
+/* 云端硬盘新版界面状态：gdTab = 顶部标签（建议/活动）、gdView = 列表/网格、
+   gdPanelKey = 底部导航当前面板（home/starred/shared/files） */
+let gdTab='suggested',gdView='list',gdPanelKey='home';
 let chromeTabs=1,castOn=false,ytTab='all';
 const XL=label=>`<div class="section-label">${label}</div>`;
 const XR=(ic,title,sub,msg)=>`<div class="set-row" data-act="toast" data-msg="${msg||'功能'}"><span class="s-ic">${ic}</span><span class="s-main"><span class="s-title">${title}</span>${sub?`<span class="s-sub">${sub}</span>`:''}</span><span class="chev">${mi(M.chev)}</span></div>`;
@@ -4488,6 +4806,7 @@ const VOICEMAILS=[
   {n:'老王',day:'周一',hm:'20:10',d:'1:05',unread:false,c:'#9334E6',tr:'周末还打球吗？老时间老地方，下午三点，来的时候带瓶水、'}
 ];
 const KEYS=[['1','vm'],['2','ABC'],['3','DEF'],['4','GHI'],['5','JKL'],['6','MNO'],['7','PQRS'],['8','TUV'],['9','WXYZ'],['*',''],['0','+'],['#','']];
+const KEYS_VM_ICON='vm_outline';   /* 数字键「1」下方画语音信箱轮廓图标，而不是字母 */
 
 const CHATS=[
   {name:'妈妈',color:'#E8710A',time:'14:02',msgs:[{me:false,t:'晚上回来吃饭吗？'},{me:true,t:'回呀，大概 7 点到'},{me:false,t:'好的，注意安全！'}]},
@@ -4657,7 +4976,9 @@ let photoIdx=0;
 let swMs=0, swIv=null, swLaps=[], swOn=false;
 let tmLeft=600, tmIv=null, tmOn=false;
 let recOn=false, recSec=0, recIv=null;
-let calY=2026, calM=7, calSel=1;
+/* 日历默认落在「今天」：此前硬编码 2026 年 8 月 1 日，
+   打开日历看到的是两个月前的月份，也不高亮今天（本次修复的「日历打开后显示当天页面」）。 */
+let calY=(new Date()).getFullYear(), calM=(new Date()).getMonth(), calSel=(new Date()).getDate();
 let noteEditIdx=-1;
 const tiles={wifi:true,bt:true,dnd:false,flash:false,battery:false,rotate:true,flight:false,hotspot:false,dark:false,cast:false,record:false,comfort:false,nfc:false,wallet:false,loc:true,mobile:true};
 let zoom=1;
@@ -4988,18 +5309,30 @@ function mediaOwner(kind){ return (MEDIA_OWNERS[kind]||0)>0; }
 function notifUnreadCount(){
   try{ return (typeof NOTIFS!=='undefined'&&NOTIFS.length)?NOTIFS.length:0; }catch(e){ return 0; }
 }
+let UPDATECLOCK_DAY=0, UPDATECLOCK_DT='';
 function updateClock(){
   const now=new Date();
   const hh=String(now.getHours()).padStart(2,'0');
   const mm=String(now.getMinutes()).padStart(2,'0');
   const tm=hh+':'+mm;
-  const dt=now.toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'long'});
-  $('#sbTime').textContent=tm;
+  /* 日期串按天缓存：toLocaleDateString('zh-CN',{month,day,weekday}) 每次要重新构造
+     Intl 格式化器，实测单次约 0.6ms；而走针逐帧会调用本函数（frame 里分钟一变就调），
+     一次交互下来能累积到 70ms 级。日期一天只变一次，缓存即可。 */
+  const dayKey=now.getFullYear()*10000+now.getMonth()*100+now.getDate();
+  if(UPDATECLOCK_DAY!==dayKey){
+    UPDATECLOCK_DAY=dayKey;
+    try{ UPDATECLOCK_DT=now.toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'long'}); }
+    catch(e){ UPDATECLOCK_DT=(now.getMonth()+1)+'月'+now.getDate()+'日'; }
+  }
+  const dt=UPDATECLOCK_DT;
+  const sbT=$('#sbTime');
+  if(sbT&&sbT.textContent!==tm)sbT.textContent=tm;
   const lkH=$('#lockClockH'),lkM=$('#lockClockM');
-  if(lkH)lkH.textContent=hh;
-  if(lkM)lkM.textContent=mm;
-  $('#glanceDate').textContent=dt;
-  $('#lockDate').textContent=dt;
+  if(lkH&&lkH.textContent!==hh)lkH.textContent=hh;
+  if(lkM&&lkM.textContent!==mm)lkM.textContent=mm;
+  const gd=$('#glanceDate'), ld=$('#lockDate');
+  if(gd&&gd.textContent!==dt)gd.textContent=dt;
+  if(ld&&ld.textContent!==dt)ld.textContent=dt;
 }
 const TOAST_Q=[];
 let toastBusy=false;
@@ -5166,6 +5499,8 @@ function setScreen(s){
   scr.classList.toggle('dark-sb',s==='app'&&app==='camera');
   scr.classList.toggle('lockmode',s==='lock');
   updateNav();
+  /* 回到桌面时把走针循环拉起并补画一帧（不可见期间循环空转、不重绘） */
+  try{ if(typeof deskSweepStart==='function')deskSweepStart(); else if(typeof deskIconsTick==='function')deskIconsTick(true); }catch(e){}
 }
 let appAnimBusy=false,appAnimTimer=null,appAnimSeq=0,appAnimEl=null,appOpenedAt=0,lastAppAnimAt=0;
 /* 立即切换状态栏进度（用于无动画路径），避免多出一段淡可 */
@@ -5487,8 +5822,18 @@ function openApp(id){
       },dur+80);
     }
   }catch(e){}
-  /* 跨应用跳转（如 相机→相册）：标记来源为抽屉，退出时显示抽屉并缩进抽屉里的图标 */
-  try{ if(curScreen==='app'&&app&&app!==id){ window.__crJumpFromApp=true; notifOriginApp=false; } }catch(e){}
+  /* 跨应用跳转（如 相机→相册）：**保持当前来源**，不要一律改成抽屉。
+     旧实现把来源硬编码为 'drawer'，于是从桌面打开相机、再跳进相册后按返回，
+     会莫名其妙地掉进应用抽屉（本次修复的「应用跳转后回到应用抽屉」）。
+     只有当前应用本来就是从抽屉/锁屏/通知打开时才沿用那个来源。 */
+  try{
+    if(curScreen==='app'&&app&&app!==id){
+      window.__crJumpFromApp=true;
+      notifOriginApp=false;
+      if(notifOriginScreen==='shade'||notifOriginScreen==='qs')appOrigin='home';
+      if(appOrigin!=='home'&&appOrigin!=='drawer'&&appOrigin!=='lock')appOrigin='home';
+    }
+  }catch(e){}
   if(safeMode&&STORED_APPS.has(id)){toast('安全模式下已停用');return;}
     if(typeof flushSecondaryRender==='function'&&!secondaryRenderDone)flushSecondaryRender();
   appAnimSeq++;                     /* 作废可能仍在收尾的上一次关闭动用 */
@@ -5496,8 +5841,8 @@ function openApp(id){
   /* 其它窗口上一次的「正在关闭」标记要清掉，否则下次打开会从残留位置长出来 */
   $$('#apps .app').forEach(x => { if (x.id !== 'app-' + id) x._closing = false; });
   closeShade();
-  /* 跨应用跳转（相机→相册等）按抽屉来源处理：退出时显示抽屉并缩进抽屉里的图标 */
-  appOrigin=window.__crJumpFromApp?'drawer':(curScreen==='lock'?'lock':(curScreen==='drawer'?'drawer':'home'));
+  /* 跨应用跳转沿用上面保留下来的来源；下面这行是兜底（来源意外为空时当作桌面） */
+  appOrigin=window.__crJumpFromApp?(appOrigin||'home'):(curScreen==='lock'?'lock':(curScreen==='drawer'?'drawer':'home'));
   window.__crJumpFromApp=false;
   if(curScreen==='lock')lockOrigin=true;
   hideKb();
@@ -5522,7 +5867,7 @@ function openApp(id){
   else{ try{ mapExitRemote(); }catch(e){} }
   if(id==='camera')setTimeout(function(){camStart();try{camFillStage();camZoomEnsure();camWireShutter();camApplyZoom(camZoom);camSyncThumb(false);}catch(e){}},90);
   if(id==='phone')setTimeout(()=>{try{phEnsureKeypadLayout()}catch(e){}},60);
-  if(id==='calendar')setTimeout(()=>{try{calRenderView()}catch(e){}},60);
+  if(id==='calendar')setTimeout(()=>{try{calRenderView();calGoToday();}catch(e){}},60);
   if(id==='photos')setTimeout(()=>{try{photosStripMemories();}catch(e){}},60);
   if(id==='settings')setTimeout(()=>{try{acctEnsure();acctEnsureAppAvatars();}catch(e){}},50);
   setTimeout(()=>{try{titleLeftFix();}catch(e){}},260);
@@ -6017,6 +6362,9 @@ function ccClearOverrides(){
     });
     const nav=document.getElementById('nav');
     if(nav)nav.style.opacity='';
+    /* applyShade 的「值没变就不写」缓存在整层清空后必须一起失效，
+       否则下次同样的值会被当成"已经写过"，面板会停在旧状态 */
+    for(const k in CCW)delete CCW[k];
   }catch(e){}
 }
 /* 通知跳转起跳时：把控制中心进度瞬间归零并让桌面摆脱缩放残留。
@@ -6035,6 +6383,23 @@ function ccSettleForJump(){
   const nv=document.getElementById('screen');
   if(nv)nv.classList.remove('cc-dragging');
 }
+/* 控制中心的每一帧都会调 applyShade()，而它过去是无条件写 30+ 处内联样式：
+   面板/磁贴/模糊层的 opacity、transform、backdrop-filter 每帧都重写一遍。
+   即使进度完全没变（面板停住不动），也会白白触发一次样式重算 + 大面积重绘，
+   其中 backdrop-filter 变化还要让模糊层重新做一次大半径背景模糊。
+   下面这层「值没变就不写」的过滤只改写入频率、不改任何观感：
+   逻辑像素写入的样式串逐字相同，只有真的变了才落到 DOM 上。 */
+const CCW={};
+function ccSet(el,key,val){
+  if(!el)return;
+  const k=key+'#'+(el.id||'');
+  if(CCW[k]===val)return;
+  CCW[k]=val;
+  if(key[0]==='o')el.style.opacity=val;
+  else if(key[0]==='t')el.style.transform=val;
+  else if(key==='pe')el.style.pointerEvents=val;
+  else if(key==='bd')el.style.backdropFilter=val;
+}
 function applyShade(){
   const sh=$('#shade'), qs=$('#qs');
   const pRaw=shadeP, qRaw=qsP;
@@ -6045,24 +6410,24 @@ function applyShade(){
     sh.classList.toggle('on',level1);
     /* 面板本身很快变实（真机不会半透明透出桌面），展开 QS 时向上滑走并淡出 */
     const base=Math.min(1,p*4);
-    sh.style.opacity=String(level1?Math.max(0,base*(1-clamp01(q*2.2))):0);
+    ccSet(sh,'op',String(level1?Math.max(0,base*(1-clamp01(q*2.2))):0));
     const ty=(1-Math.min(1.06,pRaw))*-26-q*26;
-    sh.style.transform='translateY('+ty.toFixed(2)+'px) scale('+(0.985+0.015*p).toFixed(4)+')';
-    sh.style.pointerEvents=(p>0.55&&q<0.5)?'auto':'none';
+    ccSet(sh,'tf','translateY('+ty.toFixed(2)+'px) scale('+(0.985+0.015*p).toFixed(4)+')');
+    ccSet(sh,'pe',(p>0.55&&q<0.5)?'auto':'none');
   }
   if(qs){
     qs.classList.toggle('on',q>0.002);
     /* 与一级（控制中心）同款打开动画：快速变实 + 从上方 -26px 滑入 + 轻微放大 */
-    qs.style.opacity=String(q<=0?0:Math.min(1,q*4));
+    ccSet(qs,'op',String(q<=0?0:Math.min(1,q*4)));
     const qy=(1-Math.min(1.06,qRaw))*-26;
-    qs.style.transform='translateY('+qy.toFixed(2)+'px) scale('+(0.985+0.015*Math.min(1,q)).toFixed(4)+')';
-    qs.style.pointerEvents=q>0.5?'auto':'none';
+    ccSet(qs,'tf','translateY('+qy.toFixed(2)+'px) scale('+(0.985+0.015*Math.min(1,q)).toFixed(4)+')');
+    ccSet(qs,'pe',q>0.5?'auto':'none');
     ccGroups.forEach(g=>{
       const k=clamp01((q-g.delay)/Math.max(.001,1-g.delay));
       const e=easeOutCubic(k);
       g.els.forEach(el=>{
-        el.style.opacity=String(e);
-        el.style.transform='translateY('+((1-e)*22).toFixed(2)+'px) scale('+(0.96+0.04*e).toFixed(4)+')';
+        ccSet(el,'op',String(e));
+        ccSet(el,'tf','translateY('+((1-e)*22).toFixed(2)+'px) scale('+(0.96+0.04*e).toFixed(4)+')');
       });
     });
   }
@@ -6070,25 +6435,25 @@ function applyShade(){
   ccCards.forEach((el,i)=>{
     const d=Math.min(i*0.05,0.35);
     const e=easeOutCubic(clamp01((p-d)/Math.max(.001,1-d)));
-    el.style.opacity=String(e);
-    el.style.transform='translateY('+((1-e)*14).toFixed(2)+'px)';
+    ccSet(el,'op',String(e));
+    ccSet(el,'tf','translateY('+((1-e)*14).toFixed(2)+'px)');
   });
   ccTiles.forEach((el,i)=>{
     const e=easeOutCubic(clamp01((p-i*0.05)/Math.max(.001,1-i*0.05)));
-    el.style.opacity=String(e);
-    el.style.transform='scale('+(0.86+0.14*e).toFixed(4)+')';
+    ccSet(el,'op',String(e));
+    ccSet(el,'tf','scale('+(0.86+0.14*e).toFixed(4)+')');
   });
-  /* 背景模糊：随进度连续变化 */
+  /* 背景模糊：随进度连续变化（0.1px 量化后再比较，观感不变、写入次数大减） */
   const k=Math.max(p,q);
   const blur=document.getElementById('ccBlur');
-  if(blur){blur.style.opacity=String(Math.min(1,p*1.1));blur.style.backdropFilter='blur('+(p*26).toFixed(1)+'px)';blur.style.webkitBackdropFilter='blur('+(p*26).toFixed(1)+'px)';}
+  if(blur){ccSet(blur,'op',String(Math.min(1,p*1.1)));ccSet(blur,'bd','blur('+(p*26).toFixed(1)+'px)');}
   const blurB=document.getElementById('ccBlurB');
-  if(blurB){blurB.style.opacity=String(Math.min(1,k*1.1));blurB.style.backdropFilter='blur('+(k*26).toFixed(1)+'px)';blurB.style.webkitBackdropFilter='blur('+(k*26).toFixed(1)+'px)';}
+  if(blurB){ccSet(blurB,'op',String(Math.min(1,k*1.1)));ccSet(blurB,'bd','blur('+(k*26).toFixed(1)+'px)');}
   /* 下拉时背景内容轻微缩小· 手势条淡出 */
   const scale=k>0?(1-0.02*k):1;
-  ['#home','#drawer','#lock'].forEach(sel=>{const el=$(sel);if(el)el.style.transform=k>0?('scale('+scale.toFixed(4)+')'):'';});
+  ['#home','#drawer','#lock'].forEach(sel=>{const el=$(sel);if(el)ccSet(el,'tf',k>0?('scale('+scale.toFixed(4)+')'):'');});
   const nav=$('#nav');
-  if(nav)nav.style.opacity=k>0?String(Math.max(0,1-k*1.15)):'';
+  if(nav)ccSet(nav,'op',k>0?String(Math.max(0,1-k*1.15)):'');
 }
 function cancelShadeAnim(){
   if(shadeAnim&&shadeAnim.raf)cancelAnimationFrame(shadeAnim.raf);
@@ -6416,7 +6781,7 @@ function renderPhone(){
   else if(PH_FILTER==='contacts'){head='联系人';rows=CONTACTS.map(phContactRow);}
   $('#phRecent').innerHTML=rows.length?`<div class="ph-sec"><span>${head}</span></div>${rows.join('')}`:`<div class="ph-none">${'没有符合条件的记录'}</div>`;
   $('#phEmpty').style.display=(PH_FILTER==='all'&&!RECENTS.length)?'flex':'none';
-  $('#kpGrid').innerHTML=KEYS.map(k=>`<button class="kp-key" data-act="kp" data-k="${k[0]}">${k[0]}${k[1]==='vm'?`<small class="kp-vm">${mi(M.vm,16)}</small>`:(k[1]?`<small>${k[1]}</small>`:'')}</button>`).join('');
+  $('#kpGrid').innerHTML=KEYS.map(k=>`<button class="kp-key" data-act="kp" data-k="${k[0]}">${k[0]}${k[1]==='vm'?`<small class="kp-vm">${mi(M[KEYS_VM_ICON],16)}</small>`:(k[1]?`<small>${k[1]}</small>`:'')}</button>`).join('');
   try{ kpBindLongPress(); }catch(e){}
   renderVoicemail();
   phBackVis();
@@ -8459,7 +8824,10 @@ const CR_START = 'https://www.google.com/';
 const CR = {
   ws: null, connected: false, connecting: false, session: null, id: 0, pending: new Map(),
   frame: null, decoding: false, view: { w: 360, h: 620, dpr: 2 }, retry: 0, url: '', timer: null,
-  retryTimer: null, castOn: false, restarting: false
+  retryTimer: null, castOn: false, restarting: false,
+  /* wantOpen：用户是否正打算用远程浏览器（决定失败要不要重连）。
+     failStreak：连续失败次数（决定退避到多长，避免"每 1~4 秒重连一次"的风暴）。 */
+  wantOpen: false, failStreak: 0, closing: false
 };
 /* 掩码 token，日志/提示里不泄露凭据 */
 function crMask(u) { return String(u || '').replace(/token=[^&]+/i, 'token=***'); }
@@ -8507,8 +8875,21 @@ function crRetryClear() {
 }
 function crRetrySchedule() {
   crRetryClear();
-  const wait = Math.min(20000, 1000 * Math.pow(1.6, Math.min(CR.retry++, 3)));
-  crLog('将在 ' + Math.round(wait / 1000) + 's 后重连（第 ' + CR.retry + ' 次）');
+  if (!CR.wantOpen) {                                    /* 用户已退出远程模式：不再重连 */
+    crLog('已退出远程模式，停止重连');
+    return;
+  }
+  CR.failStreak = (CR.failStreak || 0) + 1;
+  let wait;
+  if (CR.failStreak >= 5) {
+    /* 连续失败 5 次以上（多为 token 失效 / 中继不可达 / 无网络）：
+       退避上限拉到 5 分钟。否则会变成"每 1~4 秒重连一次"的风暴 ——
+       既刷满控制台，也在每次交互时额外抢主线程和网络。 */
+    wait = Math.min(300000, 20000 * Math.pow(1.8, Math.min(CR.failStreak - 5, 6)));
+  } else {
+    wait = Math.min(20000, 1000 * Math.pow(1.6, Math.min(CR.retry++, 3)));
+  }
+  crLog('将在 ' + Math.round(wait / 1000) + 's 后重连（第 ' + CR.failStreak + ' 次失败）');
   CR.retryTimer = setTimeout(crConnect, wait);
 }
 /* 1006 = 握手阶段就被拒绝/中断（拿不到 HTTP 状态码），按经验逐条给出可读原因 */
@@ -8545,14 +8926,16 @@ function crConnect() {
   let ws;
   try { ws = new WebSocket(url); } catch (e) { CR.connecting = false; crStatus('中继地址无效', true); crRetrySchedule(); return; }
   CR.ws = ws;
-  ws.onopen = function () { CR.connected = true; CR.connecting = false; CR.retry = 0; crRetryClear(); crStatus('已连接' + '，' + '正在打开页面' + '…'); crBoot(); };
+  ws.onopen = function () { CR.connected = true; CR.connecting = false; CR.retry = 0; CR.failStreak = 0; crRetryClear(); crStatus('已连接' + '，' + '正在打开页面' + '…'); crBoot(); };
   ws.onmessage = function (ev) { crOnMessage(ev.data); };
   ws.onerror = function () { crLog('WebSocket error（多为握手被拒或网络不可达）'); };
   ws.onclose = function (e) {
     const was = CR.connected;
+    const intentional = CR.closing;                 /* 主动关闭（用户退出/换地址）不重连 */
+    CR.closing = false;
     CR.connected = false; CR.connecting = false; CR.session = null; CR.castOn = false;
     /* 正常关闭（换页/未进入远程模式时的主动关闭）不打扰用户 */
-    if (!was && !CR.connecting) crLog('WebSocket 关闭：code ' + e.code);
+    if (!was && !intentional) crLog('WebSocket 关闭：code ' + e.code);
     if (e.code === 1006) {
       crStatus(crCloseHint(url), true);
     } else if (e.code === 1008 || e.code === 4001) {
@@ -8560,7 +8943,11 @@ function crConnect() {
     } else {
       crStatus('连接断开' + '（code ' + e.code + '）', true);
     }
-    crRetrySchedule();
+    /* ⚠ 只有"用户确实要用远程浏览器"且不是主动关闭时才重连。
+       原来无条件重连：token 失效时会在后台每 1~4 秒重连一次，永远不停 ——
+       控制台刷满报错，每次交互还额外抢主线程。 */
+    if (!intentional && CR.wantOpen) crRetrySchedule();
+    else crLog('不再自动重连（' + (intentional ? '主动关闭' : '未进入远程模式') + '）');
   };
 }
 function crOnMessage(raw) {
@@ -8699,17 +9086,93 @@ async function crCheckLayout() {
     }
   } catch (e) { /* 远端可能不支持该域：忽略 */ }
 }
+/* 采集参数：与帧率直接相关（吞吐固定时 帧率 ≈ 吞吐 / 单帧大小），
+   提成模块级常量便于用 crCastStats() 做对照实验。 */
+const CR_CAP_SCALE = 0.8, CR_CAP_Q = 45;
+
+/* ===== 杠杆 B：TCP 保活（防拥塞窗口衰减）=====
+   背景（实测）：screencast 的帧是**突发式**的 —— 一帧 32 KB 挤过来，然后空一段。
+   TCP 在空闲期会把拥塞窗口收缩回初始值（IW ≈ 10×MSS ≈ 14.6 KB），
+   于是每次都要从 IW 重新爬，吞吐被压在「吞吐 ≈ IW / RTT」：
+       实测 61 KB/s @ RTT 189 ms，与 14.6KB/0.189s ≈ 77 KB/s 同量级 ✓
+   这条 WS 同时承载帧，**cwnd 是整条连接共享的**，所以只要让连接持续有往返，
+   cwnd 就不会衰减，帧就能骑在一个更大的窗口上发出来。
+   这是唯一一个「不牺牲画质、纯靠页面改动」提吞吐的招。
+   开关：localStorage.cr_keepalive = 'off' 关闭；填数字 = 间隔毫秒（默认 40，范围 10~1000） */
+let crKaTimer = null, crKaSent = 0;
+function crKeepAliveMs() {
+  try {
+    const v = String(localStorage.getItem('cr_keepalive') || '').trim();
+    if (v === 'off' || v === '0') return 0;
+    const n = parseInt(v, 10);
+    return (n >= 10 && n <= 1000) ? n : 40;
+  } catch (e) { return 40; }
+}
+function crKeepAliveStart() {
+  if (crKaTimer) return;
+  const ms = crKeepAliveMs();
+  if (!ms) { crLog('保活：已关闭（localStorage.cr_keepalive = off）'); return; }
+  crKaTimer = setInterval(function () {
+    if (!CR.session) return;
+    /* 极轻的一条命令，唯一目的就是产生一次往返，让 cwnd 不衰减 */
+    crSend('Runtime.evaluate', { expression: '1', returnByValue: true })
+      .then(function () { crKaSent++; })
+      .catch(function () {});
+  }, ms);
+  crLog('保活：已开启，间隔 ' + ms + 'ms');
+}
+function crKeepAliveStop() {
+  if (!crKaTimer) return;
+  clearInterval(crKaTimer); crKaTimer = null;
+  crLog('保活：已停止（本次累计 ' + crKaSent + ' 次）');
+  crKaSent = 0;
+}
+/* 控制台自测：先执行一次 crCastStats() 开始统计，操作一会儿后再执行一次看结果。
+   判据看「吞吐」那一项 —— 保活若有效，它应该从 ~61 KB/s 明显上升。 */
+const crStats = { on: false, t0: 0, n: 0, b: 0 };
+(function hookFrameCounter() {
+  let v = null;
+  try {
+    Object.defineProperty(CR, 'frame', {
+      configurable: true,
+      get: function () { return v; },
+      set: function (x) {
+        if (x && x.data && crStats.on) { crStats.n++; crStats.b += x.data.length; }
+        v = x;
+      },
+    });
+  } catch (e) {}
+})();
+function crCastStats() {
+  if (!crStats.on) {
+    crStats.on = true; crStats.t0 = performance.now(); crStats.n = 0; crStats.b = 0;
+    console.log('%c统计中…操作一会儿，再执行一次 crCastStats() 看结果', 'color:#8ab4f8');
+    return;
+  }
+  const el = (performance.now() - crStats.t0) / 1000;
+  const fps = crStats.n / el;
+  const kb = (crStats.b / 1024) / (crStats.n || 1);
+  const tput = (crStats.b / 1024) / el;
+  console.log('%c=== 远端画面统计 ===', 'color:#8ab4f8;font-weight:bold');
+  console.log('  时长   ' + el.toFixed(1) + ' s');
+  console.log('  帧率   ' + fps.toFixed(2) + ' fps');
+  console.log('  单帧   ' + kb.toFixed(1) + ' KB');
+  console.log('  吞吐   ' + tput.toFixed(0) + ' KB/s   ← 保活有效的判据：这项应明显上升（基准约 61）');
+  console.log('  保活   间隔 ' + (crKeepAliveMs() || '关闭') + ' ms，已发 ' + crKaSent + ' 次');
+  console.log('  中继   ' + crWs());
+  console.log('  参数   CAP_SCALE=' + CR_CAP_SCALE + ', CAP_Q=' + CR_CAP_Q);
+  crStats.on = false;
+}
+
 async function crStartCast() {
   if (!CR.session) return;
   if (CR.castOn) return;                      /* 幂等：重复 start 会被远端拒绝（Screencast is already active） */
   const L = crLogical();
   const px = crPixelScale();
-  /* 截图像素 = 手机逻辑尺寸 × 像素密度：与屏幕实际像素一一对应，放大也不糊。
-     但实测（Google 地图，拖动态）单帧 60 KB、链路 49 KB/s、本地 0 丢帧 ——
-     帧率完全由「公网每次往返」决定，而每帧字节数直接构成往返里的传输时间。
-     所以这里主动把采集分辨率降到 0.8×、quality 降到 45：单帧体积约减半，
-     显示尺寸不变（crFitCanvas 按位图比例放大回去），只是略软一点。 */
-  const CAP_SCALE = 0.8, CAP_Q = 45;
+  /* 截图像素 = 手机逻辑尺寸 × 像素密度，与屏幕实际像素一一对应，放大也不糊。
+     采集分辨率与 quality 见 CR_CAP_SCALE / CR_CAP_Q：
+     吞吐固定时 帧率 ≈ 吞吐 / 单帧大小，这两个值是直接的帧率杠杆。 */
+  const CAP_SCALE = CR_CAP_SCALE, CAP_Q = CR_CAP_Q;
   await crSend('Page.startScreencast', {
     format: 'jpeg', quality: CAP_Q, everyNthFrame: 1,
     maxWidth: Math.round(L.w * px * CAP_SCALE), maxHeight: Math.round(L.h * px * CAP_SCALE)
@@ -8970,6 +9433,7 @@ function crEnterRemote(){
   crHideLegacy();
   host.classList.add('cr-on');            /* 先显示，尺寸才可测 */
   crFitCanvas();                          /* 立即按手机框尺寸摆好画布，首帧到达前不留空档 */
+  crKeepAliveStart();                     /* TCP 保活：防止帧间隔里拥塞窗口衰减 */
   setTimeout(function(){
     (function(){
       setTimeout(function(){ if(CR.connected&&CR.session) crRestartCast().catch(function(){}); }, 700);
@@ -9128,8 +9592,18 @@ function crPrewarm(){
 function crToggle() {
   const host = crEnsureUI(); if (!host) return;
   const on = host.classList.toggle('cr-on');
-  if (on) { crEnsureUI(); if (!CR.connected) { crRetryClear(); crConnect(); } setTimeout(function () { const ov = document.getElementById('crOverlay'); if (ov) ov.focus(); }, 60); }
-  else { crStatus(''); }
+  if (on) {
+    CR.wantOpen = true; CR.failStreak = 0;                    /* 用户要用远程浏览器：允许重连 */
+    crEnsureUI();
+    if (!CR.connected) { crRetryClear(); crConnect(); }
+    setTimeout(function () { const ov = document.getElementById('crOverlay'); if (ov) ov.focus(); }, 60);
+    crKeepAliveStart();
+  } else {
+    CR.wantOpen = false;                                      /* 退出：停掉重连与保活 */
+    crRetryClear();
+    if (CR.ws && CR.ws.readyState <= 1) { try { CR.closing = true; CR.ws.close(); } catch (e) {} }
+    crStatus(''); crKeepAliveStop();
+  }
   toast(on ? '已切换到远程浏览器（远端 Chrome）' : '已返回模拟浏览');
 }
 
@@ -9297,6 +9771,55 @@ function camWireShutter(){
 }
 /* ===== 桌面时钟/日历图标实时更新 ===== */
 const DESK_TICK={lastMin:-1,lastDay:-1,lastTz:'',lastLang:'',lastSec:-1,lastYear:-1,timer:null,raf:0,tzChanged:false};
+/* ===== 时钟图标指针缓存（帧率优化）=====
+   原实现：rAF 走针每一帧都 el.innerHTML=deskClockSVG(...) —— 每帧重新解析整段
+   SVG 标记、重建 4 个 circle + 2 个渐变 defs + 2 条 line，并触发一次样式重算。
+   实测单帧 ~2.0ms（桌面待机时占主线程时间的一半）。
+   现实现：值只依赖两根指针的 4 个坐标，所以首次画完整 SVG 并缓存指针句柄，
+   之后每帧只改 line 的 x2/y2（属性写入，无解析、无子树重建）。
+   el 被重渲染（抽屉/应用信息/商店页重画）后句柄失效，由 isConnected 自动检测并重建，
+   所以「自愈」语义与原来完全一致。 */
+function clockHandAngles(d,fracSec){
+  const m=d.getMinutes(), s=d.getSeconds();
+  /* fracSec 为空时按整秒取；由 rAF 走针时传入带小数的秒，得到逐帧连续的角度 */
+  const sFrac=(typeof fracSec==='number'&&isFinite(fracSec))?fracSec:(s+d.getMilliseconds()/1000);
+  const hourAng=(((d.getHours()%12)+m/60+sFrac/3600)%12)*30;   /* 时针：0..360 */
+  const minAng =((m+sFrac/60)%60)*6;                           /* 分针：0..360 */
+  return {hourAng:hourAng,minAng:minAng};
+}
+const CLOCK_HAND={el:null,svg:null,h:null,m:null,hx:'',mx:''};
+function clockHandsClear(){ CLOCK_HAND.el=null;CLOCK_HAND.svg=null;CLOCK_HAND.h=null;CLOCK_HAND.m=null;CLOCK_HAND.hx='';CLOCK_HAND.mx=''; }
+function clockHandsPaint(el,d,fracSec){
+  try{
+    const svg=(CLOCK_HAND.el===el&&CLOCK_HAND.svg&&CLOCK_HAND.svg.isConnected&&el.contains(CLOCK_HAND.svg))?CLOCK_HAND.svg:null;
+    if(!svg){
+      /* 句柄还没建立（首次绘制）：认领已存在的 SVG，成功则后续帧全部走属性更新 */
+      const s=el.firstElementChild;
+      if(s&&s.tagName&&String(s.tagName).toLowerCase()==='svg'&&s.querySelector('line[data-ck="h"]')){
+        CLOCK_HAND.el=el;CLOCK_HAND.svg=s;CLOCK_HAND.h=s.querySelector('line[data-ck="h"]');
+        CLOCK_HAND.m=s.querySelector('line[data-ck="m"]');CLOCK_HAND.hx='';CLOCK_HAND.mx='';
+      }else{ return false; }                     /* 没有可复用的指针 → 交回上层走 innerHTML 重建 */
+    }
+    const hs=CLOCK_HAND.h, ms=CLOCK_HAND.m;
+    if(!hs||!ms||!hs.isConnected||!ms.isConnected)return false;
+    const a=clockHandAngles(d,fracSec);
+    const HUB_X=61, HUB_Y=62, HOUR_LEN=23, MIN_LEN=29;
+    const hr=a.hourAng*Math.PI/180, mr=a.minAng*Math.PI/180;
+    const hx=(HUB_X+Math.sin(hr)*HOUR_LEN).toFixed(2)+','+(HUB_Y-Math.cos(hr)*HOUR_LEN).toFixed(2);
+    const mx=(HUB_X+Math.sin(mr)*MIN_LEN).toFixed(2)+','+(HUB_Y-Math.cos(mr)*MIN_LEN).toFixed(2);
+    if(hx!==CLOCK_HAND.hx){ hs.setAttribute('x2',hx.split(',')[0]); hs.setAttribute('y2',hx.split(',')[1]); CLOCK_HAND.hx=hx; }
+    if(mx!==CLOCK_HAND.mx){ ms.setAttribute('x2',mx.split(',')[0]); ms.setAttribute('y2',mx.split(',')[1]); CLOCK_HAND.mx=mx; }
+    return true;
+  }catch(err){ return false; }
+}
+function clockHandsAdopt(el,svg,d,fracSec){
+  try{
+    const hs=svg.querySelector('line[data-ck="h"]'), ms=svg.querySelector('line[data-ck="m"]');
+    if(!hs||!ms)return;
+    CLOCK_HAND.el=el;CLOCK_HAND.svg=svg;CLOCK_HAND.h=hs;CLOCK_HAND.m=ms;CLOCK_HAND.hx='';CLOCK_HAND.mx='';
+    clockHandsPaint(el,d,fracSec);
+  }catch(err){}
+}
 function deskClockSVG(d,fracSec){
   /* 表盘 / 圆环 / 径向渐变 / 两根指针的比例都按 _reficons/clock.png 重绘：
      蓝盘半径 = 白圆的 0.75，指针长度 53/48 与蓝盘半径 0.83 的关系照抄参考图。
@@ -9309,7 +9832,7 @@ function deskClockSVG(d,fracSec){
        分针 = (m + s/60) * 6          —— 0 分指正上，每分钟走 6°
      所以两根针的位置和现在时间严格对应；分针按秒插值连续匀速走动，
      肉眼随时能看到它在走。 */
-  const m=d.getMinutes(), s=d.getSeconds();
+  const angs=clockHandAngles(d,fracSec);
   const R_ICON=64, R_RING=61.8, R_DISC=48, HUB_X=61, HUB_Y=62;
   const HOUR_LEN=23, MIN_LEN=29;
   const rot=function(len,ang){
@@ -9317,12 +9840,8 @@ function deskClockSVG(d,fracSec){
     const a=ang*Math.PI/180;
     return [(HUB_X+Math.sin(a)*len).toFixed(2), (HUB_Y-Math.cos(a)*len).toFixed(2)];
   };
-  /* fracSec 为空时按整秒取；由 rAF 走针时传入带小数的秒，得到逐帧连续的角度 */
-  const sFrac=(typeof fracSec==='number'&&isFinite(fracSec))?fracSec:(s+d.getMilliseconds()/1000);
-  const hourAng=(((d.getHours()%12)+m/60+sFrac/3600)%12)*30;   /* 时针：0..360 */
-  const minAng =((m+sFrac/60)%60)*6;                           /* 分针：0..360 */
-  const hh=rot(HOUR_LEN,hourAng);
-  const mm=rot(MIN_LEN,minAng);
+  const hh=rot(HOUR_LEN,angs.hourAng);
+  const mm=rot(MIN_LEN,angs.minAng);
   return '<svg viewBox="0 0 128 128" aria-hidden="true">'
     +'<circle cx="64" cy="64" r="'+R_ICON+'" fill="#FFFFFF"/>'
     +'<circle cx="64" cy="64" r="'+(R_ICON-0.4)+'" fill="#C9CFDC"/>'
@@ -9340,8 +9859,8 @@ function deskClockSVG(d,fracSec){
       +'<linearGradient id="ckTip" gradientUnits="userSpaceOnUse" x1="61" y1="33" x2="61" y2="91">'
       +'<stop offset="0" stop-color="#DCE3F5"/><stop offset="1" stop-color="#EEF3FF"/></linearGradient></defs>'
     /* 先画时针，再画分针：两针重叠时（整点）长针在上，符合真实钟表的观感 */
-    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+hh[0]+'" y2="'+hh[1]+'" stroke="url(#ckPen)" stroke-width="12.7" stroke-linecap="round"/>'
-    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+mm[0]+'" y2="'+mm[1]+'" stroke="url(#ckTip)" stroke-width="7.8" stroke-linecap="round"/>'
+    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+hh[0]+'" y2="'+hh[1]+'" data-ck="h" stroke="url(#ckPen)" stroke-width="12.7" stroke-linecap="round"/>'
+    +'<line x1="'+HUB_X+'" y1="'+HUB_Y+'" x2="'+mm[0]+'" y2="'+mm[1]+'" data-ck="m" stroke="url(#ckTip)" stroke-width="7.8" stroke-linecap="round"/>'
     +'<circle cx="'+HUB_X+'" cy="'+HUB_Y+'" r="3.2" fill="#E6B4D4"/>'
     +'</svg>';
 }
@@ -9368,20 +9887,62 @@ function deskCalendarSVG(d){
     +' font-family="Roboto,system-ui,sans-serif" fill="#FFFFFF">'+num+'</text>'
     +'</g></svg>';
 }
+/* 走针是逐帧调用的（60Hz），所以这里的每个调用都必须便宜：
+   · Intl.DateTimeFormat().resolvedOptions() 每次都要构造一个 DateTimeFormat —— 实测约 0.3ms，
+     而时区/语言在一次会话里几乎不会变，改成每 5 秒复核一次；
+   · matchMedia() 每次返回新对象，同样不便宜，改为复用同一个 MediaQueryList。
+   这两项加起来占了走针每帧成本的一大半（实测 1.94ms/帧 → 见 _probe_frame.cjs）。 */
+function deskClockReduce(){
+  try{
+    if(!DESK_TICK.rmq&&window.matchMedia)DESK_TICK.rmq=window.matchMedia('(prefers-reduced-motion: reduce)');
+    return !!(DESK_TICK.rmq&&DESK_TICK.rmq.matches);
+  }catch(e){ return false; }
+}
+function deskTzLang(force){
+  try{
+    const now=(typeof performance!=='undefined'&&performance.now)?performance.now():Date.now();
+    if(force||!DESK_TICK.tzLangAt||now-DESK_TICK.tzLangAt>5000){
+      DESK_TICK.tzLangAt=now;
+      DESK_TICK.tzCache=(Intl.DateTimeFormat().resolvedOptions().timeZone)||'';
+      DESK_TICK.langCache=navigator.language||'';
+    }
+  }catch(e){}
+  return {tz:DESK_TICK.tzCache||'',lang:DESK_TICK.langCache||''};
+}
+/* 桌面时钟/日历图标当前是否看得见（用于"不可见就停针"）。
+   判据取最强的一条：设备开着、不在锁屏、没有应用盖着、桌面层自身在显示。
+   ⚠ 只做读操作、不写样式，避免逐帧触发样式重算。 */
+function deskIconsVisible(){
+  try{
+    if(document.hidden)return false;
+    if(typeof deviceOn!=='undefined'&&!deviceOn)return false;
+    if(typeof curScreen!=='undefined'&&curScreen!=='home')return false;
+    if(typeof app!=='undefined'&&app)return false;
+    const wrap=document.querySelector('#home .home-pages')||document.getElementById('home');
+    if(!wrap)return false;
+    const cs=getComputedStyle(wrap);
+    if(cs.display==='none'||cs.visibility==='hidden')return false;
+    return true;
+  }catch(e){ return true; }   /* 判不出来就照旧跑，宁可多画不可漏画 */
+}
 function deskIconsTick(force){
   try{
     /* 页面不可见时不重绘（真机息屏同理），恢复可见时由 visibilitychange 强制补一次 */
     if(!force&&document.hidden)return;
+    /* 走针在"锁屏/应用内/抽屉里"根本看不见（#home 被盖住或 display:none），
+       这时候由 deskSweepFrame 把 want 置空跳过重绘 —— 这里只做兜底：
+       拿到 want（说明本帧要画）但桌面其实不可见时也直接跳过，省掉一次 DOM 扫描。 */
+    if(!force&&DESK_SWEEP.want!==null&&!deskIconsVisible()){ DESK_SWEEP.want=null;DESK_SWEEP.frac=null;DESK_SWEEP.last=-1;return; }
     const d=new Date();
-    const tz=(Intl.DateTimeFormat().resolvedOptions().timeZone)||'';
-    const lang=navigator.language||'';
+    const tl=deskTzLang(!!force);
+    const tz=tl.tz, lang=tl.lang;
     const minKey=d.getHours()*60+d.getMinutes();
     const dayKey=d.getFullYear()*10000+d.getMonth()*100+d.getDate();
     const secKey=Math.floor(d.getTime()/1000);
     const tzChanged=(DESK_TICK.lastTz&&DESK_TICK.lastTz!==tz)||(DESK_TICK.lastLang&&DESK_TICK.lastLang!==lang);
     const dayChanged=dayKey!==DESK_TICK.lastDay;
     /* 无障碍：开启「减少动态效果」时只按分钟刷新，不做逐秒重绘，也不播放跨天动画 */
-    const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const reduce=deskClockReduce();
     const clockWant=(typeof DESK_SWEEP!=='undefined')?DESK_SWEEP.want:null;   /* 逐帧走针时返回当前应画的角度（-1 表示本帧不用重画） */
     const clockNeed=force||clockWant!==null||(reduce?minKey!==DESK_TICK.lastMin:secKey!==DESK_TICK.lastSec);
     const calNeed=force||dayChanged||tzChanged||secKey===0;
@@ -9407,7 +9968,7 @@ function deskIconsPaint(force){
     const minNow=dn.getHours()*60+dn.getMinutes();
     const secNow=Math.floor(dn.getTime()/1000);
     const dayNow=dn.getFullYear()*10000+dn.getMonth()*100+dn.getDate();
-    const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const reduce=deskClockReduce();
     /* 与「上一次真正画出来的状态」比较：帧在同一秒内执行时也能正确判断，
        并且在时间被外部改动（系统校时 / 用户改时区）时一定会重绘 */
     const offNow=(typeof window.__FAKE!=='undefined'&&window.__FAKE)?(window.__FAKE.offset||0):0;
@@ -9416,11 +9977,16 @@ function deskIconsPaint(force){
     const clockNow=!!force||moved||swWant!==null||(reduce?minNow!==DESK_TICK.lastMin:secNow!==DESK_TICK.lastSec);
     /* 抽屉/应用信息/商店页每次重建都会把图标写回静态参考位图（PNG），
        所以「日历图标当前还是位图」本身就当作需要重画（自愈），
-       否则它要等到第二天 0 点才会恢复成动态版；时钟因为逐帧重画不会遇到这个问题 */
-    const calStale=Array.prototype.some.call(
-      document.querySelectorAll('[data-app="calendar"] .app-icon'),
-      function(el){ const c=el.firstElementChild; return !c||c.tagName.toLowerCase()!=='svg'||!el.querySelector('#calDay'); }
-    );
+       否则它要等到第二天 0 点才会恢复成动态版；时钟因为逐帧重画不会遇到这个问题。
+       但这个自检要查 DOM，没必要逐帧做——2 秒复核一次即可，自愈时间肉眼无差别。 */
+    let calStale=false;
+    if(force||dayNow!==DESK_TICK.lastDay||!DESK_TICK.staleAt||(performance.now()-DESK_TICK.staleAt)>2000){
+      DESK_TICK.staleAt=performance.now();
+      calStale=Array.prototype.some.call(
+        document.querySelectorAll('[data-app="calendar"] .app-icon'),
+        function(el){ const c=el.firstElementChild; return !c||c.tagName.toLowerCase()!=='svg'||!el.querySelector('#calDay'); }
+      );
+    }
     const calNow=!!force||moved||dayNow!==DESK_TICK.lastDay||!!DESK_TICK.tzChanged||calStale;
     if(moved||swWant===null){ DESK_TICK.lastSec=secNow; }
     DESK_TICK.tzChanged=false;
@@ -9438,7 +10004,13 @@ function deskIconsPaint(force){
           if(id!=='clock'&&id!=='calendar')return;
           if(seen.indexOf(el)>=0)return;
           seen.push(el);
-          if(id==='clock'){ if(clockNow)el.innerHTML=deskClockSVG(dn,svgFrac); }
+          if(id==='clock'){
+            /* 快路径：句柄有效时只改两根指针的坐标（每帧省掉一次 SVG 重建，约 2ms）
+               慢路径：首次 / 重渲染后 / 跨天整点等需要重建时走 innerHTML */
+            if(clockNow){
+              if(!clockHandsPaint(el,dn,svgFrac))el.innerHTML=deskClockSVG(dn,svgFrac);
+            }
+          }
           else if(calNow){ el.innerHTML=deskCalendarSVG(dn); }
         }catch(e){}
       });
@@ -9464,8 +10036,9 @@ function deskIconsPaintNow(){
   try{
     if(DESK_TICK.raf){ cancelAnimationFrame(DESK_TICK.raf); DESK_TICK.raf=0; }
     const d=new Date();
-    const tz=(Intl.DateTimeFormat().resolvedOptions().timeZone)||'';
-    const lang=navigator.language||'';
+    const tl0=deskTzLang(true);
+    const tz=tl0.tz;
+    const lang=tl0.lang;
     DESK_TICK.tzChanged=!!((DESK_TICK.lastTz&&DESK_TICK.lastTz!==tz)||(DESK_TICK.lastLang&&DESK_TICK.lastLang!==lang));
     DESK_TICK.lastTz=tz;
     DESK_TICK.lastLang=lang;
@@ -9483,19 +10056,38 @@ function deskIconsPaintNow(){
    时区、状态栏与兜底对齐。只有真正画到 DOM 上时才更新 lastSec，
    保证保留的那条「同一秒内不重复重绘」的约束依旧成立。
    「减少动态效果」开启时不启动，退回每分钟一格的静态刷新。 */
-const DESK_SWEEP={raf:0,frac:null,want:null,last:-1};
+const DESK_SWEEP={raf:0,frac:null,want:null,last:-1,idle:false};
+function deskSweepStart(){
+  /* 回桌面/回到前台时把走针循环拉起来，并立刻补画一帧（避免等下一帧才动） */
+  try{
+    if(!DESK_SWEEP.raf&&typeof requestAnimationFrame==='function'){
+      DESK_SWEEP.want=null;DESK_SWEEP.last=-1;
+      if(typeof deskIconsTick==='function')deskIconsTick(true);
+      DESK_SWEEP.raf=requestAnimationFrame(deskSweepFrame);
+    }else if(typeof deskIconsTick==='function'){
+      deskIconsTick(true);
+    }
+  }catch(e){}
+}
 function deskSweepFrame(){
   DESK_SWEEP.raf=0;
   try{
-    if(document.hidden||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){
+    const reduce=(typeof deskClockReduce==='function')?deskClockReduce()
+                :!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    /* ⚠ 这里【不能 return】——一旦 return 就不再续帧，循环会彻底死掉，
+       只能靠 1 秒兜底定时器把指针挪一格（表现成"回到桌面后指针像分钟跳"）。
+       正确做法：循环照常续帧（空转成本几乎为零），只在不可见时跳过重绘。 */
+    if(document.hidden||reduce||!deskIconsVisible()){
+      DESK_SWEEP.idle=true;
       DESK_SWEEP.want=null;DESK_SWEEP.frac=null;DESK_SWEEP.last=-1;
-      return;                                    /* 息屏/降级：停针，回前台由 visibilitychange 补画 */
+    }else{
+      DESK_SWEEP.idle=false;
+      const d=new Date();
+      const frac=d.getSeconds()+d.getMilliseconds()/1000;
+      /* 指针角度由秒决定：1 分钟 360°，每帧约 0.1°，肉眼可见地匀速走 */
+      if(DESK_SWEEP.last!==frac){ DESK_SWEEP.frac=frac; DESK_SWEEP.want=frac; }
+      deskIconsTick(false);
     }
-    const d=new Date();
-    const frac=d.getSeconds()+d.getMilliseconds()/1000;
-    /* 指针角度由秒决定：1 分钟 360°，每帧约 0.1°，肉眼可见地匀速走 */
-    if(DESK_SWEEP.last!==frac){ DESK_SWEEP.frac=frac; DESK_SWEEP.want=frac; }
-    deskIconsTick(false);
   }catch(e){}
   DESK_SWEEP.raf=requestAnimationFrame(deskSweepFrame);
 }
@@ -9774,8 +10366,13 @@ try{
 function swRestyle(){
   try{
     const svg=document.querySelector('#swFace svg')||document.querySelector('#tab-stop svg');
-    if(!svg||svg.dataset.geoSkin==='1')return false;
+    if(!svg)return false;
+    /* 每 800ms 调一次，而表框/60 格刻度只依赖表面板本身：
+       表面板没被重建（#swFace 还在，dataset 标记也还在）就没必要再刷一遍，
+       避免无谓的 DOM 写入 + 重绘；面板重建后标记随之消失，下一拍照旧重建。 */
+    if(svg.dataset.geoSkinDone==='1'&&document.getElementById('swFace'))return false;
     svg.dataset.geoSkin='1';
+    svg.dataset.geoSkinDone='1';
     const NS='http://www.w3.org/2000/svg';
     /* 表框（外金属圈 + 高光 + 内表盘） */
     let defs=svg.querySelector('defs');
@@ -9821,18 +10418,25 @@ function swRestyle(){
 /* 秒表数字读数强制居中（inline !important，优先级最高） */
 function swCenterFix(){
   try{
+    /* 每 800ms 被调用一次，而它每次都要 querySelectorAll('*') 遍历整个秒表面板
+       再逐个写内联样式 —— 面板一重建（切标签、重渲染）就得再来一遍。
+       改成：认一次面板，盖一个完成标记；标记还在就直接返回（自愈语义不变，
+       面板重建后标记消失，下一拍照旧全量补样式）。 */
     const pane=document.getElementById('tab-stop');
     if(!pane)return;
+    if(pane.dataset.swCentered==='1'&&pane.querySelector('[data-swc]'))return;
     pane.style.setProperty('text-align','center','important');
     pane.querySelectorAll('*').forEach(function(el){
       if(el.children.length===0||/\d/.test(el.textContent)){
         el.style.setProperty('text-align','center','important');
         el.style.setProperty('margin-left','auto','important');
         el.style.setProperty('margin-right','auto','important');
+        el.setAttribute('data-swc','1');
       }
     });
     const svg=pane.querySelector('svg');
-    if(svg){svg.style.setProperty('display','block','important');svg.style.setProperty('margin-left','auto','important');svg.style.setProperty('margin-right','auto','important');}
+    if(svg){svg.style.setProperty('display','block','important');svg.style.setProperty('margin-left','auto','important');svg.style.setProperty('margin-right','auto','important');svg.setAttribute('data-swc','1');}
+    pane.dataset.swCentered='1';
   }catch(e){}
 }
 /* ===== 设置：壁纸缩略图 + 更多配色 ===== */
@@ -9970,9 +10574,16 @@ function setSecDedupe(){
     });
   }catch(e){}
 }
-/* 往“当前可见的壁纸二级页”里插入缩略图（确保用户真的能看到） */
+/* 往“当前可见的壁纸二级页”里插入缩略图（旧实现，已彻底停用）
+   ⚠ 历史坑：这里原本第一行就是
+       document.querySelectorAll('.wp-grid,.wp-accents').forEach(g=>g.remove());
+       return false;
+   函数虽然「停用」了，副作用却照跑 —— 它每次都会把**应用自带**的壁纸网格删掉，
+   然后只能等 100ms 轮询里的 wpFixMissingGrid() 在 150ms 稳定期后再补一个回来。
+   表现就是用户看到的「进入壁纸与样式后先空白约 1~2 秒才出图」。
+   停用必须彻底停用：直接返回，一行 DOM 都不要碰。 */
 function wpInjectVisible(){
-  document.querySelectorAll('.wp-grid,.wp-accents').forEach(function(g){g.remove();}); return false;
+  return false;
   try{
     const app=document.getElementById('app-settings');
     if(!app)return false;
@@ -10017,14 +10628,10 @@ function wpInjectVisible(){
     return true;
   }catch(e){return false;}
 }
-/* 点击“壁纸与样式”入口后多次尝试插入 */
-document.addEventListener('click',function(ev){
-  try{
-    const b=ev.target.closest&&ev.target.closest('#app-settings button,#app-settings .set-row,#app-settings [data-act]');
-    if(!b||!/壁纸|样式/.test(b.textContent||''))return;
-    [80,220,500,900].forEach(function(d){setTimeout(function(){try{wpInjectVisible();}catch(e){}},d);});
-  }catch(e){}
-},true);
+/* 点击“壁纸与样式”入口后多次尝试插入 —— 旧实现，已删除。
+   （它会在 80/220/500/900ms 反复调用已停用的 wpInjectVisible()，而那个函数即使
+   停用也会先把应用自带的 .wp-grid 删掉，正是「进入后空白 1~2 秒」的元凶。
+   现在壁纸网格完全由 renderStyleSub() + wpSyncThumbs() 负责，无需任何延时补插。） */
 /* 设置应用内持续兜底 */
 
 /* 清理我注入的网格，并恢复“壁纸与样式”入口（避免功能消失） */
@@ -10317,16 +10924,20 @@ try{
   window.__wpObserverOff=true;
   if(false){ const mo=new MutationObserver(function(){}); const appEl=document.getElementById('app-settings'); if(appEl)mo.observe(appEl,{childList:true}); }
 }catch(e){}
-/* 把大图缩成小缩略图 data URL（失败则回调 null） */
+/* 把大图缩成小缩略图 data URL（失败则回调 null）
+   画布按 9:16 裁切，与 .wp-thumb 的 aspect-ratio 一致：
+   缩略图不会被 object-fit:cover 二次裁切，看起来才是「整张壁纸的缩略」。 */
 function wpThumbURL(src,cb){
   try{
     const im=new Image();
     im.onload=function(){
       try{
-        const c=document.createElement('canvas');c.width=160;c.height=220;
+        const c=document.createElement('canvas');c.width=180;c.height=320;
         const ctx=c.getContext('2d');
-        const s=Math.max(c.width/im.width,c.height/im.height);
-        const dw=im.width*s,dh=im.height*s;
+        const iw=im.naturalWidth||im.width, ih=im.naturalHeight||im.height;
+        if(!iw||!ih){cb(null);return;}
+        const s=Math.max(c.width/iw,c.height/ih);
+        const dw=iw*s,dh=ih*s;
         ctx.drawImage(im,(c.width-dw)/2,(c.height-dh)/2,dw,dh);
         cb(c.toDataURL('image/jpeg',0.72));
       }catch(e){cb(null);}
@@ -10336,32 +10947,53 @@ function wpThumbURL(src,cb){
   }catch(e){cb(null);}
 }
 /* ===== 壁纸缩略图：唯一实现（幂等、无重复渲染） =====
-   状态机：placeholder(渐变) → loading(<img> 解码中) → ready | failed(渐变+重试) */
+   状态机：placeholder(渐变占位) → ready(<img> 已就绪) | failed(渐变占位 + 点击重试) */
 const WP_THUMB_STATE={};
-function wpCardThumbHtml(w){/* 失败的占位点击 → 重试（事件委托，卡片重建后依然有效） */
-document.addEventListener('click',function(e){
-  if(!e.target||!e.target.closest)return;
-  const ph=e.target.closest('.wp-thumb-ph.failed');
-  if(!ph)return;
-  e.preventDefault();e.stopPropagation();
-  const id=ph.dataset.wpPh;
-  if(id&&typeof wpThumbRetry==='function')wpThumbRetry(id);
-},true);
-
+/* 失败占位的重试入口：事件委托只注册一次。
+   旧实现把 addEventListener 写在 wpCardThumbHtml() 里，每次渲染都会再挂一个
+   document 级捕获监听器（重渲染 N 次就有 N 个），既浪费又会重复触发重试。 */
+(function bindWpThumbHooks(){
+  if(window.__wpThumbRetryBound)return;
+  window.__wpThumbRetryBound=true;
+  document.addEventListener('click',function(e){
+    if(!e.target||!e.target.closest)return;
+    const ph=e.target.closest('.wp-thumb-ph.failed');
+    if(!ph)return;
+    e.preventDefault();e.stopPropagation();
+    const id=ph.dataset.wpPh;
+    if(id&&typeof wpThumbRetry==='function')wpThumbRetry(id);
+  },true);
+  /* data URL 解码失败（缓存损坏 / 载荷被截断）→ 立刻换成带渐变的失败占位，
+     不要留浏览器的「破图图标 + alt 文字」。资源类 error 不冒泡，只能用捕获阶段监听。 */
+  document.addEventListener('error',function(e){
+    const im=e.target;
+    if(!im||!im.classList||!im.classList.contains('wp-thumb-img'))return;
+    const id=im.dataset.wpImg;
+    if(!id)return;
+    WP_THUMB_STATE[id]='failed';
+    try{ delete window.WP_THUMB_CACHE[id]; }catch(err){}
+    const w=(typeof WPS!=='undefined')?WPS.filter(function(x){return x.id===id;})[0]:null;
+    const th=im.parentElement;
+    if(w&&th&&th.classList&&th.classList.contains('wp-thumb'))th.innerHTML=wpCardThumbHtml(w);
+  },true);
+})();
+function wpCardThumbHtml(w){
   const cached=(window.WP_THUMB_CACHE&&WP_THUMB_CACHE[w.id])||'';
   /* 有缓存数据就顺手把状态表补上，保证 WP_THUMB_STATE 与画面一致 */
   if(cached&&WP_THUMB_STATE[w.id]!=='ready')WP_THUMB_STATE[w.id]='ready';
   const st=WP_THUMB_STATE[w.id]||(cached?'ready':'placeholder');
   const grad=wpGradFor(w.seed);
+  /* 任何一态都带上同色系的渐变兜底：图没解码出来也不会出现空白/破图 */
   if(cached){
-    return '<img class="wp-thumb-img" alt="'+escHtml(w.n||'')+'" src="'+cached+
-      '" data-wp-img="'+escHtml(w.id)+'" loading="eager" decoding="sync">';
+    /* alt 留空：卡片下方已有 .wp-name 文案，避免解码失败时重复朗读/显示文字 */
+    return '<img class="wp-thumb-img" alt="" src="'+cached+
+      '" data-wp-img="'+escHtml(w.id)+'" loading="eager" decoding="sync" style="background:'+grad+'">';
   }
   if(st==='failed'){
-    return '<span class="wp-thumb-ph failed" data-wp-ph="'+escHtml(w.id)+'">'+
-      mi(M.refresh,18)+'<em>加载失败，点击重试</em></span>';
+    return '<span class="wp-thumb-ph failed" data-wp-ph="'+escHtml(w.id)+'" style="background:'+grad+'" title="点击重试">'+
+      mi(M.refresh,18)+'<em>加载失败<br>点击重试</em></span>';
   }
-  return '<span class="wp-thumb-ph" data-wp-ph="'+escHtml(w.id)+'"></span>';
+  return '<span class="wp-thumb-ph" data-wp-ph="'+escHtml(w.id)+'" style="background:'+grad+'"></span>';
 }
 /* 只跑一次：为每张卡片确保存在且仅存在一个缩略图节点 */
 function wpSyncThumbs(scope){
@@ -10406,7 +11038,9 @@ function wpSyncThumbs(scope){
       return;
     }
     /* 未缓存：保留占位，异步生成小图（canvas 压缩） */
-    if(!th.querySelector('.wp-thumb-ph'))th.innerHTML=wpCardThumbHtml(w);
+    const phOld=th.querySelector('.wp-thumb-ph');
+    /* 占位必须带自己的渐变背景（旧 DOM 可能是空 span → 看起来就是白块） */
+    if(!phOld||!phOld.style.background)th.innerHTML=wpCardThumbHtml(w);
     const raw=(function(){ const m=/url\(["']?([^"')]+)["']?\)/.exec(String(w.g||'')); return m?m[1]:(String(w.g||'').indexOf('data:')===0?String(w.g):''); })();
     if(!raw||typeof wpThumbURL!=='function')return;
     wpThumbURL(raw,function(small){
@@ -10799,20 +11433,35 @@ function wpRepairAppbar(){
       return ti&&/壁纸与样式/.test((ti.textContent||'').trim());
     })[0];
     if(!sub)return false;
-    const hasBtn=[...sub.querySelectorAll('.appbar button,.appbar .iconbtn')].some(vis);
-    if(hasBtn)return true;                                   /* 顶栏与返回键都在 → 不动 */
+    const bar0=sub.querySelector('.appbar');
+    const btn0=bar0?[...bar0.querySelectorAll('button,.iconbtn')].find(vis):null;
+    /* ⚠ 判据必须是「按钮里有图标」，不能只判「按钮存在」。
+       切换壁纸 / 主题色后应用会局部重渲染，顶栏被重写成
+       <button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button> ——
+       <i> 是个还没画图标的空占位（paintIcons 只在插入 DOM 时跑一次），
+       按钮尺寸仍在、点击也有效，但箭头是空白，用户看到的就是「二级页面返回按钮消失」。
+       旧判据 `hasBtn` 在这里为真 → 直接 return，永远不修。 */
+    const iconMissing=!btn0||!btn0.querySelector('svg,img');
+    if(btn0&&!iconMissing)return true;                       /* 顶栏与返回箭头都在 → 不动 */
+    if(bar0&&btn0&&iconMissing){                             /* 只缺图标：原地补画，别重建顶栏 */
+      try{ paintIcons(bar0); }catch(e){}
+      if(btn0.querySelector('svg,img'))return true;
+    }
     const now=Date.now();
     if(now-__wpBarFixTs<200)return false;   /* 更快补回返回键 */
     __wpBarFixTs=now;
-    let bar=sub.querySelector('.appbar');
+    let bar=bar0;
     if(!bar){
       bar=document.createElement('header');
       bar.className='appbar';
       bar.innerHTML='<button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">壁纸与样式</h2>';
       sub.insertBefore(bar,sub.firstChild);
+      /* ⚠ 必须补画图标，否则重建出来的 <i data-ic="back"> 是空占位（返回箭头空白）。 */
+      try{ paintIcons(bar); }catch(e){}
       return true;
     }
     bar.innerHTML='<button class="iconbtn" data-act="set-back"><i data-ic="back"></i></button><h2 class="title">壁纸与样式</h2>';
+    try{ paintIcons(bar); }catch(e){}
     return true;
   }catch(e){return false;}
 }
@@ -11366,6 +12015,17 @@ function renderCal(){
   $('#calGrid').innerHTML=cells;
   calDay(calSel);
 }
+/* 每次打开日历都回到「今天」：月份切到本月、选中今天、并展开今天的安排。
+   只做一次默认值初始化不够 —— 用户翻到别的月份后关掉应用，再打开还是那个月份。 */
+function calGoToday(){
+  const now=new Date();
+  calY=now.getFullYear();
+  calM=now.getMonth();
+  calSel=now.getDate();
+  if(typeof calView!=='undefined')calView='month';
+  renderCal();
+  try{ calRenderView(); }catch(e){}
+}
 function calDay(d){
   calSel=d;
   const dt=new Date(calY,calM,d);
@@ -11601,29 +12261,9 @@ function fileKind(name){
   const fallback={ic:'description',c:'#5F6368',label:'文件'};
   return {ext:ext,k:FILE_KINDS[ext]||fallback};
 }
-function ensureFilesToolbar(){
-  const host=document.querySelector('#app-files .appbody');
-  if(!host||document.querySelector("#filesToolbar"))return;
-  const bar=document.createElement('div');
-  bar.id='filesToolbar';
-  bar.className='files-bar';
-  bar.innerHTML='<div class="fb-search">'+mi(M.search)+'<input id="filesSearch" placeholder="'+'搜索文件'+'"></div>'+    '<button class="fb-btn" data-act="files-sort">'+mi(M.menu)+'<span id="filesSortLabel">'+'名称'+'</span></button>'+    '<button class="fb-btn" data-act="files-select">'+mi(M.check)+'<span>'+'多选'+'</span></button>';
-  host.insertBefore(bar,host.firstChild);
-  const inp=bar.querySelector('#filesSearch');
-  if(inp)inp.addEventListener('input',function(){ fsQuery=inp.value; filesQuery=inp.value; renderFiles(); });
-  /* 多选操作条 */
-  const crumb=document.createElement('div');
-  crumb.id='filesCrumb';crumb.className='files-crumb';
-  bar.parentNode.insertBefore(crumb,bar.nextSibling);
-  filesBreadcrumb();
-  const sec=document.querySelector('#app-files');
-  if(sec&&!sec.querySelector('#filesSelBar')){
-    const sb=document.createElement('div');
-    sb.id='filesSelBar';sb.className='files-selbar';
-    sb.innerHTML='<span class="fsb-n">0</span>'+      '<button data-act="files-copy" aria-label="复制">'+mi(M.check)+'</button>'+      '<button data-act="files-move" aria-label="移动">'+mi(M.folder)+'</button>'+      '<button data-act="files-share" aria-label="分享">'+mi(M.send)+'</button>'+      '<button data-act="files-delete" aria-label="删除">'+mi(M.delete)+'</button>';
-    sec.appendChild(sb);
-  }
-}
+/* 旧版顶栏工具条已被新版顶栏（汉堡菜单 + 排序 + 视图切换）取代。
+   这里保留同名函数仅为兼容历史调用点，不再创建任何控件。 */
+function ensureFilesToolbar(){ return null; }
 function filesVisible(){
   let list=(typeof FILE_RECENT!=="undefined"?FILE_RECENT:[]).slice();
   const q=filesQuery.trim().toLowerCase();
@@ -11639,6 +12279,261 @@ function filesSelBar(){
   if(!filesSelect||!filesSel.size){bar.classList.remove('on');return;}
   bar.classList.add('on');
   const n=bar.querySelector('.fsb-n');if(n)n.textContent=filesSel.size+' '+'项已选择';
+}
+/* ==================== 文件（Google 文件版式）：顶栏 / 分类条 / 列表 ==================== */
+let gfCat='recent',gfView='list';
+function gfIcSvg(kind,size){
+  return '<svg viewBox="0 0 24 24" width="'+(size||24)+'" height="'+(size||24)+'" aria-hidden="true">'+gfIcInner(kind)+'</svg>';
+}
+function gfIcInner(kind){
+  const A='<path fill="#4285F4" d="M13 9V3.5L18.5 9H13z"/>';
+  switch(kind){
+    case 'folder':return '<path fill="#4285F4" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>';
+    case 'image':return '<path fill="#4285F4" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>';
+    case 'video':return '<path fill="#EA4335" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>';
+    case 'audio':return '<path fill="#EA4335" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>';
+    case 'apk':return '<path fill="#34A853" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H8l4-4 4 4h-3v4h-2z"/>';
+    case 'download':return '<path fill="#5F6368" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>';
+    case 'pdf':return '<path fill="#EA4335" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>';
+    default:return '<path fill="#4285F4" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z"/>'+A;
+  }
+}
+/* ⚠ 这段 SVG 的几何不要动：它是按参考截图 1:1 量出来的「无项目」插画。
+   一个 172×150 的 viewBox 里包含 5 个飞散的小碎片、一个描边信夹外框和中间的小横条。 */
+function gfEmptyIllustration(){
+  return '<svg class="gf-illus" viewBox="0 0 172 150" aria-hidden="true">'+
+    /* 飞散碎片：红色两枚、灰色三枚，围绕外框上沿呈扇形排开 */
+    '<rect x="50" y="14" width="7" height="9" rx="2" fill="#EA4335"/>'+
+    '<rect x="86" y="10" width="8" height="10" rx="2" fill="#EA4335"/>'+
+    '<rect x="24" y="28" width="7" height="9" rx="2" fill="#DADCE0" transform="rotate(-18 27 32)"/>'+
+    '<rect x="118" y="26" width="7" height="9" rx="2" fill="#DADCE0" transform="rotate(18 121 30)"/>'+
+    '<rect x="106" y="14" width="7" height="9" rx="2" fill="#DADCE0" transform="rotate(12 109 18)"/>'+
+    '<rect x="38" y="34" width="7" height="9" rx="2" fill="#DADCE0" transform="rotate(-32 41 38)"/>'+
+    /* 信夹外框 */
+    '<rect x="26" y="56" width="120" height="80" rx="3" fill="#fff" stroke="#DADCE0" stroke-width="3"/>'+
+    /* 中间的小横条 */
+    '<rect x="76" y="66" width="20" height="5" rx="2.5" fill="#E8EAED"/>'+
+  '</svg>';
+}
+function gfCatChipsHtml(){
+  return FS_CATS.map(function(c){
+    return '<button class="gf-chip'+(gfCat===c.id?' on':'')+'" data-act="gf-cat" data-c="'+c.id+'">'+
+      gfIcSvg(c.ic,19)+'<span>'+escHtml(c.n)+'</span></button>';
+  }).join('');
+}
+function gfCountText(n){
+  const cat=FS_CATS.find(function(c){return c.id===gfCat;});
+  return (cat?cat.n:'文件')+' · '+n+' 项';
+}
+function gfHeaderHtml(){
+  return '<div class="gf-chips">'+gfCatChipsHtml()+'</div>'+
+    '<div class="gf-count"><span>'+escHtml(gfCountText(gfList().length))+'</span>'+
+    '<button class="gf-view" data-act="files-view" aria-label="切换视图">'+
+      '<i data-ic="menu"></i><i data-ic="grid"></i></button></div>';
+}
+/* 当前分类下的文件（整机遍历，跨目录聚合） */
+function gfList(){
+  /* 位于子目录里（fsPath 深度 > 1）时列出该目录的内容，
+     否则点进文件夹之后列表看起来毫无变化，像是没反应。 */
+  if(fsPath.length>1){
+    const cur=fsCur();
+    return (cur.kids||[]).slice();
+  }
+  if(gfCat==='recent'){
+    const all=fsWalk(FS).filter(function(x){return x.node.type==='file';});
+    /* mod 字段有的是「今天 07:20」这类前置数字、有的是「上周」这类词，
+       直接字符串比较并不能真的按时间排；这里按“能解析到数字的优先、其次按下标”兜底，
+       保证顺序稳定（不会因为排序把刚保存的文件从列表里挤掉）。 */
+    return all.sort(function(a,b){
+      const sa=gfModScore(a.node.mod),sb=gfModScore(b.node.mod);
+      if(sa!==sb)return sb-sa;
+      return 0;
+    }).slice(0,40).map(function(x){return x.node;});
+  }
+  return fsCategoryFiles(gfCat).map(function(x){return x.node;});
+}
+function gfModScore(mod){
+  const s=String(mod||'');
+  if(/刚刚/.test(s))return 1000;
+  if(/今天/.test(s))return 900+(parseInt(s.replace(/[^\d]/g,''),10)||0)/100;
+  if(/昨天/.test(s))return 800;
+  if(/周/.test(s))return 700;
+  if(/月/.test(s))return 600;
+  return 500;
+}
+function gfRow(node){
+  const isFolder=node.type==='folder';
+  const k=fsKindOf(node.name);
+  const ic=isFolder?'folder':(node.ic||k.k.ic);
+  const color=isFolder?'#4285F4':(node.color||k.k.c);
+  const sub=isFolder?((node.kids||[]).length+' 项')
+    :[node.size||'',node.mod||''].filter(Boolean).join(' · ');
+  const sel=fsSelected.has(node.id);
+  return '<div class="gf-row'+(sel?' sel':'')+'" data-fs-id="'+escHtml(node.id)+'">'+
+    '<button class="gf-hit" data-act="fs-open" data-id="'+escHtml(node.id)+'" aria-label="'+escHtml(node.name)+'">'+
+      '<span class="gf-ic2" style="color:'+escHtml(color)+'">'+gfIcSvg(ic,23)+'</span>'+
+      '<span class="gf-meta"><span class="gf-name">'+escHtml(node.name)+'</span>'+
+      '<span class="gf-sub">'+escHtml(sub)+'</span></span>'+
+    '</button>'+
+    (fsMulti
+      ? '<button class="drive-sel'+(sel?' on':'')+'" data-act="fs-pick" data-id="'+escHtml(node.id)+'" aria-label="选择">'+mi(M.check,18)+'</button>'
+      : '<button class="gf-more" data-act="fs-menu" data-id="'+escHtml(node.id)+'" aria-label="更多">'+mi(M.more,20)+'</button>')+
+  '</div>';
+}
+function gfSearchRow(node){
+  const k=fsKindOf(node.name);
+  const ic=(node.type==='folder')?'folder':(node.ic||k.k.ic);
+  const color=(node.type==='folder')?'#4285F4':(node.color||k.k.c);
+  const where=fsParentOf(node.id);
+  const sub=(where&&where.id!=='fs_root'?where.name:'内部存储')+' · '+(node.size||'文件夹');
+  const sel=fsSelected.has(node.id);
+  return '<div class="gf-row'+(sel?' sel':'')+'" data-fs-id="'+escHtml(node.id)+'">'+
+    '<button class="gf-hit" data-act="fs-open" data-id="'+escHtml(node.id)+'">'+
+      '<span class="gf-ic2" style="color:'+escHtml(color)+'">'+gfIcSvg(ic,23)+'</span>'+
+      '<span class="gf-meta"><span class="gf-name">'+escHtml(node.name)+'</span>'+
+      '<span class="gf-sub">'+escHtml(sub)+'</span></span>'+
+    '</button>'+
+    '<button class="gf-more" data-act="fs-menu" data-id="'+escHtml(node.id)+'" aria-label="更多">'+mi(M.more,20)+'</button>'+
+  '</div>';
+}
+function gfRenderList(host){
+  if(fsQuery){
+    const hits=fsSearchFiles(fsQuery);
+    host.innerHTML='<div class="gf-count" style="padding-top:14px"><span>搜索「'+escHtml(fsQuery)+'」· '+hits.length+' 项</span></div>'+
+      (hits.length?hits.map(function(x){return gfSearchRow(x.node);}).join('')
+        :gfEmptyHtml('没有找到文件','换个关键词试试'));
+    return;
+  }
+  const list=gfList();
+  host.innerHTML=(list.length?list.map(gfRow).join(''):gfEmptyHtml('无项目',''));
+}
+function gfEmptyHtml(title,sub){
+  return '<div class="gf-empty">'+gfEmptyIllustration()+
+    '<div class="gf-none">'+escHtml(title)+'</div>'+
+    (sub?'<div class="gf-sub" style="margin-top:8px">'+escHtml(sub)+'</div>':'')+'</div>';
+}
+/* 左抽屉：内部存储用量 + 分类导航 */
+function gfDrawer(){
+  const sec=document.querySelector('#app-files');
+  if(!sec)return null;
+  let d=sec.querySelector('#gfDrawer');
+  if(!d){ d=document.createElement('div'); d.id='gfDrawer'; d.className='gf-drawer'; sec.appendChild(d); }
+  let sc=sec.querySelector('#gfScrim');
+  if(!sc){ sc=document.createElement('div'); sc.id='gfScrim'; sc.className='gf-scrim'; sc.setAttribute('data-act','gf-menu-close'); sec.insertBefore(sc,sec.firstChild); }
+  const st=fsStorageText();
+  const pct=Math.max(3,Math.min(100,Math.round(st.used/274877906944*100)));
+  d.innerHTML=
+    '<div class="gf-drawer-top"><div class="gf-drawer-title">文件</div>'+
+      '<div class="gf-drawer-sub">内部存储 · '+escHtml(st.text)+'</div></div>'+
+    '<div class="gf-bar2"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="gf-nav">'+
+      '<button class="gf-nav-row'+(gfCat==='recent'?' on':'')+'" data-act="gf-cat" data-c="recent">'+mi(M.history,22)+'最近</button>'+
+      FS_CATS.map(function(c){
+        return '<button class="gf-nav-row'+(gfCat===c.id?' on':'')+'" data-act="gf-cat" data-c="'+c.id+'">'+
+          gfIcSvg(c.ic,22)+escHtml(c.n)+'</button>';
+      }).join('')+
+      '<div class="gf-nav-sep"></div>'+
+      '<button class="gf-nav-row" data-act="fs-new-folder">'+mi(M.folder,22)+'新建文件夹</button>'+
+      '<button class="gf-nav-row" data-act="gf-refresh">'+mi(M.refresh_filled,22)+'刷新</button>'+
+    '</div>';
+  return {drawer:d,scrim:sc};
+}
+function gfMenuOpen(){
+  const r=gfDrawer();
+  if(!r)return;
+  r.scrim.classList.add('on');
+  r.drawer.classList.add('on');
+}
+function gfMenuClose(){
+  const d=document.querySelector('#gfDrawer'),s=document.querySelector('#gfScrim');
+  if(d)d.classList.remove('on');
+  if(s)s.classList.remove('on');
+}
+function gfMoreMenu(){
+  fsSheet('gfMoreSheet','更多选项',
+    '<button class="sheet-row" data-act="gf-menu"><span class="s-ic">'+mi(M.menu)+'</span><span class="s-main"><span class="s-title">打开侧边栏</span><span class="s-sub">内部存储用量与分类</span></span>'+mi(M.chev)+'</button>'+
+    '<button class="sheet-row" data-act="files-sort"><span class="s-ic">'+mi(M.sort)+'</span><span class="s-main"><span class="s-title">排序方式</span><span class="s-sub">'+escHtml(gfSortLabel())+'</span></span>'+mi(M.chev)+'</button>'+
+    '<button class="sheet-row" data-act="files-select"><span class="s-ic">'+mi(M.check)+'</span><span class="s-main"><span class="s-title">'+(fsMulti?'退出多选':'选择文件')+'</span></span>'+mi(M.chev)+'</button>'+
+    '<button class="sheet-row" data-act="fs-new-folder"><span class="s-ic">'+mi(M.folder)+'</span><span class="s-main"><span class="s-title">新建文件夹</span></span>'+mi(M.chev)+'</button>'+
+    (fsClip?'<button class="sheet-row" data-act="fs-paste"><span class="s-ic">'+mi(M.copy)+'</span><span class="s-main"><span class="s-title">粘贴</span><span class="s-sub">'+fsClip.nodes.length+' 项在剪贴板</span></span>'+mi(M.chev)+'</button>':'')+
+    '<button class="sheet-row" data-act="gf-refresh"><span class="s-ic">'+mi(M.refresh_filled)+'</span><span class="s-main"><span class="s-title">刷新</span></span>'+mi(M.chev)+'</button>'+
+    '<div class="sheet-close" data-act="fs-sheet-close">取消</div>');
+}
+function gfSortLabel(){
+  return ({name:'名称',size:'大小',type:'类型',mod:'修改时间'}[fsSort]||'名称')+(fsSortDir>0?' ↑':' ↓');
+}
+function renderFiles(){
+  try{ if(typeof ensureFilesToolbar==='function')ensureFilesToolbar(); }catch(e){}
+  const host=document.getElementById('recentFiles');
+  if(!host)return;
+  const sec=document.querySelector('#app-files');
+  if(sec){
+    sec.classList.toggle('grid',gfView==='grid');
+    sec.classList.toggle('list',gfView!=='grid');
+  }
+  const headEl=document.getElementById('filesHeading');
+  const deepName=(fsPath.length>1)?((fsFind(FS,fsPath[fsPath.length-1])||{}).name||''):'';
+  if(headEl)headEl.textContent=fsQuery?('搜索：'+fsQuery):(deepName||(gfCat==='recent'?'文件':((FS_CATS.find(function(c){return c.id===gfCat;})||{}).n||'文件')));
+  /* 在文件夹里时，汉堡键换成返回键（Google 文件进目录后顶栏也是返回箭头） */
+  const backBtn=document.getElementById('gfBackBtn');
+  if(backBtn)backBtn.hidden=!(fsPath.length>1);
+  const menuBtn=document.querySelector('#app-files [data-act="gf-menu"]');
+  if(menuBtn)menuBtn.hidden=(fsPath.length>1);
+  try{ filesBreadcrumb(); }catch(e){}
+  const chips=document.getElementById('filesChips');
+  if(chips)chips.innerHTML=gfCatChipsHtml();
+  const cnt=document.getElementById('filesCount');
+  if(cnt)cnt.textContent=fsQuery?('搜索「'+fsQuery+'」· '+fsSearchFiles(fsQuery).length+' 项')
+    :((fsPath.length>1)?('本文件夹 · '+gfList().length+' 项')
+      :(gfCat==='recent'?('最近 · '+gfList().length+' 项'):gfCountText(gfList().length)));
+  const legend=document.getElementById('filesLegend');
+  if(legend)legend.innerHTML=fsMulti?('<span>已选择 '+fsSelected.size+' 项</span><b>多选模式</b>'):'';
+  gfRenderList(host);
+  paintIcons(host);
+  paintIcons(sec);
+  const d=document.querySelector('#gfDrawer');
+  if(d&&d.classList.contains('on'))gfDrawer();
+  const fb=document.getElementById('fileCats');
+  if(fb)fb.hidden=true;
+  try{ gdViewIcons(); }catch(e){}
+}
+/* 一行文件/文件夹：点击进入或打开详情，多选模式下勾选 */
+function fsRow(node,parent){
+  return gfRow(node);
+}
+/* 打开一个节点：文件夹进入，文件打开详情 */
+function fsOpenNode(id){
+  const node=fsFind(FS,id);
+  if(!node)return;
+  if(node.type==='folder'){
+    if(!node.kids)node.kids=[];
+    /* 已在该目录时不再压栈：否则重复进入会得到「内部存储›DCIM›DCIM」 */
+    if(fsPath[fsPath.length-1]!==id)fsPath.push(id);
+    gfCat='recent';
+    fsQuery='';
+    const inp=document.getElementById('filesSearch');
+    if(inp)inp.value='';
+    filesPath=['内部存储'].concat(fsPath.slice(1).map(function(x){const n=fsFind(FS,x);return n?n.name:'';}));
+    filesBreadcrumb();
+    renderFiles();
+    return;
+  }
+  fsOpenFileDetail(node);
+}
+function fsCatOpen(catId){
+  const cat=FS_CATS.find(function(c){return c.id===catId;});
+  if(!cat)return;
+  gfCat=catId;
+  fsQuery='';
+  const inp=document.getElementById('filesSearch');
+  if(inp)inp.value='';
+  fsPath=['fs_root'];
+  filesPath=['内部存储',cat.n];
+  filesBreadcrumb();
+  gfMenuClose();
+  renderFiles();
+  const host=document.getElementById('recentFiles');
+  if(host&&host.parentNode&&host.parentNode.parentNode)host.parentNode.parentNode.scrollTop=0;
 }
 /* ===== 文件：路径面包屑 + 复制/移动目标选择 ===== */
 let filesPath=['内部存储'];
@@ -12042,118 +12937,6 @@ function gOpenResult(i){
 }
 
 
-function renderFiles(){
-  /* 工具条/多选条按需补齐：懒渲染路径下它们可能还没建立，缺了会直接抛异常 */
-  try{ if(typeof ensureFilesToolbar==='function')ensureFilesToolbar(); }catch(e){}
-  const cats=document.getElementById('fileCats');
-  const host=document.getElementById('recentFiles');
-  if(!cats||!host)return;
-  const st=fsStorageText();
-  const card=document.querySelector('#app-files .storage-card');
-  if(card){
-    const sub=card.querySelector('.row-sub');
-    if(sub)sub.textContent=st.text;
-    const bar=card.querySelector('.st-bar i');
-    if(bar)bar.style.width='12%';
-  }
-  cats.innerHTML=FS_CATS.map(function(c){
-    const n=fsCategoryFiles(c.id).length;
-    return '<button class="cat-card" data-act="folder-open" data-f="'+c.id+'">'+
-      '<span class="cat-ic" style="background:'+c.color+'">'+mi(M[c.ic]||M.folder,20)+'</span>'+
-      '<span class="cat-n">'+escHtml(c.n)+'</span><span class="cat-c">'+n+' 项</span></button>';
-  }).join('');
-  /* 文件列表区：搜索 → 结果；否则显示当前目录 */
-  const sortLabel={name:'名称',size:'大小',type:'类型',mod:'修改时间'}[fsSort]||'名称';
-  const head=
-    '<div class="fs-toolbar">'+
-      '<button class="drv-sortbtn" data-act="files-sort"><i data-ic="sort"></i>'+escHtml(sortLabel)+(fsSortDir>0?' ↑':' ↓')+'</button>'+
-      '<button class="drv-sortbtn'+(fsMulti?' on':'')+'" data-act="files-select"><i data-ic="check"></i>'+
-        (fsMulti?('已选 '+fsSelected.size+' 项'):'多选')+'</button>'+
-      '<button class="drv-sortbtn" data-act="fs-new-folder"><i data-ic="folder"></i>新建文件夹</button>'+
-    '</div>';
-  if(fsQuery){
-    const hits=fsSearchFiles(fsQuery);
-    host.innerHTML='<div class="fs-crumbrow">'+fsBreadcrumbHtml()+'</div>'+head+
-      '<div class="section-label">搜索「'+escHtml(fsQuery)+'」· '+hits.length+' 项</div>'+
-      (hits.length?hits.map(function(x){return fsRow(x.node,fsParentOf(x.node.id));}).join('')
-        :emptyHtml('没有找到文件','试试其它关键词',[{label:'清除搜索',act:'fs-clear-search'}]));
-  }else{
-    const cur=fsCur();
-    const kids=fsSortList(cur.kids||[]);
-    host.innerHTML='<div class="fs-crumbrow">'+fsBreadcrumbHtml()+'</div>'+head+
-      '<div class="section-label">'+escHtml(cur.id==='fs_root'?'内部存储':cur.name)+' · '+kids.length+' 项</div>'+
-      (kids.length?kids.map(function(k){return fsRow(k,cur);}).join('')
-        :emptyHtml('这个文件夹是空的','使用「新建文件夹」或在应用里保存文件到这里'));
-  }
-  paintIcons(host);
-  const sb=document.getElementById('filesSelBar');
-  if(sb){
-    sb.classList.toggle('on',fsMulti);
-    const n=sb.querySelector('.fsb-n');
-    if(n)n.textContent=String(fsSelected.size);
-  }
-}
-/* 一行文件/文件夹：点击进入或打开详情，多选模式下勾选 */
-function fsRow(node,parent){
-  const isFolder=node.type==='folder';
-  const k=fsKindOf(node.name);
-  const ic=isFolder?'folder':(node.ic||k.k.ic);
-  const color=isFolder?'#4285F4':(node.color||k.k.c);
-  const sel=fsSelected.has(node.id);
-  const sub=isFolder?((node.kids||[]).length+' 项')
-    :(node.size+' · '+(node.mod||'')+(node.dur?(' · '+Math.floor(node.dur/60)+':'+String(node.dur%60).padStart(2,'0')):''));
-  return '<div class="fs-row'+(sel?' sel':'')+'">'+
-    '<button class="fs-hit" data-act="fs-open" data-id="'+escHtml(node.id)+'" aria-label="'+escHtml(node.name)+'">'+
-      '<span class="fs-ic" style="background:'+escHtml(color)+'">'+mi(M[ic]||M.description,19)+'</span>'+
-      '<span class="row-main"><span class="row-title">'+escHtml(node.name)+'</span>'+
-      '<span class="row-sub">'+escHtml(sub)+'</span></span>'+
-    '</button>'+
-    (fsMulti
-      ? '<button class="drive-sel'+(sel?' on':'')+'" data-act="fs-pick" data-id="'+escHtml(node.id)+'" aria-label="选择">'+mi(M.check,18)+'</button>'
-      : '<button class="drive-more" data-act="fs-menu" data-id="'+escHtml(node.id)+'" aria-label="更多">'+mi(M.more,18)+'</button>')+
-  '</div>';
-}
-/* 打开一个节点：文件夹进入，文件打开详情 */
-function fsOpenNode(id){
-  const node=fsFind(FS,id);
-  if(!node)return;
-  if(node.type==='folder'){
-    if(!node.kids)node.kids=[];
-    /* 已在该目录时不再压栈：否则重复进入会得到「内部存储›DCIM›DCIM」 */
-    if(fsPath[fsPath.length-1]!==id)fsPath.push(id);
-    fsQuery='';
-    const inp=document.getElementById('filesSearch');
-    if(inp)inp.value='';
-    filesPath=['内部存储'].concat(fsPath.slice(1).map(function(x){const n=fsFind(FS,x);return n?n.name:'';}));
-    filesBreadcrumb();
-    renderFiles();
-    return;
-  }
-  fsOpenFileDetail(node);
-}
-function fsCatOpen(catId){
-  const cat=FS_CATS.find(function(c){return c.id===catId;});
-  if(!cat)return;
-  const hits=fsCategoryFiles(catId);
-  const host=document.getElementById('recentFiles');
-  if(!host)return;
-  host.innerHTML='<div class="fs-crumbrow"><button class="fs-crumb" data-act="fs-crumb" data-i="0">内部存储</button>'+
-    '<span class="fs-sep">›</span><button class="fs-crumb on">'+escHtml(cat.n)+'</button></div>'+
-    '<div class="fs-toolbar">'+
-      '<button class="drv-sortbtn" data-act="files-sort"><i data-ic="sort"></i>排序</button>'+
-      '<button class="drv-sortbtn'+(fsMulti?' on':'')+'" data-act="files-select"><i data-ic="check"></i>'+
-        (fsMulti?('已选 '+fsSelected.size+' 项'):'多选')+'</button>'+
-      '<button class="drv-sortbtn" data-act="fs-back-root"><i data-ic="back"></i>返回</button>'+
-    '</div>'+
-    '<div class="section-label">'+escHtml(cat.n)+' · '+hits.length+' 项</div>'+
-    (hits.length?hits.map(function(x){return fsRow(x.node,x.parent);}).join('')
-      :emptyHtml('这个分类下还没有文件','在应用里保存文件后会自动归类到这里'));
-  paintIcons(host);
-  fsPath=['fs_root'];
-  filesPath=['内部存储',cat.n];
-  filesBreadcrumb(cat.n);
-}
-/* 文件详情（含可预览内容） */
 function fsOpenFileDetail(node){
   if(!node)return;
   const k=fsKindOf(node.name);
@@ -12203,6 +12986,15 @@ function openFolder(id){
   $('#folderTitle').textContent=c.n;
   $('#folderList').innerHTML=c.files.map(f=>`<button class="file-row" data-act="file-detail" data-name="${f[0]}" data-size="${f[1]}" data-ic="${c.ic}" data-color="${c.c}" data-where="${c.n}"><span class="f-ic" style="background:${c.c}">${mi(M[c.ic])}</span><div class="row-main"><div class="row-title">${f[0]}</div><div class="row-sub">${f[1]}</div></div><span class="chev">${mi(M.chev)}</span></button>`).join('');
   $('#folderView').classList.add('on');
+}
+/* 新版「文件」没有独立文件夹页：点进文件夹是就地切换列表，
+   所以这里负责“返回上一级”，并保持 filesPath 与面包屑同步。 */
+function gfBack(){
+  if(fsPath.length<=1){ toast('已在内部存储'); return; }
+  fsPath.pop();
+  filesPath=['内部存储'].concat(fsPath.slice(1).map(function(x){const n=fsFind(FS,x);return n?n.name:'';}));
+  filesBreadcrumb();
+  renderFiles();
 }
 function closeFolder(){
   /* 返回上一级：必须同步弹出路径栈，否则面包屑与 fsCur() 会停留在已进入的目录，
@@ -12425,26 +13217,60 @@ const DRIVE_SHARED=[
 let driveTrash=[];
 let driveFolderStack=[],driveCurName=null;
 let driveCur=null;
+/* 列表/网格切换控件里的两个图标。
+   ⚠ 这里用 [data-gdicon]/[data-gficon] 而不是 data-ic：
+   paintIcons() 会给任何 [data-ic] 节点塞 mi(M[k])，而 M 里没有 list/view_agenda 这些键，
+   结果是图标全空、只有胶囊没有图形。 */
+function gdSvg(pathD,size){ return '<svg viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="currentColor" aria-hidden="true"><path d="'+pathD+'"/></svg>'; }
+const GD_ICON_LIST='M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z';
+const GD_ICON_GRID='M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z';
+function gdViewIcons(){
+  document.querySelectorAll('#app-drive [data-gdicon]').forEach(function(n){
+    n.innerHTML=gdSvg(n.getAttribute('data-gdicon')==='grid'?GD_ICON_GRID:GD_ICON_LIST,18);
+  });
+  document.querySelectorAll('#app-files [data-gficon]').forEach(function(n){
+    n.innerHTML=gdSvg(n.getAttribute('data-gficon')==='grid'?GD_ICON_GRID:GD_ICON_LIST,17);
+  });
+}
 function driveLogoHtml(){
   return `<svg viewBox="0 0 87.3 78" aria-hidden="true"><path fill="#0066da" d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z"/><path fill="#00ac47" d="M43.65 25L29.9 4.2c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44c-.8 1.4-1.2 2.95-1.2 4.5h27.5z"/><path fill="#ea4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H66.8z"/><path fill="#00832d" d="M43.65 25L57.4 4.2c-1.35-.8-2.95-1.2-4.5-1.2h-18.5c-1.55 0-3.15.4-4.5 1.2z"/><path fill="#2684fc" d="M59.8 53.95h-32.3l-13.75 23.8c1.35.8 2.95 1.2 4.5 1.2h41.5c1.55 0 3.15-.4 4.5-1.2z"/><path fill="#ffba00" d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.65c0-1.55-.4-3.1-1.2-4.5z"/></svg>`;
 }
 function driveRow(it){
-  const ic=DRIVE_IC[it.type]||driveKindOf(it.n)||'description';
-  const color=it.color||DRIVE_COLOR[it.type]||'#5F6368';
-  const sub=it.kids?((it.kids.length)+' 项'+(it.owner?(' · 已共享 · '+it.owner):''))
-    :(driveHumanSize(it)+(it.owner?(' · '+it.owner):'')+(it.mod?(' · '+it.mod):''));
+  const kind=it.type||driveKindOf(it.n);
+  const ic=DRIVE_IC[kind]||DRIVE_IC[driveKindOf(it.n)]||'description';
+  const pal=gdPalette(kind,it);
+  const sub=it.kids?(driveFolderLine(it))
+    :[driveHumanSize(it),(it.owner?(' · '+it.owner):''),(it.mod||'')].filter(Boolean).join(' · ');
   const sel=driveSel.has(it.id);
-  return '<div class="drive-row'+(sel?' sel':'')+'" data-drive-id="'+escHtml(it.id)+'">'+
-    '<button class="drive-hit" data-act="drive-open" data-id="'+escHtml(it.id)+'" aria-label="'+escHtml(it.n)+'">'+
-      '<span class="drive-ic" style="background:'+escHtml(color)+'">'+mi(M[ic]||M.description,20)+'</span>'+
-      '<span class="row-main"><span class="row-title">'+escHtml(it.n)+'</span>'+
-      '<span class="row-sub">'+escHtml(sub)+'</span></span>'+
+  return '<div class="gd-row'+(sel?' sel':'')+(it.kids?' is-folder':'')+'" data-drive-id="'+escHtml(it.id)+'">'+
+    '<button class="gd-hit" data-act="drive-open" data-id="'+escHtml(it.id)+'" aria-label="'+escHtml(it.n)+'">'+
+      '<span class="gd-ic2" style="background:'+pal.bg+'">'+gdIcSvg(kind,24,pal.fg)+'</span>'+
+      '<span class="gd-meta"><span class="gd-name">'+escHtml(it.n)+'</span>'+
+      '<span class="gd-sub">'+gdSubHtml(it,sub)+'</span></span>'+
     '</button>'+
     (driveMulti
       ? '<button class="drive-sel'+(sel?' on':'')+'" data-act="drive-pick" data-id="'+escHtml(it.id)+'" aria-label="选择">'+mi(M.check,18)+'</button>'
-      : '<button class="drive-star'+(it.star?' on':'')+'" data-act="drive-star" data-id="'+escHtml(it.id)+'" aria-label="星标">'+mi(M.star,18)+'</button>')+
-    '<button class="drive-more" data-act="drive-menu" data-id="'+escHtml(it.id)+'" aria-label="更多操作">'+mi(M.more,18)+'</button>'+
+      : '')+
+    '<button class="gd-more" data-act="drive-menu" data-id="'+escHtml(it.id)+'" aria-label="更多操作">'+mi(M.more,20)+'</button>'+
   '</div>';
+}
+/* 云端硬盘文件图标的浅色底 + 品牌色（对齐参考截图：浅灰底 + 彩色文件图标） */
+function gdPalette(kind,it){
+  const F={doc:'#1A73E8',sheet:'#0F9D58',ppt:'#F4B400',pdf:'#EA4335',img:'#EA4335',
+    video:'#EA4335',audio:'#EA4335',zip:'#5F6368',fig:'#EA4335',code:'#1A73E8',folder:'#5F6368'};
+  return {bg:'#F1F3F4',fg:F[kind]||'#5F6368'};
+}
+function gdIcSvg(kind,size,color){
+  return '<svg viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="'+color+'" aria-hidden="true"><path d="'+
+    (M[DRIVE_IC[kind]||'description']||M.description)+'"/></svg>';
+}
+/* 文件夹行：小字显示「拥有者 + 修改时间」，与参考截图一致（不再数「N 项」） */
+function driveFolderLine(it){
+  return [it.owner||'我',it.mod||''].filter(Boolean).join(' · ');
+}
+function gdSubHtml(it,sub){
+  const own=it.owner?'<span class="gd-share">'+escHtml(String(it.owner).slice(0,1))+'</span>':'';
+  return own+escHtml(sub);
 }
 function driveFind(id,list=DRIVE_ROOT){
   for(const it of list){
@@ -12488,58 +13314,68 @@ function driveCollectStarred(list,acc){
 }
 function renderDrive(){
   const logo=document.getElementById('driveLogo');
-  if(logo)logo.innerHTML=driveLogoHtml();
+  if(logo){ logo.innerHTML=driveLogoHtml(); logo.hidden=true; }
+  /* 列表 / 网格：整个应用根节点带 .list 或 .grid，样式见「云端硬盘」CSS 段 */
+  const driveSec=document.querySelector('#app-drive');
+  if(driveSec){
+    driveSec.classList.toggle('grid',gdView==='grid');
+    driveSec.classList.toggle('list',gdView!=='grid');
+  }
+  /* 底部导航当前面板（显式状态变量：不要从按钮下标反推，
+     否则以后调换导航顺序会静默错位） */
+  const curKey=gdPanelKey||'home';
   const q=driveQuery.trim();
-  const st=driveStorage();
   const p=[];
-  p.push('<div class="drive-storage">');
-  p.push('<div class="row-title">我的云端硬盘</div>');
-  p.push('<div class="row-sub" style="font-size:12px;color:var(--txt2);margin-top:2px">'+escHtml(driveUsageText())+'</div>');
-  p.push('<div class="st-bar"><i style="width:'+st.pct+'%"></i></div>');
-  p.push('<div class="drv-parts">'+st.parts.map(function(x){
-    return '<span><i style="background:'+x[2]+'"></i>'+escHtml(x[0])+' '+x[1]+' GB</span>';
-  }).join('')+'</div>');
-  p.push('<div class="drive-chips">');
-  p.push('<button class="drv-chip" data-act="drive-new"><i data-ic="add"></i>新建</button>');
-  p.push('<button class="drv-chip" data-act="drive-upload"><i data-ic="upload"></i>上传</button>');
-  p.push('<button class="drv-chip" data-act="drive-new-folder"><i data-ic="folder"></i>新建文件夹</button>');
-  p.push('</div></div>');
-
-  /* 搜索结果（跨层级） */
   if(q){
     const hits=driveSearchAll(q).slice(0,40);
     p.push('<div class="section-label">搜索「'+escHtml(q)+'」· '+hits.length+' 项</div>');
     p.push(hits.length?hits.map(function(x){return driveRow(x.it);}).join('')
-      : emptyHtml('没有找到文件','换个关键词试试，支持按名称、类型和所有者搜索',[{label:'清除搜索',act:'drive-search-clear'}]));
-    $('#driveHome').innerHTML=p.join('');
-    renderDrivePanes();
-    return;
+      :emptyHtml('没有找到文件','换个关键词试试，支持按名称、类型和所有者搜索',[{label:'清除搜索',act:'drive-search-clear'}]));
+  }else if(curKey==='files'){
+    const folders=driveSortApply(DRIVE_ROOT.filter(function(x){return !!x.kids;}));
+    const files=driveSortApply(DRIVE_ROOT.filter(function(x){return !x.kids;}));
+    p.push('<div class="section-label">文件夹 · '+folders.length+'</div>');
+    p.push(folders.length?folders.map(driveRow).join('')
+      :'<div class="gd-note">还没有文件夹，点击右下角的「+」新建。</div>');
+    p.push('<div class="section-label">文件 · '+files.length+'</div>');
+    p.push(files.length?files.map(driveRow).join('')
+      :'<div class="gd-note">还没有文件，点击右下角的「+」新建或上传。</div>');
+  }else if(curKey==='starred'||curKey==='shared'){
+    /* 「已加星标」「共享」两个面板由 renderDrivePanes() 负责内容，
+       #driveHome 只要保持存在（隐藏）即可，便于搜索与提示复用同一套 DOM。 */
+    p.push('<div class="gd-tip">'+(curKey==='starred'?'已加星标的文件会显示在这里。':'别人与你共享的文件会显示在这里。')+'</div>');
+  }else{
+    /* 建议：先显示最近打开过的内容（与参考截图一致），再补全最近列表。
+       ⚠ 文件夹必须一起列出来：SaaS 版首页是「文件 + 文件夹」混排，
+       早期版本只过滤了文件（!it.kids），于是首页一个文件夹都看不到。 */
+    /* ⚠ 这里必须用「文件夹优先 + 修改时间倒序」的复合比较：
+       早先写成 driveSortApply(...).sort(按 mod 再排一次)，第二次 sort 会把
+       driveCompare 好不容易排好的「文件夹优先」完全打乱 —— 表现为首页一个文件夹都看不到。 */
+    const all=driveFlat().map(function(x){return x.it;}).sort(function(a,b){
+      if((a.kids?0:1)!==(b.kids?0:1))return a.kids?-1:1;
+      return String(b.mod||'').localeCompare(String(a.mod||''));
+    });
+    const suggested=all.slice(0,5);
+    const starred=driveSortApply(driveCollectStarred(DRIVE_ROOT,[]));
+    p.push('<div class="gd-head"><span>文件</span><div class="gd-view" data-act="gd-view"><i data-gdicon="list"></i><i data-gdicon="grid"></i></div></div>');
+    p.push('<div class="section-label">推荐给你的文件</div>');
+    p.push(suggested.length?suggested.map(driveRow).join(''):'');
+    p.push('<div class="section-label">最近使用</div>');
+    p.push(all.length?all.slice(0,10).map(driveRow).join('')
+      :emptyHtml('还没有文件','点击右下角「+」新建或上传'));
+    if(starred.length){
+      p.push('<div class="section-label">已加星标</div>');
+      p.push(starred.slice(0,3).map(driveRow).join(''));
+    }
+    p.push('<div class="gd-tip">想查看所有文件？点底部的「文件」标签。</div>');
   }
-  /* 多选工具条 */
-  p.push('<div class="drv-selbar'+(driveMulti?' on':'')+'">'+
-    '<button class="drv-chip'+(driveMulti?' on':'')+'" data-act="drive-select">'+
-      '<i data-ic="check"></i>'+(driveMulti?('已选 '+driveSel.size+' 项'):'多选')+'</button>'+
-    (driveMulti?('<button class="drv-chip" data-act="drive-copy"><i data-ic="copy"></i>复制</button>'+
-      '<button class="drv-chip" data-act="drive-move"><i data-ic="move"></i>移动</button>'+
-      '<button class="drv-chip" data-act="drive-share-multi"><i data-ic="share"></i>分享</button>'+
-      '<button class="drv-chip danger" data-act="drive-del-multi"><i data-ic="delete"></i>删除</button>'):'')+
-    '</div>');
-  /* 排序 */
-  const sortLabel={name:'名称',size:'大小',mod:'修改时间',type:'类型'}[driveSort]||'名称';
-  p.push('<div class="drv-toolbar">'+
-    '<button class="drv-sortbtn" data-act="drive-sort"><i data-ic="sort"></i>排序：'+escHtml(sortLabel)+
-    (driveSortDir>0?' ↑':' ↓')+'</button></div>');
-
-  const folders=driveSortApply(DRIVE_ROOT.filter(function(x){return !!x.kids;}));
-  const files=driveSortApply(DRIVE_ROOT.filter(function(x){return !x.kids;}));
-  p.push('<div class="section-label">文件夹 · '+folders.length+'</div>');
-  p.push(folders.length?folders.map(driveRow).join(''):emptyHtml('还没有文件夹','点击上方「新建文件夹」开始整理'));
-  p.push('<div class="section-label">文件 · '+files.length+'</div>');
-  p.push(files.length?files.map(driveRow).join(''):emptyHtml('还没有文件','点击「新建」或「上传」添加内容'));
-  $('#driveHome').innerHTML=p.join('');
+  const home=document.getElementById('driveHome');
+  if(home)home.innerHTML=p.join('');
   renderDrivePanes();
   driveRenderRecent();
-  paintIcons(document.getElementById('driveHome'));
+  gdSyncTabs();
+  paintIcons(home);
+  try{ gdViewIcons(); }catch(e){}
 }
 function renderDrivePanes(){
   const shared=document.getElementById('driveShared');
@@ -12550,7 +13386,8 @@ function renderDrivePanes(){
   if(starredEl){
     const starred=driveSortApply([].concat(driveCollectStarred(DRIVE_ROOT,[]),DRIVE_SHARED.filter(function(x){return x.star;})));
     starredEl.innerHTML='<div class="section-label">已加星标 · '+starred.length+'</div>'+
-      (starred.length?starred.map(driveRow).join(''):emptyHtml('还没有加星标的文件','在文件上点星标即可收藏'));
+      (starred.length?starred.map(driveRow).join('')
+        :emptyHtml('还没有加星标的文件','在文件上点星标即可收藏'));
   }
   const trash=document.getElementById('driveTrash');
   if(trash){
@@ -12564,6 +13401,44 @@ function renderDrivePanes(){
   paintIcons(document.getElementById('driveShared'));
   paintIcons(document.getElementById('driveStarred'));
   paintIcons(document.getElementById('driveTrash'));
+}
+/* 建议 / 活动 两个标签：活动视图是独立的 #driveActivity 面板 */
+function gdSyncTabs(){
+  const act=document.getElementById('driveActivity');
+  const panes={home:'driveHome',starred:'driveStarred',shared:'driveShared',files:'driveRecent'};
+  const want=panes[gdPanelKey||'home']||'driveHome';
+  if(act&&gdTab==='activity'){
+    act.innerHTML=gdActivityRows();
+    act.classList.add('on');
+    document.querySelectorAll('#app-drive .drive-pane').forEach(function(x){
+      if(x.id!=='driveActivity')x.classList.remove('on');
+    });
+    paintIcons(act);
+  }else{
+    if(act)act.classList.remove('on');
+    document.querySelectorAll('#app-drive .drive-pane').forEach(function(x){
+      x.classList.toggle('on',x.id===want);
+    });
+  }
+  document.querySelectorAll('#app-drive .gd-tab').forEach(function(b){
+    b.classList.toggle('on',b.dataset.gdtab===gdTab);
+  });
+}
+function gdActivityRows(){
+  const rows=[];
+  const rec=driveFlat().map(function(x){return x.it;}).filter(function(it){return !it.kids;});
+  rows.push('<div class="section-label">今天的活动</div>');
+  if(!rec.length)return '<div class="gd-note">最近没有活动记录。</div>';
+  rec.slice(0,7).forEach(function(it,ix){
+    const pal=gdPalette(it.type||driveKindOf(it.n),it);
+    const when=ix===0?'刚刚':(it.mod||'最近');
+    rows.push('<button class="gd-act" data-act="drive-open" data-id="'+escHtml(it.id)+'">'+
+      '<span class="gd-av" style="background:'+pal.bg+';color:'+pal.fg+'">'+gdIcSvg(it.type||driveKindOf(it.n),20,pal.fg)+'</span>'+
+      '<span class="gd-meta"><span class="gd-name">你打开了「'+escHtml(it.n)+'」</span>'+
+      '<span class="gd-sub">'+escHtml(when)+'</span></span></button>');
+  });
+  rows.push('<div class="gd-tip">活动记录只保留最近 30 天。</div>');
+  return rows.join('');
 }
 function driveOpen(id){
   const it=driveFindAny(id);
@@ -12592,7 +13467,7 @@ function renderDriveFolder(){
     return escHtml(it?(it.n||it.name||''):'');
   }).join(' › ');
   host.innerHTML=
-    '<div class="drv-crumb">'+escHtml('我的云端硬盘')+(path?(' › '+path):'')+'</div>'+
+    '<div class="drv-crumb">'+escHtml('我的云端硬盘'+(path?(' › '+path):''))+'</div>'+
     '<div class="drv-toolbar">'+
       '<button class="drv-sortbtn" data-act="drive-sort"><i data-ic="sort"></i>排序</button>'+
       '<button class="drv-sortbtn" data-act="drive-upload-here"><i data-ic="upload"></i>上传到此</button>'+
@@ -12798,6 +13673,9 @@ function driveMenuSheet(id){
       return '<button class="sheet-row" data-act="'+r[0]+'" data-id="'+escHtml(id)+'">'+
         '<span class="s-ic">'+mi(M[r[2]]||M.info)+'</span><span class="s-main"><span class="s-title">'+r[1]+'</span></span>'+mi(M.chev)+'</button>';
     }).join('')+
+    /* 星标操作：新版行里不再常驻星标按钮（对齐参考截图），改从行菜单切换 */
+    '<button class="sheet-row" data-act="drive-star" data-id="'+escHtml(id)+'">'+
+      '<span class="s-ic">'+mi(M.star)+'</span><span class="s-main"><span class="s-title">'+(it.star?'取消星标':'添加星标')+'</span></span></button>'+
     '<button class="sheet-row danger" data-act="drive-del-one" data-id="'+escHtml(id)+'">'+
       '<span class="s-ic">'+mi(M.delete)+'</span><span class="s-main"><span class="s-title">移到回收站</span></span></button>'+
     '<div class="sheet-close" data-act="drive-sheet-close">取消</div>');
@@ -14706,7 +15584,10 @@ function closeContact(){$('#contactDetail').classList.remove('on');}
 function renderSettings(){
   $('#setGroups').innerHTML=SET_GROUPS.map((g,i)=>{
     const prev=SET_GROUPS[i-1];
-    const head=(!prev||prev.head!==g.head)?`<div class="set-group-title">${g.head}</div>`:'';
+    /* 分组小标题若与紧随其后那一行的标题同名，就是纯重复（一级页上会出现一条
+       灰色小字压在同名行上方），此时不再渲染。仅当标题不同才作为真正的分组标题显示。 */
+    const dup=String(g.head||'').trim()===String(g.title||'').trim();
+    const head=(!dup&&(!prev||prev.head!==g.head))?`<div class="set-group-title">${g.head}</div>`:'';
     return `<div class="set-group">${head}<button class="set-row" data-act="${g.subid?'set-open':'toast'}" data-sub="${g.subid||''}" data-msg="${g.title}"><span class="s-ic">${mi(M[g.icon]||M.notif)}</span><span class="s-main"><span class="s-title">${g.title}</span><span class="s-sub">${g.sub}</span></span><span class="chev">${mi(M.chev)}</span></button></div>`;
   }).join('');
 }
@@ -15070,6 +15951,11 @@ function openSetSub(id){
   if(cur)setStack.push(cur.id);
   hideSetSubs();
   el.classList.add('on');
+  /* 进入壁纸页：立刻补一次缩略图（缓存由启动预热生成），避免看到空卡片 */
+  if(id==='setStyle'){
+    try{ if(typeof wpSyncThumbs==='function')wpSyncThumbs(el); }catch(e){}
+    [40,300,900].forEach(function(d){setTimeout(function(){try{wpSyncThumbs(el);}catch(e){}},d);});
+  }
 }
 function setBack(){
   const prev=setStack.pop();
@@ -15290,7 +16176,13 @@ function showKb(input){
   /* 输入法组件已删除：聚焦后交给系统/浏览器原生键盘，只做滚动可见性处理 */
   try {
     if (input && input.focus) input.focus({ preventScroll: true });
-    if (input && input.scrollIntoView) input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    /* instant 而不是 smooth：smooth 会给【整个页面】播一段滚动动画，
+       一旦页面有可滚动量（窗口偏小、机身比可视区高），聚焦输入框就会看到整机在抖。
+       这里只做"最小必要滚动"，把输入框带进视野即可，不做动画。 */
+    if (input && input.scrollIntoView) {
+      try { input.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+      catch (e) { input.scrollIntoView(false); }
+    }
   } catch (e) { /* ignore */ }
   try { if (window.visualViewport && typeof crNoopKb === 'undefined') { /* 原生键盘会自行处理可视区域 */ } } catch (e) {}
   return true;
@@ -15801,6 +16693,7 @@ function renderChromeNtp(){
 function crExitToHome(){
   const host=document.getElementById('crWrap');
   if(host)host.classList.remove('cr-on');
+  try{ crKeepAliveStop(); }catch(e){}       /* 离开远端画面就停掉保活，别白烧 CPU */
   const home=document.getElementById('chromeHome');
   if(home){home.style.display='';home.classList.remove('hidden');}
   const res=document.getElementById('chromeResults');
@@ -15871,7 +16764,7 @@ function renderStyleSub(){
     <div class="appbody">
       <div class="section-label">壁纸</div>
       <div class="wp-grid">
-        ${WPS.map(w=>`<button class="wp-card${curWp===w.id?' on':''}" data-act="set-wp" data-wp="${w.id}" style="background:${wpGradFor(w.seed)}"><span class="wp-thumb">${wpCardThumbHtml(w)}</span><span class="wp-name">${escHtml(w.n)}</span></button>`).join('')}
+        ${WPS.map(w=>`<button class="wp-card${curWp===w.id?' on':''}" data-act="set-wp" data-wp="${w.id}"><span class="wp-thumb">${wpCardThumbHtml(w)}</span><span class="wp-name">${escHtml(w.n)}</span></button>`).join('')}
       </div>
       <div class="section-label">主题颜色 · Material You</div>
       <div class="palette-row">
@@ -15879,6 +16772,8 @@ function renderStyleSub(){
       </div>
       <div class="hint-m3">Material You 会根据壁纸自动生成整套主题色；选择「主题颜色」可手动指定强调色，系统应用、快捷设置与开关会同步变化。</div>
     </div>`;
+  /* 刚重建过 DOM：立刻按缓存补一次缩略图（缓存没就绪时保持渐变占位，稍后由 wpSyncThumbs 补上） */
+  try{ if(typeof wpSyncThumbs==='function')wpSyncThumbs($('#setStyle')); }catch(e){}
 }
 function applyStyle(seed,wp){
   if(seed)document.documentElement.dataset.seed=seed;
@@ -16161,7 +17056,7 @@ function acctRow(ic,title,sub,act,extra){
 }
 /* ===== Google 账户中心（任意应用的头像都可点击进入） ===== */
 /* 给每个应用的顶栏补齐可点击的 Google 账户头像（已有头像的应用不动） */
-const NO_ACCT_APPS=['clock','camera','calculator'];   /* 这些应用不显示账户头像 */
+const NO_ACCT_APPS=['clock','camera','calculator','files'];   /* 这些应用不显示账户头像 */
 function acctEnsureAppAvatars(){
   try{
     const a=googleAccount();
@@ -18018,6 +18913,19 @@ function init(){
       case 'g-open':gOpenResult(Number(el.dataset.i));break;
       case 'g-account':openSubPage('google','account');break;
       case 'g-settings':openSubPage('google','settings');break;
+      case 'files-select':{
+        /* ⚠ files-select 与 fsMulti 是同一件事的两个名字：真正的选中集是 fsSelected/fsMulti，
+           filesSelect/filesSel 只是历史遗留引用，必须一起翻转，否则两处状态会打架
+           （表现为「点了多选，但行里没有勾选按钮」）。 */
+        fsMulti=!fsMulti;
+        filesSelect=fsMulti;
+        fsSelected.clear();
+        filesSel.clear();
+        fsCloseSheets();
+        renderFiles();
+        toast(fsMulti?'已进入多选':'已退出多选');
+        break;
+      }
       case 'files-sort':{
         const order=['name','size','type','mod'];
         const at=order.indexOf(fsSort);
@@ -18165,8 +19073,6 @@ function init(){
       case 'files-move-to':filesMoveTo(el.dataset.f);break;
       case 'files-move-cancel':{const s2=document.querySelector('#filesMoveSheet');if(s2)s2.classList.remove('on');break;}
       case 'files-crumb':filesCrumb(Number(el.dataset.i));break;
-      case 'files-share':toast(filesSel.size+' '+'项已分享');break;
-      case 'files-delete':{const n=filesSel.size;if(typeof FILE_RECENT!=='undefined'){for(let i=FILE_RECENT.length-1;i>=0;i--){if(filesSel.has(FILE_RECENT[i][0]))FILE_RECENT.splice(i,1);}}filesSel.clear();filesSelect=false;renderFiles();toast(n+' '+'项已删除');break;}
       case 'file-copy-one':{
         /* Files 详情页的复制：深拷贝并生成唯一的「副本」名称 */
         const node=fsCurFile;
@@ -18353,7 +19259,7 @@ function init(){
       case 'drive-folder-back':driveFolderBack();break;
       case 'drive-preview-inject':driveInjectPreview((driveCur&&driveCur.n)||driveCurName||'');break;
       case 'drive-preview-back':drivePreviewBack();break;
-      case 'drive-star':{ const it=driveFindAny(el.dataset.id); if(it){ it.star=!it.star; renderDrive(); toast(it.star?'已加星标':'已取消星标'); } break; }
+      case 'drive-star':{ const it=driveFindAny(el.dataset.id); if(it){ it.star=!it.star; driveSheetClose(); renderDrive(); toast(it.star?'已加星标':'已取消星标'); } break; }
       case 'drive-open-file':toast('正在打开');break;
       case 'drive-share':driveShare(driveCur||driveFindAny(el.dataset.id));break;
       case 'drive-dl':driveDownload(driveCur||driveFindAny(el.dataset.id));break;
@@ -18510,8 +19416,38 @@ function init(){
         break;
       }
       case 'drive-search':{
+        /* 新版顶栏里的搜索框是常驻的：这里只把焦点给它，不再切换隐藏行 */
+        const box=$('#driveSearch');
         const row=$('#driveSearchRow');
-        if(row){row.classList.toggle('hidden');if(!row.classList.contains('hidden'))$('#driveSearch').focus();}
+        if(row)row.classList.add('hidden');
+        if(box)box.focus();
+        break;
+      }
+      /* ===== 「文件」新版：汉堡抽屉 / 分类 / 视图切换 ===== */
+      case 'gf-menu':gfMenuOpen();break;
+      case 'gf-menu-close':gfMenuClose();break;
+      case 'gf-refresh':gfMenuClose();renderFiles();toast('已刷新');break;
+      case 'gf-cat':fsCatOpen(el.dataset.c);break;
+      case 'gf-more':gfMoreMenu();break;
+      case 'gf-back':gfBack();break;
+      /* 多选状态下选中项的复制 / 移动 / 分享（旧分支已删除，这里统一走 FS 树） */
+      case 'files-copy':filesCopySel();break;
+      case 'files-move':filesMoveSheet();break;
+      case 'files-share':toast(fsSelected.size+' 项已分享');break;
+      case 'files-view':{
+        gfView=(gfView==='grid')?'list':'grid';
+        renderFiles();
+        toast(gfView==='grid'?'网格视图':'列表视图');
+        break;
+      }
+      case 'gd-camera':toast('正在打开相机扫描…');setTimeout(function(){try{openApp('camera');}catch(e){}},260);break;
+      case 'gd-menu':toast('侧边栏：我的云端硬盘 / 共享 / 已加星标 / 回收站');break;
+      case 'gd-tab':gdTab=el.dataset.t||'suggested';gdSyncTabs();break;
+      case 'gd-view':{
+        gdView=(gdView==='grid')?'list':'grid';
+        const sec=document.querySelector('#app-drive');
+        if(sec){sec.classList.toggle('grid',gdView==='grid');sec.classList.toggle('list',gdView!=='grid');}
+        toast(gdView==='grid'?'网格视图':'列表视图');
         break;
       }
       case 'map-route':{
@@ -18934,11 +19870,25 @@ function init(){
       renderMails(b.dataset.gmail);
     });
   });
-  $$('[data-drive]').forEach(b=>{
+  /* 云端硬盘底部导航：用 data-gdkey 承载语义 key（中文标签拼不出 driveHome 这类 id） */
+  $$('#app-drive .gd-tab').forEach(b=>{
     b.addEventListener('click',()=>{
-      $$('[data-drive]').forEach(x=>x.classList.toggle('on',x===b));
-      const cap=b.dataset.drive[0].toUpperCase()+b.dataset.drive.slice(1);
-      $$('#app-drive .drive-pane').forEach(p=>p.classList.toggle('on',p.id==='drive'+cap));
+      gdTab=b.dataset.gdtab||'suggested';
+      gdSyncTabs();
+    });
+  });
+  $$('[data-gdkey]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const key=b.dataset.gdkey;
+      $$('#app-drive .gd-nav button').forEach(x=>x.classList.toggle('on',x===b));
+      gdTab='suggested';
+      gdPanelKey=key;
+      renderDrive();
+      const panes={home:'driveHome',starred:'driveStarred',shared:'driveShared',files:'driveRecent'};
+      $$('#app-drive .drive-pane').forEach(p=>p.classList.toggle('on',p.id===panes[key]));
+      const act=document.getElementById('driveActivity');
+      if(act)act.classList.remove('on');
+      gdSyncTabs();
     });
   });
   /* phone：底部导航+ 筛通,chips */
@@ -19000,7 +19950,19 @@ function init(){
   const ms=$('#mailSearch');
   if(ms)ms.addEventListener('input',e=>{mailQuery=e.target.value;renderMails();});
   const ds=$('#driveSearch');
-  if(ds)ds.addEventListener('input',e=>{driveQuery=e.target.value;renderDrive();});
+  if(ds)ds.addEventListener('input',e=>{
+    driveQuery=e.target.value;
+    /* 清空输入即回到常规视图，不要卡在「搜索 · 0 项」的空列表上 */
+    if(!driveQuery.trim())gdTab='suggested';
+    renderDrive();
+  });
+  /* 「文件」新版：列表/网格视图切换按钮（搜索框常驻，多选条按需切换） */
+  const fsInp=$('#filesSearch');
+  if(fsInp)fsInp.addEventListener('input',e=>{
+    fsQuery=e.target.value;filesQuery=e.target.value;
+    if(fsQuery.trim())gfMenuClose();
+    renderFiles();
+  });
   /* ---- 亮度滑条：此前完全没有监听，拖动无任何效果 ---- */
   const bright=document.getElementById('brightness');
   if(bright){
@@ -19551,26 +20513,102 @@ function fitDebounced(){
   });
 }
 function fit(){
-  /* 桌面外壳（标题/工具栏/提示）实际占多高就留多少，手机端提示被隐藏后机身自动占满 */
-  let chrome=0;
-  ['.desk-top','.desk-actions','.desk-hint'].forEach(sel=>{
-    const el=document.querySelector(sel);
-    if(!el)return;
-    const cs=getComputedStyle(el);
-    if(cs.display==='none')return;
-    const r=el.getBoundingClientRect();
-    if(r.height)chrome+=r.height+parseFloat(cs.marginTop||0)+parseFloat(cs.marginBottom||0);
-  });
-  chrome+=28;                                  /* 外壳内边距与间隙 */
+  /* ===== 机身适配：清晰度 + 不溢出 =====
+     这里同时承担三件事，顺序不能乱：
+       ① 量出"机身以外到底占多高"（chrome）—— 决定自适应缩放；
+       ② 按实测溢出量决定最终缩放（必要时把机身顶到 1:1 原生分辨率，最锐）；
+       ③ 机身放得下时锁住文档滚动 —— 这是「输入时抖动」的根治点。
+     抖动成因：.desk 有 min-height:100%、body 上下有内边距、机身外壳还要占一百多 px，
+     三者相加在很多窗口下比视口高 20~32px，页面于是有了空滚动量；输入框聚焦时
+     showKb() 会 scrollIntoView，整页被滚走 → 看起来就是"整机在抖"。
+     原来的 fit 少算了约 47px（只加了固定 28px），所以这个空滚动量一直都在。 */
+  const px=v=>parseFloat(v||0)||0;
+  const wrapEl=$('#phoneWrap'), ph=$('#phone');
+  const deskEl=document.querySelector('.desk');
+  const dcs=deskEl?getComputedStyle(deskEl):null;
+  const bcs=getComputedStyle(document.body);
   const vh=(window.visualViewport&&window.visualViewport.height)||innerHeight;
   const vw=(window.visualViewport&&window.visualViewport.width)||innerWidth;
-  const base=Math.min((vh-chrome)/846,(vw-26)/368,1);
-  const cap=Math.min((vh-12)/846,(vw-8)/368,1.25);
-  const s=Math.max(0.3,Math.min(base*zoom,cap));
-  $('#phone').style.transform='scale('+s+')';
-  $('#phone').style.transformOrigin='0 0';
-  $('#phoneWrap').style.height=(808*s)+'px';
-  $('#phoneWrap').style.width=(360*s)+'px';
+
+  const applyScale=function(v){
+    if(v===1){ ph.style.transform=''; ph.style.transformOrigin=''; }
+    else { ph.style.transform='scale('+v+')'; ph.style.transformOrigin='0 0'; }
+    wrapEl.style.height=(808*v)+'px';
+    wrapEl.style.width=(360*v)+'px';
+  };
+  /* chrome = .desk 里非机身子元素的高度和 + 它们之间的行间距
+     + .desk 的内外边距 + body 的内外边距（即"机身以外必须占的高度"）。
+     量的时候必须：解除文档滚动锁、清掉 .phone-wrap 的 min-height（窄屏媒体查询里是
+     808px）、把 .desk 的 min-height:100% 临时归零（否则它被撑到视口高、内容在内部
+     垂直居中，第一行会被往下推，实测多算 12px），并让机身按真实 808 占好位。 */
+  let chrome=0;
+  const deskMinH=deskEl?deskEl.style.minHeight:'';
+  try{
+    document.documentElement.style.overflowY='';
+    document.body.style.overflowY='';
+    wrapEl.style.minHeight='';
+    if(deskEl)deskEl.style.minHeight='0px';
+    applyScale(1);
+    void wrapEl.offsetHeight;
+    let kids=0,n=0;
+    if(deskEl){
+      Array.prototype.forEach.call(deskEl.children,function(el){
+        if(el===wrapEl)return;
+        const r=el.getBoundingClientRect();
+        if(r.height){kids+=r.height;n++;}
+      });
+    }
+    const gap=n>0?(px(dcs.rowGap)||px(dcs.gap)):0;
+    chrome=kids+(n>1?(n-1)*gap:0)
+         +px(dcs.paddingTop)+px(dcs.paddingBottom)+px(dcs.marginTop)+px(dcs.marginBottom)
+         +px(bcs.paddingTop)+px(bcs.paddingBottom)+px(bcs.marginTop)+px(bcs.marginBottom);
+    chrome=Math.max(0,Math.round(chrome*100)/100);
+  }catch(e){
+    chrome=Math.max(0,vh-808);
+  }finally{
+    if(deskEl)deskEl.style.minHeight=deskMinH;
+  }
+  /* 实测溢出量：机身包装底边 + body 下内边距 越过可视高度多少。
+     ⚠ 这是唯一可靠的判据 —— .desk 的 min-height、机身的 flex-shrink:0
+     会让"按常数估算"永远漏掉十几 px。 */
+  const padB=px(bcs.paddingBottom)||0;
+  const overAt=function(v){ applyScale(v); return wrapEl.getBoundingClientRect().bottom+padB-vh; };
+  const base=Math.min((vh-chrome)/808,(vw-26)/368,1);
+  const cap=Math.min((vh-12)/808,(vw-8)/368,1.25);
+  let sSnap=Math.max(0.3,Math.min(base*zoom,cap));   /* 视口自适应 + 用户缩放（原公式） */
+  const dpr=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+  /* 允许的溢出上限：这点空隙由 overflow 锁兜掉（页面根本不会滚、看不见），
+     换来机身能顶到 1:1 原生分辨率。超过 8px 才真的缩机身。 */
+  const OVER_OK=8;
+  let fits1=false;
+  try{
+    let ov=overAt(sSnap);
+    if(ov>OVER_OK){
+      /* 基准值偏小（原公式留了 38px 余量）→ 在"用户缩放上限"之内把机身顶到最大 */
+      const target=Math.min(cap,Math.max(1,sSnap));        /* 目标：最多顶到 1:1，或用户放大的值 */
+      let lo=sSnap,hi=target,mid=hi;
+      if(overAt(hi)<=OVER_OK){ sSnap=hi; }
+      else{
+        for(let i=0;i<12;i++){ mid=(lo+hi)/2; if(overAt(mid)>OVER_OK)hi=mid;else lo=mid; }
+        sSnap=+lo.toFixed(6);
+      }
+      ov=overAt(sSnap);
+    }
+    fits1=ov<=OVER_OK;
+    /* 整数设备像素比：只在"几乎不损失尺寸"（≤1/4 CSS 像素）时才采用（重采样最锐） */
+    const q=Math.round(sSnap*dpr)/dpr;
+    if(q>=0.3&&q<=sSnap&&q>=sSnap-0.25/808){ const o2=overAt(q); if(o2<=OVER_OK){ sSnap=q; ov=o2; fits1=ov<=OVER_OK; } }
+  }catch(e){}
+  applyScale(sSnap);
+  /* fits1 为真 ⇒ 溢出已在容许范围内 ⇒ 锁住文档滚动。
+     ⚠ 必须 html 和 body 都锁：body 的 CSS 是 overflow-y:auto，它是滚动容器，
+       只写 html 或只写 body 都可能被另一侧接管。锁上之后页面没有空滚动量，
+       输入框聚焦时 showKb() 的 scrollIntoView 也不会把整机拖走（"输入时抖动"的成因）。
+     机身确实放不下（小窗口/手机竖屏）时保持 auto，让页面能正常滚。 */
+  try{
+    document.documentElement.style.overflowY=fits1?'hidden':'';
+    document.body.style.overflowY=fits1?'hidden':'';
+  }catch(e){}
   $('#zoomLabel').textContent=Math.round(zoom*100)+'%';
 }
 /* ============ 手机端 / 触摸设备适配 ============
