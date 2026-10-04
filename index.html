@@ -374,8 +374,15 @@ html.dark .search-pill .mic svg{fill:#9aa0a6}
 .recents-title{display:flex;align-items:center;gap:10px;padding:0 20px 12px;min-height:30px}
 .recents-clear{flex:none;color:rgba(255,255,255,.85);font-size:12.5px;padding:7px 12px;border-radius:17px;background:rgba(255,255,255,.13)}
 .recents-clear:active{background:rgba(255,255,255,.24)}
+/* 最近任务：整屏零文案 —— 标题栏按钮一律不显示（选择/清除/关闭所选的功能仍在，只是没有文字入口） */
+.recents-title .recents-sel,.recents-title .recents-clear,.recents-title .recents-sel-close{display:none !important}
+/* 空态：完全空白 —— 图标与胶囊都不再显示（节点保留在 DOM 里，避免引用报错）。
+   空态仍可退出：底部上滑 / 返回手势 / 系统 Home 键。 */
+.recents-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:100%;min-height:60vh;color:rgba(255,255,255,.65);font-size:13px;padding:40px 24px}
+.recents-empty svg,.recents-empty .re-home{display:none !important}
+.recents-empty .re-home{width:132px;height:40px;min-width:0;padding:0}
 .recents-cards{display:flex;gap:18px;overflow-x:auto;padding:0 20px;flex:1;align-items:stretch}
-.recents-empty{color:rgba(255,255,255,.65);font-size:13px;padding:40px 24px}
 .recent-item{flex:none;width:318px;display:flex;flex-direction:column;gap:12px}
 .recent-card{flex:1;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 12px 34px rgba(0,0,0,.5);background:#202124}
 .recent-thumb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff}
@@ -385,8 +392,7 @@ html.dark .search-pill .mic svg{fill:#9aa0a6}
 .recent-head .rh-ic{width:20px;height:20px;border-radius:50%;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
 .recent-head .rh-ic svg,.recent-head .rh-ic img{width:100%;height:100%;display:block}
 .recent-head .rh-name{font-size:13.5px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.recent-more{position:absolute;top:10px;right:48px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:flex;align-items:center;justify-content:center;z-index:2}
-.recent-more svg{width:15px;height:15px;fill:#fff}
+/* 「⋮（应用信息）」按钮已移除：卡片右上角只留关闭键（.recent-x 定位在 right:10px） */
 .recent-x{
   position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.45);
   color:#fff;display:flex;align-items:center;justify-content:center;z-index:2;
@@ -687,7 +693,10 @@ html.dark .gb-key.fn{color:#9A9AA1}
 .cv-end .c{background:#d93025}
 /* phone 新版：底部导航+ Home/Keypad/Voicemail 面板 */
 #app-phone .ph-pane{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;padding:0;background:#EDEDF6;overscroll-behavior:contain}
-#app-phone #phHome,#app-phone #phVm{padding-bottom:102px}
+/* 电话应用的内容让开顶部状态栏（含挖孔区），否则号码行/清除键会压在状态栏上 */
+#app-phone{padding-top:var(--sb-h-total);box-sizing:border-box;justify-content:center}
+#app-phone #phHome,#app-phone #phVm{padding-top:48px;padding-bottom:102px}
+#app-phone #phKeypad{padding-top:0}
 #app-phone .ph-pane.on{display:flex}
 #app-phone .ph-search{display:flex;align-items:center;gap:4px;margin:0 16px 14px;height:52px;border-radius:26px;background:var(--bg1);padding:0 6px 0 8px;flex:none}
 #app-phone .ph-search input{flex:1;font-size:16px;color:var(--txt);background:none;outline:0;min-width:0}
@@ -1455,6 +1464,35 @@ html.dark .dpv-table td{border-top-color:#4a4b50}
 .gf-search{display:none !important}
 .gf-viewwrap{position:absolute;right:16px;bottom:16px;z-index:6}
 .gd-viewwrap{position:absolute;right:16px;bottom:calc(var(--nav-h) + 146px);z-index:6}
+/* ---------- 云端硬盘：左侧导航抽屉 ---------- */
+.gd-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:8;display:none}
+.gd-scrim.on{display:block;animation:gdFade .18s ease-out}
+.gd-drawer{position:absolute;left:0;top:0;bottom:0;width:300px;z-index:9;background:#fff;display:none;
+  flex-direction:column;border-radius:0 26px 26px 0;overflow-y:auto;overflow-x:hidden;
+  box-shadow:0 4px 26px rgba(0,0,0,.28)}
+.gd-drawer.on{display:flex;animation:gdSlideL .22s cubic-bezier(.2,0,0,1)}
+.gd-dw-head{display:flex;align-items:center;gap:12px;flex:none;
+  padding:calc(var(--sb-h-total) + 12px) 16px 12px}
+.gd-dw-logo{width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:none}
+.gd-dw-logo svg{width:30px;height:30px;display:block}
+.gd-dw-title{font-size:21px;font-weight:500;color:#3C4043;font-family:var(--font-clock)}
+.gd-dw-store{display:block;width:100%;text-align:left;flex:none;padding:4px 20px 16px}
+.gd-dw-bar{height:8px;border-radius:4px;background:#E8EAED;overflow:hidden}
+.gd-dw-bar i{display:block;height:100%;border-radius:4px;background:var(--gf-blue)}
+.gd-dw-note,.gd-dw-sub{font-size:12px;color:#5F6368;margin-top:8px;line-height:1.5}
+.gd-dw-sub{font-weight:600;padding:10px 22px 4px;margin:0}
+.gd-dw-sub+p{margin-top:0}
+.gd-dw-row{display:flex;align-items:center;gap:18px;height:48px;flex:none;width:100%;text-align:left;
+  padding:0 22px;border-radius:0 24px 24px 0;font-size:14px;color:#3C4043}
+.gd-dw-row svg{width:22px;height:22px;fill:#5F6368;flex:none}
+.gd-dw-row span{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gd-dw-row b{font-weight:400;color:#5F6368;font-size:12.5px;flex:none}
+.gd-dw-row.on{background:#C2E7FF;color:#001D35;font-weight:600}
+.gd-dw-row.on svg{fill:#001D35}
+.gd-dw-row:active{background:var(--bg1)}
+.gd-dw-sep{height:1px;background:var(--divider);margin:10px 0 10px 22px;flex:none}
+.gd-dw-foot{margin-top:auto;padding:8px 0 22px;flex:none}
+.gd-dw-note2{font-size:11.5px;color:#80868B;padding:14px 22px 0;line-height:1.6}
 .gd-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
 .gd-name{font-size:14.5px;color:var(--txt);line-height:1.3;
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
@@ -1580,10 +1618,22 @@ html.dark .dpv-table td{border-top-color:#4a4b50}
 /* ==== 随机推送 + 嵌套浏览器 ==== */
 .yt-push-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;font-size:13px;color:var(--txt2)}
 .yt-push-head .pillbtn.small{height:28px;padding:0 10px;border-radius:14px;font-size:12px}
-.yt-push-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 16px}
-.yt-push-card{position:relative;display:block;padding:0;border-radius:12px;overflow:hidden;background:var(--scontainer);text-align:left}
+/* 推荐卡片高度统一。原先大小不一有三个独立原因，缺一不可：
+   ① .yt-push-card 是 <button>，默认 display:block 是 shrink-to-fit ——
+      宽度由**文字内容**决定，所以每张卡宽度都不同（实测 103.8 / 108.0 / 139.8 …），
+      而 grid 的列其实是等宽的（145px 145px）。改成 flex + width:100% 让它填满格子。
+   ② 歌手行 .yp-s 是条件渲染的（没歌手就不输出）—— 有歌手比没歌手高一截
+      → HTML 里改成永远输出，没歌手时留空占位。
+   ③ 标题用 max-height:52px —— 1/2/3 行都合法，高度随标题长度变化。
+      另外 grid 每行按各自内容撑高，行与行之间不等高。
+      → 固定 height + -webkit-line-clamp:2；grid-auto-rows:1fr 让所有行等高。 */
+.yt-push-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:10px;padding:0 14px 16px}
+.yt-push-card{position:relative;display:flex;flex-direction:column;width:100%;padding:0;border-radius:12px;overflow:hidden;background:var(--scontainer);text-align:left}
 .yt-push-card .yt-cover{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
-.yt-push-card .yp-t{display:block;padding:7px 8px 9px;font-size:11.5px;line-height:1.45;color:var(--txt);max-height:52px;overflow:hidden}
+/* 固定高度：两行 × 11.5px × 1.45 ≈ 33.4 + 上内边距 7 ≈ 41 */
+.yt-push-card .yp-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;padding:7px 8px 0;font-size:11.5px;line-height:1.45;color:var(--txt);height:41px;overflow:hidden}
+/* 固定高度占位：没歌手时也要占住这块，否则卡片会矮一截 */
+.yt-push-card .yp-s{display:block;padding:4px 8px 9px;font-size:11px;line-height:1.35;color:var(--txt2);height:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ytm-grid{grid-template-columns:1fr 1fr}
 .chrome-wrap{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--surface)}
 .chrome-wrap .cw-bar{display:none;padding:10px 14px;font-size:12px;line-height:1.6;color:#F2B8B5;background:rgba(217,48,37,.14)}
@@ -2930,10 +2980,11 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
           <div class="drawer-grid"><div class="app-grid" id="drawerGrid"></div></div>
         </div>
         <div id="recents" class="layer">
+          <!-- 最近任务：整屏不出现任何文案（标题栏按钮只保留命中区、不显示文字） -->
           <div class="recents-title">
-            <button class="recents-sel" id="recentsSelBtn" data-act="recents-select">选择</button>
-            <button class="recents-clear" data-act="recents-clear">全部清除</button>
-            <button class="recents-sel-close" id="recentsSelClose" data-act="recents-sel-close" hidden>关闭所选</button>
+            <button class="recents-sel" id="recentsSelBtn" data-act="recents-select" aria-label="选择" hidden></button>
+            <button class="recents-clear" data-act="recents-clear" aria-label="全部清除" hidden></button>
+            <button class="recents-sel-close" id="recentsSelClose" data-act="recents-sel-close" aria-label="关闭所选" hidden></button>
           </div>
           <div class="recents-cards" id="recentsCards"></div>
         </div>
@@ -3367,6 +3418,8 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
               <div class="drive-pane" id="driveShared"></div>
               <div class="drive-pane" id="driveStarred"></div>
               <div class="drive-pane" id="driveTrash"></div>
+              <div class="drive-pane" id="driveComputers"></div>
+              <div class="drive-pane" id="gdSpamPane"></div>
               <div class="drive-pane" id="driveActivity"></div>
             </div>
             <div class="gd-viewwrap" id="gdViewWrap">
@@ -3394,6 +3447,10 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
               </header>
               <div class="appbody no-pad" id="driveFolderList"></div>
             </div>
+            <!-- 左侧导航抽屉：抽屉与遮罩同为应用窗口的子元素（不是兄弟关系），
+                 这样遮罩只会压暗抽屉以外的应用内容 -->
+            <div class="gd-scrim" id="gdScrim" data-act="gd-menu-close"></div>
+            <aside class="gd-drawer" id="gdDrawer" aria-label="云端硬盘导航"></aside>
             <div class="sub" id="drivePreview">
               <header class="appbar">
                 <button class="iconbtn" data-act="drive-preview-back"><i data-ic="back"></i></button>
@@ -3890,9 +3947,9 @@ const mi=(d,s=24)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="cu
 const escHtml=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 /* ============ 联网状态（离线检测 + WiFi 感叹号提示） ============
-   ⚠ macOS 版 Chromium 在「系统代理 / VPN / 虚拟网卡」环境下 navigator.onLine 会
-   长期误报 false：此时网络明明是通的，右上角状态栏却一直挂着「Wi-Fi + 感叹号」，
-   YouTube 也只给未联网视图 —— 这就是「状态栏始终显示未联网」的根因。
+   ⚠ navigator.onLine 会误报：iframe / file:// / 系统代理 / VPN 或虚拟网卡环境下，
+   浏览器可能长期自报 offline —— 此时网络明明是通的，右上角状态栏却一直挂着
+   「Wi-Fi + 感叹号」，YouTube 也只给未联网视图。这就是「状态栏始终显示未联网」的根因。
 
    所以这里不再把 navigator.onLine 当成事实，而是把它当成「提示」，真正的判据是
    「最近一次真实网络请求的结果」：
@@ -6359,7 +6416,7 @@ function recentSelCloseAll(){
 function renderRecentsModeOff(){
   recentSelMode=false;
   const selBtn=document.getElementById('recentsSelBtn');
-  if(selBtn){ selBtn.textContent='选择'; selBtn.classList.remove('on'); }
+  if(selBtn){ selBtn.textContent=''; selBtn.classList.remove('on'); }
   const del=document.getElementById('recentsSelClose');
   if(del)del.hidden=true;
 }
@@ -6376,8 +6433,9 @@ function renderRecentsCards(){
       '<div class="recent-card" data-act="'+(recentSelMode?'recent-pick':'open-app')+'" data-app="'+escHtml(id)+'">'+
         '<div class="recent-thumb" style="background:'+appBg(id)+'">'+ICON(id)+'</div>'+
         '<div class="recent-head"><span class="rh-ic" style="background:'+syncIconBg(id)+'">'+ICON(id)+'</span>'+
-        '<span class="rh-name">'+escHtml(a.name)+'</span>'+
-        '<button class="recent-more" data-act="recent-info" data-app="'+escHtml(id)+'" aria-label="应用信息">'+mi(M.more,16)+'</button></div>'+
+        '<span class="rh-name">'+escHtml(a.name)+'</span></div>'+
+        /* 卡片右上角只保留关闭键：原先的「⋮（应用信息）」已按界面要求去掉，
+           应用信息仍可从卡片下方的「信息」chip / 长按进入。 */
         '<button class="recent-x" data-act="recent-close" data-app="'+escHtml(id)+'" aria-label="关闭">'+mi(M.close,16)+'</button>'+
         '<span class="recent-pickdot'+(sel?' on':'')+'" aria-hidden="true">'+mi(M.check,15)+'</span></div>'+
       '<div class="recent-meta">'+
@@ -6386,15 +6444,14 @@ function renderRecentsCards(){
       '</div></div>';
   }).join('');
   host.innerHTML=cards||('<div class="recents-empty">'+mi(M.grid,30)+
-    '<div class="re-title">没有最近使用的应用</div>'+
-    '<div class="re-sub">打开一个应用后，它会出现在这里</div>'+
-    '<button class="pillbtn primary" data-act="recents-home">回到桌面</button></div>');
+    '<button class="pillbtn primary re-home" data-act="recents-home" aria-label="回到桌面"></button></div>');
   host.classList.toggle('selmode',!!recentSelMode);
   const rc=document.querySelector('.recents-clear');
   if(rc)rc.style.display=cards?'':'none';
   const selBtn=document.getElementById('recentsSelBtn');
   if(selBtn){
-    selBtn.textContent=recentSelMode?('完成'+(recentSel.size?(' · '+recentSel.size):'')):'选择';
+    /* 文案一律不写（界面要求零文字），只保留状态类 */
+    selBtn.textContent='';
     selBtn.classList.toggle('on',!!recentSelMode);
   }
   const del=document.getElementById('recentsSelClose');
@@ -6754,7 +6811,11 @@ function ccDragEnd(){
 }
 function toggleShade(){
   if(curScreen==='lock')return;
-  if(shadeLevel===0)openShade(curScreen==='app'?2:1);
+  /* ⚠ 应用内打开控制中心必须落在一级（通知面板）。
+     旧写法 openShade(curScreen==='app'?2:1) 让应用内一打开就是二级（快捷设置），
+     看起来像「控制中心直接跳到二级页面」：用户点状态栏本意是看通知，
+     结果整屏磁贴、没有通知列表。现在统一先开一级，想展开完整快捷设置再点/再下滑一次。 */
+  if(shadeLevel===0)openShade(1);
   else if(shadeLevel===1)openShade(2);
   else closeShade();
 }
@@ -8686,11 +8747,13 @@ function ytmRenderChips(){
 }
 function ytmCardHtml(s,i){
   const on=ytmIsFav(s.id);
+  /* 歌手行**永远输出**（没歌手就留空）：条件渲染会让卡片高度不一致。
+     见 .yt-push-card .yp-s 的固定高度占位。 */
   return '<div class="ytm-cell">'+
     '<button class="yt-push-card" data-act="ytm-open" data-id="'+escHtml(s.id)+'">'+
       coverImgTag(s.art||ytThumb(s.id),coverAsset(i),'yt-cover',s.id)+
       '<span class="yp-t">'+escHtml(s.t)+'</span>'+
-      (s.a?'<span class="yp-s">'+escHtml(s.a)+(s.d?(' · '+escHtml(s.d)):'')+'</span>':'')+
+      '<span class="yp-s">'+(s.a?escHtml(s.a)+(s.d?(' · '+escHtml(s.d)):''):'')+'</span>'+
     '</button>'+
     '<button class="ytm-fav'+(on?' on':'')+'" data-act="ytm-fav" data-id="'+escHtml(s.id)+'" '+
       'aria-label="'+(on?'取消收藏':'收藏')+'" aria-pressed="'+on+'">'+(on?'★':'☆')+'</button>'+
@@ -13493,10 +13556,11 @@ function renderDrive(){
     p.push('<div class="section-label">文件 · '+files.length+'</div>');
     p.push(files.length?files.map(driveRow).join('')
       :'<div class="gd-note">还没有文件，点击右下角的「+」新建或上传。</div>');
-  }else if(curKey==='starred'||curKey==='shared'){
-    /* 「已加星标」「共享」两个面板由 renderDrivePanes() 负责内容，
-       #driveHome 只要保持存在（隐藏）即可，便于搜索与提示复用同一套 DOM。 */
-    p.push('<div class="gd-tip">'+(curKey==='starred'?'已加星标的文件会显示在这里。':'别人与你共享的文件会显示在这里。')+'</div>');
+  }else if(curKey!=='home'){
+    /* 「已加星标 / 共享 / 最近 / 回收站 / 电脑 / 垃圾内容 / 文件」这些面板都由
+       renderDrivePanes() / gdSidePick() 负责内容，此处只让 #driveHome 保持存在
+       （隐藏状态）即可 —— 搜索框与提示文案复用同一套 DOM，不再为每个 key 写分支。 */
+    p.push('<div class="gd-tip">这个视图的内容会显示在右侧面板里。</div>');
   }else{
     /* 建议：先显示最近打开过的内容（与参考截图一致），再补全最近列表。
        ⚠ 文件夹必须一起列出来：SaaS 版首页是「文件 + 文件夹」混排，
@@ -13542,6 +13606,13 @@ function renderDrivePanes(){
       (starred.length?starred.map(driveRow).join('')
         :emptyHtml('还没有加星标的文件','在文件上点星标即可收藏'));
   }
+  /* 最近：按修改时间倒序，文件夹也会出现（与真机一致） */
+  const recentEl=document.getElementById('driveRecent');
+  if(recentEl){
+    const rows=gdRecentItems();
+    recentEl.innerHTML='<div class="section-label">最近 · '+rows.length+'</div>'+
+      (rows.length?rows.map(driveRow).join(''):emptyHtml('没有最近的项目','打开过的文件会显示在这里'));
+  }
   const trash=document.getElementById('driveTrash');
   if(trash){
     trash.innerHTML='<div class="section-label">回收站 · '+driveTrash.length+'</div>'+
@@ -13551,14 +13622,130 @@ function renderDrivePanes(){
         '<button class="pillbtn" data-act="drive-restore">全部恢复</button>'+
         '<button class="pillbtn" data-act="drive-empty" style="color:#B3261E">清空回收站</button></div>'):'');
   }
+  /* 电脑：本模拟器没有备份客户端，这里保持 Google 云端硬盘同款的空状态 */
+  const comp=document.getElementById('driveComputers');
+  if(comp)comp.innerHTML='<div class="section-label">电脑</div>'+
+    emptyHtml('还没有备份的电脑','在电脑上安装「云端硬盘」桌面版并开启备份后，'+
+      '桌面 / 文档 / 下载三个文件夹会出现在这里。',[{label:'了解详情',act:'toast',msg:'云端硬盘桌面版备份'}]); 
   paintIcons(document.getElementById('driveShared'));
   paintIcons(document.getElementById('driveStarred'));
   paintIcons(document.getElementById('driveTrash'));
+  paintIcons(document.getElementById('driveComputers'));
+}
+/* ---------- 云端硬盘：左侧导航抽屉（我的云端硬盘 / 共享 / 最近 / 星标 / 回收站 …） ---------- */
+/* 每一项：语义 key（与底部导航共用 gdPanelKey）、图标、文案、要显示的面板 id */
+const GD_SIDEBAR=[
+  {k:'home',ic:'folder',t:'我的云端硬盘',pane:'driveHome'},
+  {k:'computers',ic:'devices',t:'电脑',pane:'driveComputers'},
+  {k:'shared',ic:'person',t:'与我共享',pane:'driveShared'},
+  {k:'recent',ic:'history',t:'最近',pane:'driveRecent'},
+  {k:'starred',ic:'star',t:'已加星标',pane:'driveStarred'},
+  {k:'spam',ic:'exclamation',t:'垃圾内容',pane:'gdSpamPane'},
+  {k:'trash',ic:'delete',t:'回收站',pane:'driveTrash'}
+];
+/* 「最近」按修改时间倒序（整棵树 + 共享），空文件夹也会出现，和真机一致 */
+function gdRecentItems(){
+  return driveFlat().map(function(x){return x.it;}).slice()
+    .sort(function(a,b){ return String(b.mod||'').localeCompare(String(a.mod||'')); })
+    .slice(0,24);
+}
+function gdDrawerSync(){
+  const d=document.getElementById('gdDrawer');
+  if(!d)return;
+  d.querySelectorAll('[data-gdside]').forEach(function(b){
+    /* 侧栏高亮：key 就是当前面板；底部「文件」标签对应 recent 面板 */
+    const on=(b.dataset.gdside==='files')?(gdPanelKey==='files'):(b.dataset.gdside===gdPanelKey);
+    b.classList.toggle('on',on);
+  });
+}
+function gdDrawerBuild(){
+  const d=document.getElementById('gdDrawer');
+  if(!d)return null;
+  const st=driveStorage();
+  const pct=Math.max(3,Math.min(100,st.pct||38));
+  const row=function(k,ic,t,extra){
+    return '<button class="gd-dw-row" data-act="gd-side" data-gdside="'+k+'">'+mi(M[ic]||M.folder,22)+
+      '<span>'+escHtml(t)+'</span>'+(extra||'')+'</button>';
+  };
+  d.innerHTML=
+    '<div class="gd-dw-head"><span class="gd-dw-logo">'+driveLogoHtml()+'</span>'+
+      '<span class="gd-dw-title">云端硬盘</span></div>'+
+    '<button class="gd-dw-store" data-act="g-account">'+
+      '<div class="gd-dw-bar"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="gd-dw-note">'+escHtml(driveUsageText())+'</div></button>'+
+    row('home','folder','我的云端硬盘')+
+    row('computers','devices','电脑')+
+    '<div class="gd-dw-sub">共享</div>'+
+    row('shared','person','与我共享')+
+    '<div class="gd-dw-sep"></div>'+
+    row('recent','history','最近')+
+    row('starred','star','已加星标')+
+    row('spam','exclamation','垃圾内容')+
+    row('trash','delete','回收站')+
+    '<div class="gd-dw-sep"></div>'+
+    row('newfolder','folder','新建文件夹')+
+    row('shortcut','add_circle','添加快捷方式')+
+    row('upload','upload','上传文件')+
+    '<div class="gd-dw-foot">'+
+      row('settings','shield','设置')+
+      row('help','info','帮助与反馈')+
+      '<div class="gd-dw-note2">本模拟器中的「云端硬盘」为本地演示数据，不会真正上传到 Google 服务器。</div>'+
+    '</div>';
+  paintIcons(d);
+  gdDrawerSync();
+  return d;
+}
+function gdMenuOpen(){
+  const d=gdDrawerBuild();
+  const sc=document.getElementById('gdScrim');
+  if(sc)sc.classList.add('on');
+  if(d)d.classList.add('on');
+}
+function gdMenuClose(){
+  const d=document.getElementById('gdDrawer'),sc=document.getElementById('gdScrim');
+  if(d)d.classList.remove('on');
+  if(sc)sc.classList.remove('on');
+}
+/* 侧栏选中：切面板 + 关抽屉 + 同步底部导航与顶栏标签 */
+function gdSidePick(key){
+  /* 「新建文件夹 / 添加快捷方式 / 上传文件 / 设置 / 帮助」是动作型条目：
+     它们不切换面板，只执行各自的既有逻辑。 */
+  gdMenuClose();
+  if(key==='newfolder'){
+    const nm=driveUniqueName('新建文件夹','',null);
+    DRIVE_ROOT.push({id:driveNewId(),n:nm,type:'folder',mod:'刚刚',star:false,kids:[]});
+    gdPanelKey='home';
+    renderDrive();
+    gdSyncTabs();
+    toast('已创建「'+nm+'」');
+    return;
+  }
+  if(key==='upload'){ driveUploadSheet(''); return; }
+  if(key==='shortcut'){ toast('快捷方式：可从「我的云端硬盘」里选文件固定到这里'); return; }
+  if(key==='settings'){ toast('云端硬盘设置：仅通过 Wi-Fi 传输、离线文件等'); return; }
+  if(key==='help'){ toast('帮助与反馈：本模拟器为本地演示数据'); return; }
+  const item=GD_SIDEBAR.filter(function(x){return x.k===key;})[0];
+  gdPanelKey=key;
+  const pane=(item&&item.pane)||'driveHome';
+  /* 垃圾内容 / 最近没有历史数据，用统一的空状态，但仍然是一个独立面板 */
+  const sp=document.getElementById('gdSpamPane');
+  if(sp)sp.innerHTML=emptyHtml('没有垃圾内容','被判定为垃圾的文件会显示在这里，30 天后自动删除。');
+  gdTab='suggested';
+  renderDrive();
+  document.querySelectorAll('#app-drive .drive-pane').forEach(function(x){
+    x.classList.toggle('on',x.id===pane);
+  });
+  const act=document.getElementById('driveActivity');
+  if(act)act.classList.remove('on');
+  const body=document.querySelector('#app-drive .gd-body');
+  if(body)body.scrollTop=0;
 }
 /* 建议 / 活动 两个标签：活动视图是独立的 #driveActivity 面板 */
 function gdSyncTabs(){
   const act=document.getElementById('driveActivity');
-  const panes={home:'driveHome',starred:'driveStarred',shared:'driveShared',files:'driveRecent'};
+  /* 面板映射表：底部导航用的 key 与侧栏一致，另加「文件」→ driveRecent */
+  const panes={home:'driveHome',starred:'driveStarred',shared:'driveShared',files:'driveRecent',
+    recent:'driveRecent',trash:'driveTrash',computers:'driveComputers',spam:'gdSpamPane'};
   const want=panes[gdPanelKey||'home']||'driveHome';
   if(act&&gdTab==='activity'){
     act.innerHTML=gdActivityRows();
@@ -13575,6 +13762,12 @@ function gdSyncTabs(){
   }
   document.querySelectorAll('#app-drive .gd-tab').forEach(function(b){
     b.classList.toggle('on',b.dataset.gdtab===gdTab);
+  });
+  /* 侧栏高亮 / 底部导航高亮都跟着 gdPanelKey 走 */
+  try{ gdDrawerSync(); }catch(e){}
+  const navMap={home:'home',starred:'starred',shared:'shared',files:'files'};
+  document.querySelectorAll('#app-drive .gd-nav button').forEach(function(b){
+    b.classList.toggle('on',navMap[gdPanelKey]===b.dataset.gdkey);
   });
 }
 function gdActivityRows(){
@@ -17407,7 +17600,12 @@ document.addEventListener('click',function(ev){
     '#screen header.appbar .avatar,#screen header.appbar .gavatar,#screen .appbar .avatar,#screen .topbar .avatar');
 
   if(!el)return;
-  /* 排除列表/聊天/联系人/邮件等处的头像，避免误触（之前“到处出错”的原因） */
+  /* 排除列表/聊天/联系人/邮件等处的头像，避免误触（之前“到处出错”的原因）；
+     · 电话与通讯录应用整体不受这条规则影响 —— 那里的头像都是联系人气泡/联系人条目；
+     · .person/.people-row 是各应用顶部注入的联系人横排（信息「开始聊天」等），
+       点它应该开新会话/看联系人，而不是弹自己的 Google 账户 */
+  if(el.closest('#app-phone,#app-contacts'))return;
+  if(el.closest('.person,.people-row'))return;
   if(el.closest('#contactDetail,.ph-contact-hero,.list-row,.mail-row,.chat-row,.msg,.drive-row,.set-row,.store-row,#recents'))return;
   /* 顶栏头像周围的按钮（如返回/更多）不拦截 */
   if(el.tagName==='BUTTON'&&el.dataset.act&&el.dataset.act!=='g-account')return;
@@ -18430,7 +18628,20 @@ function init(){
       case 'recent-pick':recentSelToggle(el.dataset.app);break;
       case 'recents-sel-close':recentSelCloseAll();break;
       case 'recents-home':setScreen(lockOrigin?'lock':'home');break;
-      case 'recent-appinfo':openAppInfo(el.dataset.app);break;
+      case 'recent-appinfo':{
+        /* 最近任务的「信息」：必须先把设置应用打开再挂应用信息页。
+           旧实现只调 openAppInfo()，它仅点亮「设置 › 应用信息」子页，
+           而调用时人还停在最近任务层 —— 表现成「点了信息什么都不发生」。 */
+        const aiId=el.dataset.app;
+        if(!aiId)break;
+        if(curScreen!=='app'||app!=='settings'){
+          openApp('settings');
+          setTimeout(function(){ try{ openAppInfo(aiId); }catch(e){} },360);
+        }else{
+          openAppInfo(aiId);
+        }
+        break;
+      }
       case 'recent-shot':{
         /* 真实抓取一张缩略图放进相册，而不是只弹提示 */
         const rid=el.dataset.app;
@@ -19596,7 +19807,12 @@ function init(){
         break;
       }
       case 'gd-camera':toast('正在打开相机扫描…');setTimeout(function(){try{openApp('camera');}catch(e){}},260);break;
-      case 'gd-menu':toast('侧边栏：我的云端硬盘 / 共享 / 已加星标 / 回收站');break;
+      case 'gd-menu':gdMenuOpen();break;
+      case 'gd-menu-close':gdMenuClose();break;
+      case 'gd-side':gdSidePick(el.dataset.gdside);break;
+      case 'gd-shortcut':gdMenuClose();toast('快捷方式：可从「我的云端硬盘」里选文件固定到这里');break;
+      case 'gd-settings':gdMenuClose();toast('云端硬盘设置：仅通过 Wi-Fi 传输、离线文件等');break;
+      case 'gd-help':gdMenuClose();toast('帮助与反馈：本模拟器为本地演示数据');break;
       case 'gd-tab':gdTab=el.dataset.t||'suggested';gdSyncTabs();break;
       case 'gd-view':{
         gdView=(gdView==='grid')?'list':'grid';
@@ -20389,7 +20605,7 @@ function init(){
     if(sc&&sc.scrollTop>0)return;
     if(e.deltaY>40){
       if(e.target.closest('#drawer'))return;
-      openShade(curScreen==='app'?2:1);
+      openShade(1);   /* 与点击状态栏一致：先开一级（通知面板），再滚一次才展开快捷设置 */
     }else if(e.deltaY<-40){
       if(curScreen==='home')openDrawer();
       else if(curScreen==='drawer')closeDrawer();
