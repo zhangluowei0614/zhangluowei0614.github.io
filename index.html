@@ -2122,7 +2122,14 @@ img.ytm-cover.now{width:40px;height:40px}
 .sheet.on{display:block}
 .sheet-handle{width:34px;height:4px;border-radius:2px;background:var(--outline-variant);margin:8px auto 10px}
 .sheet-title{font-size:20px;font-weight:500;padding:4px 4px 10px}
-.sheet-close{display:block;width:100%;height:46px;border-radius:24px;background:var(--scontainer);color:var(--onsc);font-size:14px;font-weight:600;margin-top:12px}
+/* 「取消」按钮：用 flex 垂直+水平居中。
+   历史坑：原来是 display:block + height:46px，而元素是 <div> 不是 <button> ——
+   <div> 不会像 <button> 那样自动把文字居中，所以「取消」两个字贴在 46px 框的顶部，
+   看起来就是"错位"。所有用到 .sheet-close 的表单都受这条影响
+   （文件的 菜单/移动/更多选项、云端硬盘的 新建/上传/重命名/移动/菜单）。 */
+.sheet-close{display:flex;align-items:center;justify-content:center;width:100%;height:46px;
+  border-radius:24px;background:var(--scontainer);color:var(--onsc);font-size:14px;
+  font-weight:600;margin-top:12px;cursor:pointer;line-height:1}
 .dev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0 8px}
 .dev-tile{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 4px;border-radius:18px;background:var(--surface-low);color:var(--txt);font-size:11.5px;box-shadow:var(--elev1)}
 .dev-tile .d-ic{width:42px;height:42px;border-radius:50%;background:var(--surface-high);display:flex;align-items:center;justify-content:center}
@@ -2524,8 +2531,12 @@ body{overflow-y:auto !important;overflow-x:hidden;align-items:center}
 #acctInApp>header.appbar .title{margin-left:8px !important;margin-right:auto !important}
 /* ===== 个别应用：顶栏前导控件（头像）保留在最左，标题紧随其后 =====
    标题的 order/对齐统一由样式表末尾的「全局内容标题排版」决定，这里只管间距与空元素。 */
+/* 账户图标按 Google 规范放右上角。这里原来是 order:-1 ——
+   它会**无视 DOM 顺序**把头像一个强制画到最左，所以即使把头像挪到 header 末尾也无效。
+   改成最后绘制（order:9），配合上面 .title 的 margin-right:auto，
+   头像就落到最右侧。注意这条同时作用于「信息」和「云端硬盘」。 */
 #app-messages>.appbar>.avatar,#app-drive>.appbar>.avatar{
-  order:-1 !important;margin-left:0 !important;flex:none !important}
+  order:9 !important;margin-left:0 !important;flex:none !important}
 #app-messages>.appbar .title,#app-drive>.appbar .title{
   margin-left:6px !important;margin-right:auto !important;padding-left:0 !important}
 #app-messages>.appbar,#app-drive>.appbar,#app-gmail>.appbar{
@@ -3154,11 +3165,14 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
           </section>
 
           <section class="app" id="app-messages">
+            <!-- 一级界面遵循 Google 规范：标题在左上角，账户图标在右上角。
+                 .title 是 flex:1，会把后面的控件整体推到右侧，所以头像放最后就是最右。
+                 二级界面（下方 .sub）则是「返回按钮左上角 + 标题紧靠其右」。 -->
             <header class="appbar">
-              <div class="avatar small gavatar">M</div>
               <h2 class="title">信息</h2>
               <button class="iconbtn"><i data-ic="search"></i></button>
               <button class="iconbtn"><i data-ic="more"></i></button>
+              <div class="avatar small gavatar">M</div>
             </header>
             <div class="appbody no-pad">
               <div id="chatList"></div>
@@ -3532,11 +3546,13 @@ html #screen .app .gv-top>:first-child:empty{display:none !important}
           </section>
 
           <section class="app" id="app-gmail">
+            <!-- 一级界面遵循 Google 规范：标题在左上角，账户图标在右上角。
+                 二级界面（下方 .sub）则是「返回按钮左上角 + 标题紧靠其右」。 -->
             <header class="appbar">
-              <div class="avatar small gavatar">M</div>
               <h2 class="title">Gmail</h2>
               <button class="iconbtn" data-act="mail-search"><i data-ic="search"></i></button>
               <button class="iconbtn"><i data-ic="more"></i></button>
+              <div class="avatar small gavatar">M</div>
             </header>
             <div class="tabs">
               <button class="tabbtn on" data-gmail="inbox">收件箱</button>
@@ -6004,6 +6020,15 @@ function appOpenAnim(id){
 function openApp(id){
   /* Google 与 Chrome 共用同一套 Chrome 界面 DOM：先把界面搬到要打开的这个窗口 */
   try{ chromeUiMount(id); }catch(e){}
+  /* 兜底记锚点 —— 这是「应用闪退」的根因：
+     closeApp() 的退出动画关卡是
+         if(el && p && curScreen==='app' && deviceOn)
+     p（= appIconPos[id]，图标锚点）为空时它退化成「直接隐藏」，
+     观感就是应用"闪"一下消失（闪退）。
+     抽屉图标、通知栏、应用内跳转等入口不一定都经过 open-app 分支去记锚点，
+     所以在这里统一兜底。captureIconPos 内部用 appIconRect 找**真实图标**，
+     找不到就什么都不写 —— 绝不合成假锚点（假锚点会让退出动画朝错误方向缩）。 */
+  try{ if(!appIconPos[id])captureIconPos(id); }catch(e){}
   /* 相机→相册 转场：相机窗口左移淡出，相册窗口从右侧并列滑入淡入 */
   try{
     if(app==='camera'&&id==='photos'&&typeof setScreen==='function'){
@@ -6142,8 +6167,13 @@ function closeApp(){
     document.querySelectorAll('#homePages .app-item[data-app]').forEach(function (el) { el.style.pointerEvents = ''; });
   } catch (e) { /* ignore */ }
   if(typeof camStop==='function')camStop();   /* 离开相机释放摄像头，避免占用指示灯常亮 */
-  const backTo=lockOrigin?'lock':(appOrigin==='drawer'?'drawer':'home');
+  /* backTo 必须留到**锚点修正之后**再算：下面的代码会根据「找到的图标在抽屉里还是桌面上」
+     把 appOrigin 改写成 'drawer'（规则 3b：桌面打开的 App 跳转到没有桌面图标的应用）。
+     原先在这里就算好了，用的是改写前的旧值 —— 于是来源识别对了、背景却仍然显示桌面。
+     lockOrigin 在下一行就被清零，所以先存到局部变量里。 */
+  const wasLock=lockOrigin;
   lockOrigin=false;
+  let backTo=null;
   hideKb();
   const id=app;
   const el=id?$('#app-'+id):null;
@@ -6165,6 +6195,11 @@ function closeApp(){
           /* 记录抽屉原始状态（量完必须还原，否则整个抽屉会被定格而偏移） */
           var dFix={el:d,display:d.style.display,transition:d.style.transition,transform:d.style.transform,opacity:d.style.opacity,scrollTop:d.scrollTop};
           d.style.display='flex';d.classList.add('on');
+          /* 同时移除 .anim：#drawer.on.anim 会触发 drawerIn 动画（translateY(90px) → 0），
+             抽屉在定格期间会带着这个位移被量到，而且退出时又被重新显示一次，
+             动画重播 → 表现为「退出后应用抽屉有位移」。
+             后面各条退出路径本来就会 remove('anim')，这里提前清掉是一致的。 */
+          d.classList.remove('anim');
           /* 滚动位置归零：保证锚点 = 抽屉“即将展示”时该图标的位置（否则会因滚动差出偏移） */
           try{d.scrollTop=0;const inner=d.querySelector('.drawer-grid,.drawer-body,.drawer-scroll');if(inner)inner.scrollTop=0;}catch(e){}
           /* 抽屉内的图标自身也可能带着入场动画的 transform（缩放/位移），
@@ -6236,8 +6271,31 @@ function closeApp(){
   }
   /* 无条件还原：锚点测量时临时清掉的 transform/transition 必须复原，否则图标会停在错误位置 */
   try{ if(typeof restore!=='undefined'&&restore&&restore.length){ restore.forEach(function(it){if(it[2])it[0].style.transition=it[1];else it[0].style.transform=it[1];}); restore.length=0; } }catch(e){}
-  /* 抽屉本身也必须还原（否则“缩小时抽屉整体偏移”） */
-  try{ if(typeof dFix!=='undefined'&&dFix&&dFix.el){ if(dFix.scrollTop!==undefined)dFix.el.scrollTop=dFix.scrollTop; } }catch(e){}
+  /* 抽屉本身必须**完整**还原。
+     dFix 在锚点测量前记录了 5 个属性（display/transition/transform/opacity/scrollTop），
+     但这里原本只还原了 scrollTop —— 其余四个被永久留在了「为量锚点而定格」的状态：
+       · transform 没还原 → 抽屉停在入场动画的 translateY(90px) 上，就是「抽屉有位移」
+       · display/opacity 没还原 → 抽屉可能被错误显示或半透明
+     从抽屉打开 play 时最容易看到：play 的图标靠下，抽屉当时处于滚动/入场动画中。 */
+  try{
+    if(typeof dFix!=='undefined'&&dFix&&dFix.el){
+      const de=dFix.el;
+      if(dFix.transition!==undefined)de.style.transition=dFix.transition;
+      if(dFix.transform!==undefined)de.style.transform=dFix.transform;
+      if(dFix.opacity!==undefined)de.style.opacity=dFix.opacity;
+      if(dFix.display!==undefined)de.style.display=dFix.display;
+      if(dFix.scrollTop!==undefined)de.scrollTop=dFix.scrollTop;
+    }
+  }catch(e){}
+  /* ⚠ 已撤销的尝试：曾经在拿不到 appIconPos[id] 时"合成"一个屏幕中心锚点，
+     想让退出动画分支成立。结果**更糟** —— closeApp 拿这个假锚点播动画，
+     于是应用朝屏幕中心缩回去，而不是朝向自己的图标，退出动画完全错了。
+     教训：锚点必须来自真实图标，宁可没有动画，也不能给假锚点。
+     正确做法是让入口（相机缩略图这种 data-act="open-app"）在打开时就记下真实锚点。 */
+  /* 到这里为止，来源修正（可能把 appOrigin 改写成 'drawer'）与锚点重算都已完成，
+     现在才确定退出后回到哪个界面 —— 用最新的 appOrigin，而不是函数开头那个旧值。
+     规则：桌面打开→桌面；抽屉打开→抽屉；桌面打开后跳转、目标没有桌面图标→抽屉。 */
+  backTo=wasLock?'lock':(appOrigin==='drawer'?'drawer':'home');
   /* 目标应用不在桌面（从抽屉/通知进入）：退出动画前先把抽屉显示出来，避免“动画播完才出现抽屉” */
   if(appOrigin==='drawer'){
     try{
@@ -6294,6 +6352,13 @@ function closeApp(){
       };
 const sW=p.s, sH=(p.sh||p.s);
       appIconHidden(id,true);
+      /* 关闭前必须把逐帧动画的进度显式置为「满屏」，与 appOpenAnim 里的 z0.p=0 对称。
+         漏了这一步会出现「瞬移、没有过渡」：appZoomRun 从元素缓存的 z.p 起算，
+         若 z.p 恰好已是终值，则 dp=0，动画没有可动距离 —— 元素直接跳到图标姿势后停住。
+         实测：sx 在 41ms 就变成 0.133 且此后 400ms 不变，td=0s、anims=0（rAF 动画，本就没有 transition）。
+         而 z.p 之所以是脏的，是因为入口没记锚点时 appOpenAnim 会 `if(!appIconPos[id])return false`
+         直接跳过，它那行重置也就没机会执行。 */
+      try{ const z0=appZoomState(el); z0.p=1; z0.vp=0; z0.op=1; z0.vop=0; }catch(e){}
       const pose={dx:p.dx,dy:p.dy,sW:sW,sH:sH};
       appZoomRun(el,pose,0,'fade',done,()=>appIconHidden(id,false));
       appAnimTimer=setTimeout(done,1200);
@@ -6324,6 +6389,14 @@ const sW=p.s, sH=(p.sh||p.s);
     appAnimBusy=true;
     appAnimEl=el;
     el._closing=true;
+    /* 关键复位（这里才是真正执行的分支；上面 appAnimBusy 那一支是"打开被打断"的另一条路径）。
+       appZoomRun 从元素缓存的 z.p 起算，appZoomDraw 里 k=1 是满屏、k=0 是图标姿势：
+       若 z.p 已经是 0（脏值），则 dp = 0-0 = 0，逐帧循环照跑、op 照淡出，
+       但 appZoomDraw 每帧都画 k=0 —— 表现就是"瞬间缩到图标大小、只有淡出没有缩放"。
+       z.p 之所以会脏：入口没记锚点时 appOpenAnim 被 `if(!appIconPos[id])return false` 跳过，
+       它那行 z0.p=0 的重置没机会执行，状态就停在上一次的终值上。
+       所以关闭前显式置为 1（满屏），与打开路径的设置对称。 */
+    try{ const z0=appZoomState(el); z0.p=1; z0.vp=0; z0.op=1; z0.vop=0; }catch(e){}
     const fin=e=>{
       if(e&&e.target!==el)return;
       clearTimeout(appAnimTimer);
@@ -7096,15 +7169,118 @@ function phVmDelete(i){
   renderVoicemail();
   toast('已删除');
 }
+/* ===== 并排推挤 + 交叉淡入淡出转场 =====
+   规格：A（旧窗口）**无缩放**向左平移并淡出；B（新窗口）**并排等大、无缩放**，
+   从右侧同步向左平移并淡入。两者时长相同、同时开始，合起来就是"并排推挤"。
+   刻意不做 scale：缩放是与 appOpenAnim（从图标长出全屏）那套冲突的，
+   混在一起会出现先缩后移的怪动作。
+
+   out / inEl 都接受「元素」或「元素数组」；inEl 可以为 null —— 表示只把 A 滑出去，
+   背景交给别的逻辑（返回键退出通话就是这种：不要自己把电话应用滑回来）。
+   opt: { ms, reverse, hideA, done }
+     hideA=true 时才移除 A 的 .on —— **默认不要动它**：
+     A 经常是「整个应用」，而 .app.on 是它"已打开"的状态标记，
+     无条件移除会让应用和桌面同时可见（就是"退出后窗口和桌面重叠"）。 */
+function slideSwap(out, inEl, opt){
+  const o=opt||{};
+  const MS=o.ms||320;
+  const EASE='cubic-bezier(.22,.61,.36,1)';
+  const A=(out?(Array.isArray(out)?out:[out]):[]).filter(Boolean);
+  const B=(inEl?(Array.isArray(inEl)?inEl:[inEl]):[]).filter(Boolean);
+  if(!A.length&&!B.length)return;
+  const rev=!!o.reverse;
+  const fromX=rev?'-100%':'100%';     /* B 的入场起点 */
+  const dirX =rev?'100%':'-100%';     /* A 的退场终点 */
+  const tr='transform '+MS+'ms '+EASE+', opacity '+MS+'ms linear';
+  /* 起点：A 在原位不透明；B 停在一侧且全透明，先显示出来 */
+  A.forEach(function(el){el.style.transition='none';el.style.willChange='transform,opacity';
+    el.style.transform='translateX(0)';el.style.opacity='1';});
+  B.forEach(function(el){el.style.transition='none';el.style.willChange='transform,opacity';
+    el.style.transform='translateX('+fromX+')';el.style.opacity='0';el.classList.add('on');});
+  void ((B[0]||A[0]).offsetWidth);    /* 强制回流，保证起点状态真的生效再开始过渡 */
+  requestAnimationFrame(function(){
+    A.forEach(function(el){el.style.transition=tr;el.style.transform='translateX('+dirX+')';el.style.opacity='0';});
+    B.forEach(function(el){el.style.transition=tr;el.style.transform='translateX(0)';el.style.opacity='1';});
+    /* 每次调用用**自己的**定时器收尾。
+       这里原来用共享的 slideSwap._t，两次 slideSwap 重叠时（快速连点、或通话转场
+       与其它转场撞上）后一次会把前一次的收尾 clearTimeout 掉 —— 前一对元素的
+       内联 transform/opacity 永远不被清理，就卡在「已移出屏幕 + 全透明」，
+       表现为那个界面再也看不见。 */
+    setTimeout(function(){
+      /* 收尾：清干净内联样式，否则下次打开会从"已经平移出去"的状态开始，看起来像闪一下。
+         A 默认**保留 .on**（见上面的说明），只有 hideA 的覆盖层才移除。 */
+      A.forEach(function(el){
+        if(o.hideA)el.classList.remove('on');
+        el.style.transition=el.style.transform=el.style.opacity=el.style.willChange='';});
+      B.forEach(function(el){
+        el.style.transition=el.style.transform=el.style.opacity=el.style.willChange='';});
+      if(o.done)o.done();
+    },MS+40);
+  });
+}
+/* ⚠ 回退说明：曾经把 #callview 搬到 #screen 下当兄弟节点，好让 A 能是「整个 #app-phone」。
+   结果**打电话直接不工作了** —— #callview 脱离 #app-phone 后，落在 #screen 的
+   子元素管理之外（应用显隐逻辑只认 .app），通话界面不再显示。
+   结论：**不要再搬动 #callview**。保持它是 #app-phone 的子元素。
+   代价是 A 只能是「app 的子元素」（背景不在里面），但功能优先于动画观感。 */
+function phCallHost(){
+  return document.getElementById('callview');
+}
+/* A 侧：电话应用里参与平移淡出的主体块（appbar + appbody）。
+   #callview 必须排除，否则它会跟着 A 一起被平移，B 就没有入场效果了。 */
+function phSlideBody(){
+  const app=document.getElementById('app-phone');
+  if(!app)return [];
+  return [].slice.call(app.children).filter(function(el){
+    return el.id!=='callview'&&!el.classList.contains('sub');
+  });
+}
+/* 发起通话前所在的界面：'drawer' / 'home' / 某个应用 id / null（本来就在电话应用里）。
+   挂断时要回到这里 —— 之前完全没记来源，endCall 固定把电话应用滑回来，
+   所以「抽屉里打电话，挂断后停在电话应用」「通讯录里打电话，挂断后回到电话」。
+   复用 closeApp() 已有的来源判定（appOrigin/backTo，已验证 7/7）。 */
+let callOrigin=null;
 function startCall(name){
   const c=CONTACTS.find(x=>x.n===name)||{n:name||'未知号码',c:'#5F6368',p:''};
+  /* 先记来源，再切到电话应用 —— 顺序不能反，openApp 之后就问不出来了。
+     ⚠ 不能用 curScreen 判断！真实流程是「抽屉里点电话图标 → 打开电话应用 → 拨号」，
+     等 startCall 执行时 curScreen 早已变成 'app'，会记成 null，挂断后便停在电话应用。
+     正确来源是 **appOrigin** —— 它记的是「当前这个应用是从哪里打开的」
+     （'drawer' / 'home' / 'lock'），closeApp() 一直靠它决定回哪去。
+     优先级：先在别的应用里（如通讯录）→ 用那个应用；否则用 appOrigin。 */
+  try{
+    callOrigin = (app && app!=='phone')       ? app
+               : (appOrigin==='drawer')       ? 'drawer'
+               : (appOrigin==='home')         ? 'home'
+               : (curScreen==='drawer')       ? 'drawer'
+               : (curScreen==='home')         ? 'home'
+               : null;
+  }catch(e){ callOrigin=null; }
+  /* 必须让掉 appOpenAnim 的「从图标缩放展开」，否则它会盖住并排推挤转场
+     （用户看到的是图标缩放，推挤动画等于没了）。这个是本文件既有的开关，
+     另外两处流程也在用（见 openApp 里对 suppressIconAnim 的消费）。
+     注意：它和「打电话能不能用」无关 —— 上一轮我把它连同结构回退一起删掉是过度回退。 */
+  try{suppressIconAnim=true;}catch(e){}
+  /* ⚠ 必须让 openApp 保留 appOrigin！
+     openApp 内部按 curScreen 重算来源：
+         appOrigin = __crJumpFromApp ? (appOrigin||'home')
+                    : (curScreen==='drawer' ? 'drawer' : 'home');
+     拨号时 curScreen 已经是 'app'（电话应用已经打开），于是 appOrigin 会被改写成 'home' ——
+     之后按导航条退出，closeApp 的 backTo 就变成桌面，回不到抽屉。
+     文件里本来就有 __crJumpFromApp 这个「应用内跳转，保留来源」的开关，这里必须用它。
+     这是「从抽屉打开电话、退出却回桌面」的直接原因。 */
+  try{ window.__crJumpFromApp=true; }catch(e){}
+  suppressIconAnim=true;
   openApp('phone');
+  try{ window.__crJumpFromApp=false; }catch(e){}
   phSwitch('keypad');
-  $('#callview').classList.add('on');
+  /* 先把通话界面的内容填好，再播转场 —— 否则会看到空白的通话界面滑进来 */
   $('#cvAvatar').textContent=c.n[0];
   $('#cvAvatar').style.background=c.c;
   $('#cvName').textContent=c.n;
   $('#cvState').textContent='正在呼叫';
+  /* 并排推挤：整个电话应用（含背景）向左平移淡出，通话界面从右侧同步滑入淡入（都不缩放） */
+  slideSwap(phSlideBody(),phCallHost());
   clearInterval(callIv);callSec=0;
   setTimeout(()=>{
     if($('#callview').classList.contains('on')){
@@ -7191,11 +7367,18 @@ function kpCall(){
   startCall(name);
 }
 function endCall(){
-  clearInterval(callIv);
-  $('#callview').classList.remove('on');
-  $('#kpDisplay').textContent='';
-  phBackVis();
-  toast('通话已结束');
+  /* ⚠ 结论（用户明确）：**挂断后回到电话应用，不要退出应用。**
+     所以这里不做任何「按来源回抽屉/桌面」的判断 —— 那属于**退出应用**的路径，
+     由导航条 → closeApp() 负责（它用 appOrigin/backTo 判定，已验证 7/7）。
+     在 endCall 里做来源判断是方向性错误，而且之前几次「电话闪退」都源于此：
+     要么手动改 app/setScreen 绕过了 closeApp 的复位逻辑，要么延时调 closeApp
+     导致"电话应用露出来停一会再突然关掉"。
+     现在只把通话界面滑回去、露出电话应用 —— 与最初的行为一致，不碰任何状态。 */
+  try{ clearInterval(callIv); }catch(e){}
+  try{ slideSwap(phCallHost()||$('#callview'),phSlideBody(),{reverse:true,hideA:true}); }catch(e){}
+  try{ $('#kpDisplay').textContent=''; }catch(e){}
+  try{ phBackVis(); }catch(e){}
+  try{ toast('通话已结束'); }catch(e){}
 }
 
 /* ============ 信息 ============ */
@@ -7251,6 +7434,12 @@ function renderPhotos(q=''){
       `<span class="ph-label">${p.n}</span></button>`;
   }).join('')||'<div style="padding:30px;text-align:center;color:var(--txt3);font-size:13px">未找到照片</div>';
 }
+/* A 侧：相册应用里参与平移淡出的主体（顶栏 + 网格），排除 .sub（查看器本身就是 .sub） */
+function photoSlideBody(){
+  const app=document.getElementById('app-photos');
+  if(!app)return [];
+  return [].slice.call(app.children).filter(function(el){return !el.classList.contains('sub');});
+}
 function openPhoto(i){
   if(typeof photoInitViewer==='function'){photoInitViewer();photoZoom=1;}
   photoIdx=Math.max(0,Math.min(PHOTOS.length-1,i));
@@ -7262,7 +7451,12 @@ function openPhoto(i){
   $('#viewerStage').innerHTML=src?`<img id="photoImg" class="pv-img" src="${src}" alt="${p.n}">`:`<div class="ph">${p.n}</div>`;
   $('#viewerCaption').textContent=`${p.n} · ${'拍摄于'} 2026年8月 · ${size} MB`;
   const pv=$('#photoViewer');
-  pv.classList.add('on');
+  /* 只有「从未打开 → 打开」才播转场。
+     上一张/下一张、删除后重建都会再次调用 openPhoto，那些属于查看器**内部**换页，
+     再播一次推挤会变成乱闪 —— 所以用 wasOpen 区分。 */
+  const wasOpen=pv.classList.contains('on');
+  if(wasOpen){pv.classList.add('on');}
+  else{slideSwap(photoSlideBody(),pv);}
   $('#photoPrev').disabled=photoIdx===0;
   $('#photoNext').disabled=photoIdx===PHOTOS.length-1;
 }
@@ -7298,7 +7492,11 @@ function photoDeleteCur(){
 }
 function photoCloseViewer(){
   const v=document.getElementById('photoViewer');
-  if(v)v.classList.remove('on');
+  /* 退出相册查看器也要有动画（原来只是 classList.remove('on')，瞬间消失）。
+     反向并排推挤：查看器向右平移淡出，相册主体从左侧滑回。
+     hideA 必须给 —— v 是靠 .on 控制 display 的覆盖层，不移除 .on 会一直浮在上层。 */
+  if(v&&v.classList.contains('on'))slideSwap(v,photoSlideBody(),{reverse:true,hideA:true});
+  else if(v)v.classList.remove('on');
   photoZoom=1;photoApplyZoom();
 }
 /* 移除相册里的“回忆”分区（按标题文案定位，兼容不同结构） */
@@ -12383,10 +12581,15 @@ function fsSortList(list){
 }
 /* 分类聚合：把整棵树里匹配的文件收集起来（保持它们所在路径可回退） */
 function fsCloseSheets(){
-  ['fsMenuSheet','fsMoveSheet'].forEach(function(id){
-    const s=document.getElementById(id);
-    if(s)s.classList.remove('on');
-  });
+  /* 关掉文件应用里**所有** sheet-layer，不要写死 id 白名单。
+     历史坑：原来是 ['fsMenuSheet','fsMoveSheet'] 两个 id 的硬编码，
+     而 fsSheet() 实际被三个 id 调用 —— 第三个是 gfMoreSheet（更多选项），
+     不在白名单里，于是点它的「取消」/遮罩都关不掉，表现为按钮失灵。
+     遍历 DOM 而不是维护清单，以后再加表单也不会漏。 */
+  const app=document.getElementById('app-files');
+  if(!app)return;
+  const list=app.querySelectorAll('.sheet-layer.on');
+  for(let i=0;i<list.length;i++)list[i].classList.remove('on');
 }
 function fsCategoryFiles(catId){
   const cat=FS_CATS.find(function(c){return c.id===catId;});
@@ -18600,7 +18803,12 @@ function init(){
       return;
     }
     switch(act){
-      case 'open-app':openApp(el.dataset.app);break;
+      /* 打开前先记下目标应用图标的真实位置（captureIconPos 内部走 appIconRect）。
+         否则 closeApp() 里的退出动画关卡 `if(el&&p&&curScreen==='app'&&deviceOn)`
+         会因为 p 为空而整段跳过 —— 实测：相机缩略图走这条 open-app，
+         进入相册后 appIconPos.photos === null，于是退出只剩"瞬间隐藏"，没有任何动画。
+         记的是真实图标矩形，所以退出会正确缩回相册图标。 */
+      case 'open-app':captureIconPos(el.dataset.app);openApp(el.dataset.app);break;
       case 'recent-close':{
         const rid=el.dataset.app;
         hist=hist.filter(x=>x!==rid);
@@ -19105,9 +19313,39 @@ function init(){
       case 'ytm-lib':ytmPlay(el.dataset.name,'Pixel 音乐');break;
       case 'ytm-explore':ytmPlay(el.dataset.name,'Pixel 音乐');break;
       case 'safe-contact':{
-        closeApp();
-        openApp('contacts');
-        setTimeout(()=>{if(app==='contacts')openContact('妈妈');},600);
+        /* 规格（用户明确）：**淡入淡出 + 位移，但不要缩放**。
+           A（设置）向左平移并淡出；B（通讯录）从右侧同步向左平移并淡入；
+           全程 transform 只做 translateX，绝不出现 scale —— 所以不能用 appZoomRun。
+           上一版我只做了透明度、把位移也去掉了，做错了。 */
+        var slideFade=function(fromId,toId,MS,done){
+          var A=fromId?document.getElementById('app-'+fromId):null;
+          var EASE='cubic-bezier(.22,.61,.36,1)';
+          var openIt=function(){
+            try{suppressIconAnim=true;}catch(e){}   /* 让 openApp 直接满屏落位，不播图标缩放 */
+            openApp(toId);
+            var B=document.getElementById('app-'+toId);
+            if(!B){if(done)done();return;}
+            B.style.transition='none';
+            B.style.transform='translateX(100%)';
+            B.style.opacity='0';
+            void B.offsetWidth;
+            requestAnimationFrame(function(){
+              B.style.transition='transform '+MS+'ms '+EASE+', opacity '+MS+'ms linear';
+              B.style.transform='translateX(0)';
+              B.style.opacity='1';
+              setTimeout(function(){B.style.transition=B.style.transform=B.style.opacity='';if(done)done();},MS+40);
+            });
+          };
+          if(A){
+            A.style.transition='transform '+MS+'ms '+EASE+', opacity '+MS+'ms linear';
+            A.style.transform='translateX(-100%)';
+            A.style.opacity='0';
+            setTimeout(function(){A.style.transition=A.style.transform=A.style.opacity='';openIt();},MS+40);
+          }else openIt();
+        };
+        slideFade(app,'contacts',190,function(){
+          if(app==='contacts')openContact('妈妈');
+        });
         break;
       }
       case 'safe-toggle':{
